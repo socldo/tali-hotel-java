@@ -1,0 +1,68 @@
+package com.vn.tali.hotel.dao;
+
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vn.tali.hotel.entity.BaseEntity;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+
+public abstract class AbstractDao<PK extends Serializable, T> {
+
+	private final Class<T> persistentClass;
+
+	@SuppressWarnings("unchecked")
+	public AbstractDao() {
+		this.persistentClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass())
+				.getActualTypeArguments()[1];
+	}
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	protected Session getSession() {
+		Session session = this.sessionFactory.getCurrentSession();
+		return session;
+	}
+
+	protected CriteriaBuilder getBuilder() {
+		return this.getSession().getCriteriaBuilder();
+	}
+
+	public T getByKey(PK key) {
+		return (T) getSession().get(persistentClass, key);
+	}
+
+	public void persist(T entity) {
+		getSession().persist(entity);
+	}
+
+	public void delete(T entity) {
+		getSession().delete(entity);
+	}
+
+	public void update(BaseEntity entity) {
+		this.getSession().update(entity);
+	}
+
+	public void merge(BaseEntity entity) {
+		this.getSession().merge(entity);
+	}
+
+	public void delete(BaseEntity entity) {
+		this.getSession().delete(entity);
+	}
+
+	public void refresh(BaseEntity entity) {
+		this.getSession().refresh(entity);
+	}
+
+	public void flush() {
+		this.getSession().flush();
+	}
+
+}
