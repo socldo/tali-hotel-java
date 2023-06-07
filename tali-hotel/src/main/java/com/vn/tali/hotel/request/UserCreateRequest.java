@@ -9,6 +9,9 @@ public class UserCreateRequest {
 	@JsonProperty("email")
 	private String email;
 
+	@JsonProperty("phone")
+	private String phone;
+
 	@JsonProperty("first_name")
 	private String firstName;
 
@@ -17,6 +20,14 @@ public class UserCreateRequest {
 
 	@JsonProperty("password")
 	private String password;
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public int getRoleId() {
 		return roleId;

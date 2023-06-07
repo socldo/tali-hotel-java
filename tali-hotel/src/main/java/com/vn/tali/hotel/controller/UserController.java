@@ -1,5 +1,8 @@
 package com.vn.tali.hotel.controller;
 
+import java.util.Base64;
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +29,21 @@ public class UserController {
 		User user = new User();
 		user.setRoleId(request.getRoleId());
 		user.setEmail(request.getEmail());
+		user.setPhone(request.getPhone());
 		user.setFirstName(request.getFirstName());
 		user.setLastName(request.getLastName());
 		user.setPassword(request.getPassword());
+
+		HashMap<String, String> profile = new HashMap<>();
+
+		profile.put("first_name", request.getFirstName());
+		profile.put("last_name", request.getFirstName());
+		profile.put("phone", request.getFirstName());
+		profile.put("password", request.getFirstName());
+		String accesToken = Base64.getEncoder().encodeToString(profile.toString().getBytes());
+		user.setAccessToken(accesToken);
 		userService.create(user);
 		response.setData(user);
-		System.out.println("test rest api");
 		return response;
 	}
 }

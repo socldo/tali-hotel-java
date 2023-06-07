@@ -1,5 +1,7 @@
 package com.vn.tali.hotel.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,17 +17,34 @@ public class User extends BaseEntity {
 	private int id;
 
 	@Column(name = "role_id")
+	@JsonProperty("role_id")
 	private int roleId;
 
 	private String email;
 
+	private String phone;
+
 	@Column(name = "first_name")
+	@JsonProperty("first_name")
 	private String firstName;
 
 	@Column(name = "last_name")
+	@JsonProperty("last_name")
 	private String lastName;
 
 	private String password;
+
+	@Column(name = "access_token")
+	@JsonProperty("access_token")
+	private String accessToken;
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public int getId() {
 		return id;
@@ -73,6 +92,14 @@ public class User extends BaseEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 
 }
