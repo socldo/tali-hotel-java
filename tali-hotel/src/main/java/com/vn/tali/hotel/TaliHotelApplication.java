@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.ComponentScan;
 
 
-//@ComponentScan({"com.vn.tali.hotel"})
-//@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@SpringBootApplication
+@ComponentScan({"com.vn.tali.hotel"})
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+//@SpringBootApplication
 public class TaliHotelApplication {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(TaliHotelApplication.class);

@@ -1,34 +1,50 @@
 package com.vn.tali.hotel.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-	
-	private static final long serialVersionUID = -1802905399883137918L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name = "role_id")
+	@JsonProperty("role_id")
 	private int roleId;
 
 	private String email;
 
+	private String phone;
+
 	@Column(name = "first_name")
+	@JsonProperty("first_name")
 	private String firstName;
 
 	@Column(name = "last_name")
+	@JsonProperty("last_name")
 	private String lastName;
 
 	private String password;
+
+	@Column(name = "access_token")
+	@JsonProperty("access_token")
+	private String accessToken;
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public int getId() {
 		return id;
@@ -76,6 +92,14 @@ public class User extends BaseEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 
 }
