@@ -34,4 +34,11 @@ public class UserController {
 		System.out.println("test rest api");
 		return response;
 	}
+	
+
+	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	public String test() throws Exception {
+
+		return "XIn chào";
+	}
 }

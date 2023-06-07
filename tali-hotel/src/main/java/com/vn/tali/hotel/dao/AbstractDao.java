@@ -3,13 +3,13 @@ package com.vn.tali.hotel.dao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vn.tali.hotel.entity.BaseEntity;
-
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 public abstract class AbstractDao<PK extends Serializable, T> {
 
