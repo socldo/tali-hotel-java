@@ -3,25 +3,16 @@
  */
 package com.vn.tali.hotel.security;
 
-import java.beans.PropertyVetoException;
-import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -96,6 +87,7 @@ public class DatasourceConfig {
 		return transactionManager;
 	}
 
+	
 //	@Bean
 //	public DataSource dataSource() {
 //		HikariConfig hikariConfig = this.initHikariPoolingConfig("hikari-pool");

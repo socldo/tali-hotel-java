@@ -23,6 +23,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		resources.resourceId("pstudioapi").tokenServices(tokenServices);
 	}
 
+	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.requestMatchers()//

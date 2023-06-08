@@ -10,6 +10,7 @@ import com.vn.tali.hotel.service.UserService;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
+
 	@Autowired
 	UserService userService;
 
@@ -17,8 +18,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		User user = (User) userService.findByPhone(username);
-
 		return UserDetailsImpl.build(user);
 	}
+	
+	
 
 }
