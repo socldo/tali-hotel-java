@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.NewsDao;
 import com.vn.tali.hotel.entity.News;
+import com.vn.tali.hotel.entity.TestModel;
 import com.vn.tali.hotel.service.NewsService;
 
 @Service("newsService")
@@ -38,7 +39,7 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public int spList() throws Exception {
+	public TestModel spList() throws Exception {
 		return dao.spList();
 	}
 

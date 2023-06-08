@@ -14,9 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan({"com.vn.tali.hotel"})
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class,
-	    DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
-//@SpringBootApplication
+@EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class })
 public class TaliHotelApplication {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(TaliHotelApplication.class);
@@ -24,7 +22,6 @@ public class TaliHotelApplication {
 		app.setDefaultProperties(Collections.singletonMap("server.port", "1802"));
 		app.run(args);
 	
-//		 SpringApplication.run(TaliHotelApplication.class, args);
 	}
 
 
