@@ -1,4 +1,4 @@
-package com.vn.tali.hotel.security;
+package com.vn.tali.hotel.security.jwt;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.vn.tali.hotel.security;
+package com.vn.tali.hotel.security.service;
 
 import java.util.Collection;
 import java.util.List;
