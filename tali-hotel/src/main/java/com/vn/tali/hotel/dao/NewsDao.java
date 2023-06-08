@@ -3,7 +3,6 @@ package com.vn.tali.hotel.dao;
 import java.util.List;
 
 import com.vn.tali.hotel.entity.News;
-import com.vn.tali.hotel.entity.TestModel;
 
 public interface NewsDao {
 
@@ -15,6 +14,6 @@ public interface NewsDao {
 
 	News findOne(int id) throws Exception;
 
-	TestModel spList() throws Exception;
+	int spList() throws Exception;
 
 }

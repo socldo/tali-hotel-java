@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vn.tali.hotel.entity.TestModel;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.NewsResponse;
 import com.vn.tali.hotel.service.NewsService;
@@ -35,12 +34,12 @@ public class NewsController {
 	}
 
 	@GetMapping(value = "/test", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<TestModel>> test() throws Exception {
+	public ResponseEntity<BaseResponse<NewsResponse>> test(@PathVariable("id") int id) throws Exception {
 
-		BaseResponse<TestModel> response = new BaseResponse<>();
-		TestModel data = newsService.spList();
+		BaseResponse<NewsResponse> response = new BaseResponse<>();
+
 		System.out.println(newsService.spList());
-		response.setData(data);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}

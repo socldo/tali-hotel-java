@@ -1,4 +1,4 @@
-package com.vn.tali.hotel.security;
+package com.vn.tali.hotel.securiry.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
