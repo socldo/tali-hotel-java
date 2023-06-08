@@ -1,9 +1,9 @@
 package com.vn.tali.hotel.securiry.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,8 +41,10 @@ public class UserDetailsImpl implements UserDetails {
 	}
 
 	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = roleService.findByUserId(user.getId()).stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+		GrantedAuthority authoritie = new SimpleGrantedAuthority(roleService.findOne(user.getRoleId()).getName());
+
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(authoritie);
 
 		return new UserDetailsImpl(user.getId(), user.getPhone(), user.getEmail(), user.getPassword(), authorities);
 	}

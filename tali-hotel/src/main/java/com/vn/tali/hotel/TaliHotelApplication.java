@@ -14,8 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan({"com.vn.tali.hotel"})
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class,
-	    DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+@EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class })
 //@SpringBootApplication
 public class TaliHotelApplication {
 	public static void main(String[] args) {

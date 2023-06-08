@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.RoleDao;
-import com.vn.tali.hotel.dao.UserRolesMapDao;
 import com.vn.tali.hotel.entity.Role;
-import com.vn.tali.hotel.entity.UserRolesMap;
 import com.vn.tali.hotel.service.RoleService;
 
 @Transactional(rollbackFor = Exception.class)
@@ -18,9 +16,6 @@ import com.vn.tali.hotel.service.RoleService;
 public class RoleServiceImpl implements RoleService {
 	@Autowired
 	private RoleDao dao;
-
-	@Autowired
-	private UserRolesMapDao mapDao;
 
 	@Override
 	public Role findOne(int id) {
@@ -46,25 +41,5 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public List<Role> findAll() {
 		return (List<Role>) dao.findAll();
-	}
-
-	@Override
-	public List<Role> findByUserId(long userId) {
-		List<Role> roles = (List<Role>) dao.findAll();
-
-		List<UserRolesMap> roleMap = (List<UserRolesMap>) mapDao.findRolesMapByUserId(userId);
-
-		List<Role> result = new ArrayList<>();
-
-		for (UserRolesMap e : roleMap) {
-			roles.stream().map(x -> {
-				if (x.getId() == e.getRoleId()) {
-					result.add(x);
-				}
-				return x;
-			});
-		}
-		return result;
-
 	}
 }
