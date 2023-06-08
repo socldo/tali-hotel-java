@@ -1,4 +1,4 @@
-package com.vn.tali.hotel.securiry.service;
+package com.vn.tali.hotel.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
