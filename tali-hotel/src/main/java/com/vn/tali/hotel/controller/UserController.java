@@ -37,9 +37,9 @@ public class UserController {
 		HashMap<String, String> profile = new HashMap<>();
 
 		profile.put("first_name", request.getFirstName());
-		profile.put("last_name", request.getFirstName());
-		profile.put("phone", request.getFirstName());
-		profile.put("password", request.getFirstName());
+		profile.put("last_name", request.getLastName());
+		profile.put("phone", request.getPhone());
+		profile.put("password", request.getPassword());
 		String accesToken = Base64.getEncoder().encodeToString(profile.toString().getBytes());
 		user.setAccessToken(accesToken);
 		userService.create(user);

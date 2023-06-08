@@ -41,4 +41,9 @@ public class UserServiceImpl implements UserService {
 		dao.save(entity);
 	}
 
+	@Override
+	public User findByPhone(String phone) {
+		return (User) dao.findByPhone(phone);
+	}
+
 }
