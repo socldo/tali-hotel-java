@@ -7,7 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.vn.tali.hotel.entity.UserRolesMap;
 
+
 public interface UserRolesMapDao extends CrudRepository<UserRolesMap, Integer> {
 	@Query(value = "SELECT * FROM user_roles_map u WHERE u.user_id = :id", nativeQuery = true)
-	Collection<UserRolesMap> findRolesMapByUserId(int id);
+	Collection<UserRolesMap> findRolesMapByUserId(long id);
 }

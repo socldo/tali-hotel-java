@@ -49,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public List<Role> findByUserId(int userId) {
+	public List<Role> findByUserId(long userId) {
 		List<Role> roles = (List<Role>) dao.findAll();
 
 		List<UserRolesMap> roleMap = (List<UserRolesMap>) mapDao.findRolesMapByUserId(userId);

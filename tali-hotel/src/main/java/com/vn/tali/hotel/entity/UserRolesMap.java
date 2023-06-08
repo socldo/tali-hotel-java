@@ -1,12 +1,14 @@
 package com.vn.tali.hotel.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+@Entity(name = "user_roles_map")
 public class UserRolesMap {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

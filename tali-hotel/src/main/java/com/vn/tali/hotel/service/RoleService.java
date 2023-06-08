@@ -15,5 +15,5 @@ public interface RoleService {
 
 	List<Role> findAll();
 
-	List<Role> findByUserId(int userId);
+	List<Role> findByUserId(long userId);
 }
