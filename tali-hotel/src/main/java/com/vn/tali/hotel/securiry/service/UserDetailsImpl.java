@@ -11,12 +11,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.service.RoleService;
 
 public class UserDetailsImpl implements UserDetails {
-	@Autowired
-	static RoleService roleService;
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,10 +28,9 @@ public class UserDetailsImpl implements UserDetails {
 	@JsonIgnore
 	private String password;
 
-	private Collection<? extends GrantedAuthority> authorities;
+	private GrantedAuthority authorities;
 
-	public UserDetailsImpl(Long id, String phone, String email, String password,
-			Collection<? extends GrantedAuthority> authorities) {
+	public UserDetailsImpl(Long id, String phone, String email, String password, GrantedAuthority authorities) {
 		this.id = id;
 		this.username = phone;
 		this.email = email;
@@ -40,18 +38,23 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(User user) {
+	public static UserDetailsImpl build(User user, RoleService roleService) {
+
+		Role role = roleService.findOne(user.getRoleId());
+
 		GrantedAuthority authoritie = new SimpleGrantedAuthority(roleService.findOne(user.getRoleId()).getName());
 
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(authoritie);
 
-		return new UserDetailsImpl(user.getId(), user.getPhone(), user.getEmail(), user.getPassword(), authorities);
+		return new UserDetailsImpl(user.getId(), user.getPhone(), user.getEmail(), user.getPassword(), authoritie);
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
+		List<GrantedAuthority> array = new ArrayList<>();
+		array.add(authorities);
+		return array;
 	}
 
 	public Long getId() {

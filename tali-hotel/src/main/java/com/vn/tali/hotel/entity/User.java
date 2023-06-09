@@ -34,9 +34,17 @@ public class User extends BaseEntity {
 
 	private String password;
 
-	@Column(name = "access_token")
-	@JsonProperty("access_token")
-	private String accessToken;
+	public User() {
+
+	}
+
+	public User(String email, String phone, String firstName, String lastName, String password) {
+		this.email = email;
+		this.phone = phone;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+	}
 
 	public String getPhone() {
 		return phone;
@@ -92,14 +100,6 @@ public class User extends BaseEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getAccessToken() {
-		return accessToken;
-	}
-
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
 	}
 
 }
