@@ -86,7 +86,6 @@ public class AuthController {
 			response.setStatus(HttpStatus.UNAUTHORIZED);
 			response.setMessageError("Thông tin đăng nhập không hợp lệ");
 			return response;
-
 		}
 
 	}
@@ -107,8 +106,8 @@ public class AuthController {
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getEmail(), signUpRequest.getFirstName(), signUpRequest.getLastName(),
-				signUpRequest.getPhone(), encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getFirstName(),
+				signUpRequest.getLastName(), encoder.encode(signUpRequest.getPassword()));
 
 		Role role = roleService.findOne(signUpRequest.getRoleId());
 
