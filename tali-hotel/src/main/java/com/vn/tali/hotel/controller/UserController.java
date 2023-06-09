@@ -1,6 +1,5 @@
 package com.vn.tali.hotel.controller;
 
-import java.util.Base64;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,35 +21,36 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-//	@RequestMapping(value = "/create-user", method = RequestMethod.POST)
-//	public BaseResponse<User> create(@Validated @RequestBody UserCreateRequest request) throws Exception {
-//		BaseResponse<User> response = new BaseResponse<>();
-//
-//		User user = new User();
-//		user.setRoleId(request.getRoleId());
-//		user.setEmail(request.getEmail());
-//		user.setPhone(request.getPhone());
-//		user.setFirstName(request.getFirstName());
-//		user.setLastName(request.getLastName());
-//		user.setPassword(request.getPassword());
-//
-//		HashMap<String, String> profile = new HashMap<>();
-//
-//		profile.put("first_name", request.getFirstName());
-//		profile.put("last_name", request.getLastName());
-//		profile.put("phone", request.getPhone());
-//		profile.put("password", request.getPassword());
+	@RequestMapping(value = "/create-user", method = RequestMethod.POST)
+	public BaseResponse<User> create(@Validated @RequestBody UserCreateRequest request) throws Exception {
+		BaseResponse<User> response = new BaseResponse<>();
+
+		User user = new User();
+		user.setRoleId(request.getRoleId());
+		user.setEmail(request.getEmail());
+		user.setPhone(request.getPhone());
+		user.setFirstName(request.getFirstName());
+		user.setAddress("");
+		user.setAvatar("");
+		user.setLastName(request.getLastName());
+		user.setPassword(request.getPassword());
+
+		HashMap<String, String> profile = new HashMap<>();
+
+		profile.put("first_name", request.getFirstName());
+		profile.put("last_name", request.getLastName());
+		profile.put("phone", request.getPhone());
+		profile.put("password", request.getPassword());
 //		String accesToken = Base64.getEncoder().encodeToString(profile.toString().getBytes());
 //		user.setAccessToken(accesToken);
-//		userService.create(user);
-//		response.setData(user);
-//		return response;
-//	}
-	
-
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public String test() throws Exception {
-
-		return "XIn chào";
+		userService.create(user);
+		response.setData(user);
+		return response;
 	}
+
+//	@RequestMapping(value = "/get", method = RequestMethod.GET)
+//	public BaseResponse<User> test() throws Exception {
+//		BaseResponse<User> response = new BaseResponse<>();
+//		User user = userService.findOne(0)
+//	}
 }

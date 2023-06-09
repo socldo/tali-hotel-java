@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vn.tali.hotel.common.UnauthorizedException;
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.LoginRequest;
@@ -35,7 +34,6 @@ import com.vn.tali.hotel.securiry.service.UserDetailsImpl;
 import com.vn.tali.hotel.service.RoleService;
 import com.vn.tali.hotel.service.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -54,6 +52,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@PostMapping("/signin")
 	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
 			HttpServletRequest request) {
@@ -95,49 +94,23 @@ public class AuthController {
 	@PostMapping("/signup")
 	public BaseResponse<User> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
 		BaseResponse<User> response = new BaseResponse<>();
-//		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
-//		}
-//
-//		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-//			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-//		}
+		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Số điện thoại đã tồn tại, vui lòng thử lại!");
+			return response;
+		}
+
+		if (roleService.findOne(signUpRequest.getRoleId()) == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại quyền này!");
+			return response;
+		}
 
 		// Create new user's account
 		User user = new User(signUpRequest.getEmail(), signUpRequest.getFirstName(), signUpRequest.getLastName(),
 				signUpRequest.getPhone(), encoder.encode(signUpRequest.getPassword()));
 
-//		Set<String> strRoles = signUpRequest.getRole();
-//		Set<Role> roles = new HashSet<>();
-
 		Role role = roleService.findOne(signUpRequest.getRoleId());
-
-//		if (strRoles == null) {
-//			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//			roles.add(userRole);
-//		} else {
-//			strRoles.forEach(role -> {
-//				switch (role) {
-//				case "admin":
-//					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(adminRole);
-//
-//					break;
-//				case "mod":
-//					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(modRole);
-//
-//					break;
-//				default:
-//					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-//							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//					roles.add(userRole);
-//				}
-//			});
-//		}
 
 		user.setRoleId(role.getId());
 		userService.update(user);
@@ -145,10 +118,17 @@ public class AuthController {
 		return response;
 	}
 
-//	@PostMapping("/signout")
-//	public ResponseEntity<?> logoutUser() {
-//		ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-//		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-//				.body(new MessageResponse("You've been signed out!"));
-//	}
+	/**
+	 * Xoá cookie lưu token
+	 * 
+	 * @return
+	 */
+	@PostMapping("/signout")
+	public BaseResponse<Object> logoutUser() {
+		BaseResponse<Object> response = new BaseResponse<>();
+		jwtUtils.getCleanJwtCookie();
+		response.setStatus(HttpStatus.OK);
+		response.setData("You have been sign out!");
+		return response;
+	}
 }
