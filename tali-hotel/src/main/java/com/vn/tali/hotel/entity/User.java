@@ -20,9 +20,9 @@ public class User extends BaseEntity {
 	@JsonProperty("role_id")
 	private int roleId;
 
-	private String email;
+	private String birthday;
 
-	private String phone;
+	private String avatar;
 
 	@Column(name = "first_name")
 	@JsonProperty("first_name")
@@ -32,7 +32,23 @@ public class User extends BaseEntity {
 	@JsonProperty("last_name")
 	private String lastName;
 
+	private int gender;
+
+	private String phone;
+
+	private String email;
+
 	private String password;
+
+	private String address;
+
+	@Column(name = "is_locked")
+	@JsonProperty("is_locked")
+	private int isLock;
+
+	@Column(name = "is_activated")
+	@JsonProperty("is_activated")
+	private int isActivated;
 
 	@Column(name = "jwt_token")
 	@JsonProperty("jwt_token")
@@ -112,6 +128,54 @@ public class User extends BaseEntity {
 
 	public void setJwtToken(String jwtToken) {
 		this.jwtToken = jwtToken;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getIsLock() {
+		return isLock;
+	}
+
+	public void setIsLock(int isLock) {
+		this.isLock = isLock;
+	}
+
+	public int getIsActivated() {
+		return isActivated;
+	}
+
+	public void setIsActivated(int isActivated) {
+		this.isActivated = isActivated;
 	}
 
 }
