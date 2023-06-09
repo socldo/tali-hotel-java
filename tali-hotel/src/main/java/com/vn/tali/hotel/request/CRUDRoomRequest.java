@@ -2,22 +2,31 @@ package com.vn.tali.hotel.request;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CRUDRoomRequest {
 
+	@Min(value = 0, message = "Id chi nhánh không được để trống")
 	@JsonProperty("branch_id")
 	private int branchId;
 
+	@NotEmpty(message = "Tên không được để trống")
 	@JsonProperty("name")
 	private String name;
 
+	@NotNull(message = "Mô tả không được null")
 	@JsonProperty("description")
 	private String description;
 
+	@Min(value = 0, message = "Loại phòng không được để trống")
 	@JsonProperty("type")
 	private int type;
 
+	@Min(value = 0, message = "Giá phòng phải lớn hơn 0")
 	@JsonProperty("price")
 	private BigDecimal price;
 
