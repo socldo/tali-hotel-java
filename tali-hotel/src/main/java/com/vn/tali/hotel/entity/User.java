@@ -34,6 +34,10 @@ public class User extends BaseEntity {
 
 	private String password;
 
+	@Column(name = "jwt_token")
+	@JsonProperty("jwt_token")
+	private String jwtToken;
+
 	public User() {
 
 	}
@@ -100,6 +104,14 @@ public class User extends BaseEntity {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getJwtToken() {
+		return jwtToken;
+	}
+
+	public void setJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
 	}
 
 }

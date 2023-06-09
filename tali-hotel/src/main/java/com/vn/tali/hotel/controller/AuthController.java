@@ -3,13 +3,16 @@ package com.vn.tali.hotel.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.common.UnauthorizedException;
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.LoginRequest;
@@ -51,26 +55,41 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-//		BaseResponse<User> response = new BaseResponse<>();
+	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
+			HttpServletRequest request) {
+		BaseResponse<Object> response = new BaseResponse<>();
+		try {
 
-		UsernamePasswordAuthenticationToken vvv = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-				loginRequest.getPassword());
+			Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+			User user = userService.findByPhone(userDetails.getUsername());
 
-		ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+			user.setJwtToken(jwtUtils.getJwtFromCookies(request));
 
-		List<String> roles = userDetails.getAuthorities().stream().map(x -> x.getAuthority())
-				.collect(Collectors.toList());
-		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-				.body(new UserInforResponse(userDetails.getId(), userDetails.getEmail(), userDetails.getUsername(),
-						userDetails.getUsername(), userDetails.getUsername(), roles.get(0)));
+			userService.update(user);
+
+			ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+
+			List<String> roles = userDetails.getAuthorities().stream().map(x -> x.getAuthority())
+					.collect(Collectors.toList());
+			ResponseEntity data = ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+					.body(new UserInforResponse(userDetails.getId(), userDetails.getEmail(), userDetails.getUsername(),
+							userDetails.getUsername(), userDetails.getUsername(), roles.get(0),
+							jwtUtils.getJwtFromCookies(request)));
+			response.setData(data.getBody());
+			return response;
+		} catch (BadCredentialsException e) {
+			response.setStatus(HttpStatus.UNAUTHORIZED);
+			response.setMessageError("Thông tin đăng nhập không hợp lệ");
+			return response;
+
+		}
+
 	}
 
 	@PostMapping("/signup")

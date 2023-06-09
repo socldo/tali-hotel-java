@@ -21,6 +21,9 @@ public class UserInforResponse {
 	@JsonProperty("role")
 	private String role;
 
+	@JsonProperty("jwt_token")
+	private String jwtToken;
+
 	public long getId() {
 		return id;
 	}
@@ -61,7 +64,24 @@ public class UserInforResponse {
 		this.lastName = lastName;
 	}
 
-	public UserInforResponse(long id, String email, String phone, String firstName, String lastName, String role) {
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getJwtToken() {
+		return jwtToken;
+	}
+
+	public void setJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
+	}
+
+	public UserInforResponse(long id, String email, String phone, String firstName, String lastName, String role,
+			String jwtToken) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -69,6 +89,7 @@ public class UserInforResponse {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.role = role;
+		this.jwtToken = jwtToken;
 	}
 
 	public UserInforResponse() {

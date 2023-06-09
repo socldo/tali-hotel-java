@@ -27,6 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		User user = (User) userService.findByPhone(username);
 
+		if (user == null) {
+			throw new UsernameNotFoundException(String.format("The user doesn't exist"));
+		}
+
 		return UserDetailsImpl.build(user, roleService);
 	}
 
