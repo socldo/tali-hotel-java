@@ -1,4 +1,4 @@
-package com.vn.tali.hotel.entity;
+package com.vn.tali.hotel.common;
 
 public enum StoreProcedureStatusCodeEnum {
 	SUCCESS(0),

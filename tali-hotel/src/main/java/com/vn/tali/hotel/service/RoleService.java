@@ -14,6 +14,4 @@ public interface RoleService {
 	void update(Role entity);
 
 	List<Role> findAll();
-
-	List<Role> findByUserId(long userId);
 }

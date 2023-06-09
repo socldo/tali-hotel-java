@@ -101,7 +101,6 @@ public class BranchController {
 		response.setData(new BranchResponse(branch));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 	@PostMapping(value = "{id}/change-status", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BranchResponse>> changeStatus(@PathVariable("id") int id) throws Exception {
 		BaseResponse<BranchResponse> response = new BaseResponse<>();

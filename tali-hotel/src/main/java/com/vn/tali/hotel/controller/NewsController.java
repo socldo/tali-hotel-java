@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vn.tali.hotel.entity.News;
-import com.vn.tali.hotel.entity.TestModel;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.NewsResponse;
 import com.vn.tali.hotel.service.NewsService;
@@ -26,27 +24,22 @@ public class NewsController {
 	public ResponseEntity<BaseResponse<NewsResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 
 		BaseResponse<NewsResponse> response = new BaseResponse<>();
-		News news = newsService.findOne(id);
 
-		if (news == null) {
-			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Không tồn tại!");
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		}
+		NewsResponse data = new NewsResponse(newsService.findOne(id));
 
-		response.setData(new NewsResponse(news));
+		response.setData(data);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
 
 	@GetMapping(value = "/test", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<TestModel>> test() throws Exception {
+	public ResponseEntity<BaseResponse<NewsResponse>> test(@PathVariable("id") int id) throws Exception {
 
-		BaseResponse<TestModel> response = new BaseResponse<>();
-		TestModel data = newsService.spList();
+		BaseResponse<NewsResponse> response = new BaseResponse<>();
+
 		System.out.println(newsService.spList());
-		response.setData(data);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}

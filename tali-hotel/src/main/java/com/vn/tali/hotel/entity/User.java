@@ -12,11 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -39,9 +34,21 @@ public class User extends BaseEntity {
 
 	private String password;
 
-	@Column(name = "access_token")
-	@JsonProperty("access_token")
-	private String accessToken;
+	@Column(name = "jwt_token")
+	@JsonProperty("jwt_token")
+	private String jwtToken;
+
+	public User() {
+
+	}
+
+	public User(String email, String phone, String firstName, String lastName, String password) {
+		this.email = email;
+		this.phone = phone;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+	}
 
 	public String getPhone() {
 		return phone;
@@ -99,12 +106,12 @@ public class User extends BaseEntity {
 		this.password = password;
 	}
 
-	public String getAccessToken() {
-		return accessToken;
+	public String getJwtToken() {
+		return jwtToken;
 	}
 
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
+	public void setJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
 	}
 
 }

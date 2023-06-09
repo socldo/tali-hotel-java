@@ -12,11 +12,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.common.HttpException;
+import com.vn.tali.hotel.common.StoreProcedureStatusCodeEnum;
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.NewsDao;
 import com.vn.tali.hotel.entity.News;
-import com.vn.tali.hotel.entity.StoreProcedureStatusCodeEnum;
-import com.vn.tali.hotel.entity.TestModel;
 
 @Repository("newsDao")
 @Transactional
@@ -48,8 +47,8 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 	}
 
 	@Override
-	public TestModel spList() throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("sp_list", TestModel.class)
+	public int spList() throws Exception {
+		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("sp_list", int.class)
 
 				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
 				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
@@ -59,7 +58,7 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 
 		switch (StoreProcedureStatusCodeEnum.valueOf(statusCode)) {
 		case SUCCESS:
-			return (TestModel) query.getResultList().stream().findFirst().orElse(null);
+			return (int) query.getResultList().stream().findFirst().orElse(null);
 		case INPUT_INVALID:
 			throw new HttpException(HttpStatus.BAD_REQUEST, messageError);
 		default:

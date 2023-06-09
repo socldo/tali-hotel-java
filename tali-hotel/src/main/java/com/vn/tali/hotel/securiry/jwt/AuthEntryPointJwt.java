@@ -1,4 +1,6 @@
-package com.vn.tali.hotel.security.jwt;
+
+package com.vn.tali.hotel.securiry.jwt;
+
 
 import java.io.IOException;
 
@@ -21,8 +23,10 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
+		System.out.println("test Entrypoint");
 		logger.error("Unauthorized error: {}", authException.getMessage());
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
 	}
 	
+
 }

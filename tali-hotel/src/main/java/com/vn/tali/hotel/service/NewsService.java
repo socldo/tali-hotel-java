@@ -3,7 +3,6 @@ package com.vn.tali.hotel.service;
 import java.util.List;
 
 import com.vn.tali.hotel.entity.News;
-import com.vn.tali.hotel.entity.TestModel;
 
 public interface NewsService {
 	
@@ -15,5 +14,5 @@ public interface NewsService {
 
 	News findOne(int id) throws Exception;
 	
-	TestModel spList() throws Exception;
+	int spList() throws Exception;
 }
