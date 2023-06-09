@@ -48,9 +48,11 @@ public class UserController {
 		return response;
 	}
 
-//	@RequestMapping(value = "/get", method = RequestMethod.GET)
-//	public BaseResponse<User> test() throws Exception {
-//		BaseResponse<User> response = new BaseResponse<>();
-//		User user = userService.findOne(0)
-//	}
+	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	public BaseResponse<User> test() throws Exception {
+		BaseResponse<User> response = new BaseResponse<>();
+//		User user = userService.findOne(2);
+//		response.setData(user);
+		return response;
+	}
 }
