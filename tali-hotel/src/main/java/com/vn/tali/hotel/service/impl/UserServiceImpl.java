@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 	private UserDao dao;
 
 	@Override
-	public User findOne(int id) {
+	public User findOne(long id) {
 		return dao.findById(id).get();
 	}
 

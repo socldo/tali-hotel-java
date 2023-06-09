@@ -4,7 +4,7 @@ import com.vn.tali.hotel.entity.User;
 
 public interface UserService {
 
-	User findOne(int id);
+	User findOne(long id);
 
 	User create(User entity);
 

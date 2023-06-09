@@ -3,7 +3,9 @@ package com.vn.tali.hotel.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,7 @@ public class AuthController {
 
 			User user = userService.findByPhone(userDetails.getUsername());
 
-			user.setJwtToken(jwtUtils.getJwtFromCookies(request));
+			user.setJwtToken(jwtUtils.generateTokenFromUsername(loginRequest.getUsername()));
 
 			userService.update(user);
 
@@ -78,8 +80,7 @@ public class AuthController {
 					.collect(Collectors.toList());
 			ResponseEntity data = ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
 					.body(new UserInforResponse(userDetails.getId(), userDetails.getEmail(), userDetails.getUsername(),
-							userDetails.getUsername(), userDetails.getUsername(), roles.get(0),
-							jwtUtils.getJwtFromCookies(request)));
+							userDetails.getUsername(), userDetails.getUsername(), roles.get(0), user.getJwtToken()));
 			response.setData(data.getBody());
 			return response;
 		} catch (BadCredentialsException e) {
@@ -123,9 +124,12 @@ public class AuthController {
 	 * @return
 	 */
 	@PostMapping("/signout")
-	public BaseResponse<Object> logoutUser() {
+	public BaseResponse<Object> logoutUser(HttpServletResponse responseHttp) {
 		BaseResponse<Object> response = new BaseResponse<>();
 		jwtUtils.getCleanJwtCookie();
+		Cookie cookie = new Cookie("cookieName", null);
+		cookie.setMaxAge(0);
+		responseHttp.addCookie(cookie);
 		response.setStatus(HttpStatus.OK);
 		response.setData("You have been sign out!");
 		return response;
