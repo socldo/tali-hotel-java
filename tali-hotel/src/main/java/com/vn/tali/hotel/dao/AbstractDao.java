@@ -30,6 +30,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return session;
 	}
 
+	
 	protected CriteriaBuilder getBuilder() {
 		return this.getSession().getCriteriaBuilder();
 	}

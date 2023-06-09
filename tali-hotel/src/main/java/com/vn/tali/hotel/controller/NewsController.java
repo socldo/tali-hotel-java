@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.entity.News;
 import com.vn.tali.hotel.entity.TestModel;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.NewsResponse;
@@ -25,10 +26,15 @@ public class NewsController {
 	public ResponseEntity<BaseResponse<NewsResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 
 		BaseResponse<NewsResponse> response = new BaseResponse<>();
+		News news = newsService.findOne(id);
 
-		NewsResponse data = new NewsResponse(newsService.findOne(id));
+		if (news == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
 
-		response.setData(data);
+		response.setData(new NewsResponse(news));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
