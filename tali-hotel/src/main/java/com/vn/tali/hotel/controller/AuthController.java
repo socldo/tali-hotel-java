@@ -30,10 +30,13 @@ import com.vn.tali.hotel.request.LoginRequest;
 import com.vn.tali.hotel.request.UserCreateRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.UserInforResponse;
+import com.vn.tali.hotel.response.UserResponse;
 import com.vn.tali.hotel.securiry.jwt.JwtUtils;
 import com.vn.tali.hotel.securiry.service.UserDetailsImpl;
 import com.vn.tali.hotel.service.RoleService;
 import com.vn.tali.hotel.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -53,6 +56,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	@Operation(summary = "API đăng nhập", description = "API đăng nhập")
 	@CrossOrigin()
 	@PostMapping("/signin")
 	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -89,9 +93,10 @@ public class AuthController {
 
 	}
 
+	@Operation(summary = "API đăng ký", description = "API đăng ký")
 	@PostMapping("/signup")
-	public BaseResponse<User> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
-		BaseResponse<User> response = new BaseResponse<>();
+	public BaseResponse<UserResponse> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
+		BaseResponse<UserResponse> response = new BaseResponse<>();
 
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
@@ -112,7 +117,7 @@ public class AuthController {
 
 		user.setRoleId(role.getId());
 		userService.update(user);
-		response.setData(user);
+		response.setData(new UserResponse(user));
 		return response;
 	}
 
@@ -121,6 +126,8 @@ public class AuthController {
 	 * 
 	 * @return
 	 */
+	
+	@Operation(summary = "API đăng xuất", description = "API đăng xuất")
 	@PostMapping("/signout")
 	public BaseResponse<Object> logoutUser(HttpServletResponse responseHttp) {
 		BaseResponse<Object> response = new BaseResponse<>();

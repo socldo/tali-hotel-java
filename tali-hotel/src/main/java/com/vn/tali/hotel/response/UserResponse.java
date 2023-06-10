@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.User;
 
 public class UserResponse {
@@ -56,8 +57,7 @@ public class UserResponse {
 		super();
 		this.id = e.getId();
 		this.roleId = e.getRoleId();
-		this.birthday = e.getBirthday() == null ? "" : e.getBirthday();
-//		this.birthday = Utils.getDateFormatVN(e.getBirthday());
+		this.birthday = e.getBirthday() == null ? "" : Utils.getDateFormatVN(e.getBirthday());
 		this.avatar = e.getAvatar() == null ? "" : e.getAvatar();
 		this.firstName = e.getFirstName();
 		this.lastName = e.getLastName();
@@ -66,8 +66,8 @@ public class UserResponse {
 		this.email = e.getEmail();
 		this.password = e.getPassword();
 		this.address = e.getAddress() == null ? "" : e.getAddress();
-		this.isLock = e.getIsLock();
-		this.isActivated = e.getIsActivated();
+		this.isLock = e.isLock() ? 1 : 0;
+		this.isActivated = e.isActivated() ? 1 : 0;
 		this.jwtToken = e.getJwtToken() == null ? "" : e.getJwtToken();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();

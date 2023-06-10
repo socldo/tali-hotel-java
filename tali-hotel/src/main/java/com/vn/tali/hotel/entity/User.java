@@ -1,5 +1,7 @@
 package com.vn.tali.hotel.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +27,7 @@ public class User extends BaseEntity {
 	@JsonProperty("role_id")
 	private int roleId;
 
-	private String birthday;
+	private Date birthday;
 
 	private String avatar = "";
 
@@ -49,11 +51,11 @@ public class User extends BaseEntity {
 
 	@Column(name = "is_locked")
 	@JsonProperty("is_locked")
-	private int isLock;
+	private boolean isLock;
 
 	@Column(name = "is_activated")
 	@JsonProperty("is_activated")
-	private int isActivated;
+	private boolean isActivated;
 
 	@Column(name = "jwt_token")
 	@JsonProperty("jwt_token")
@@ -135,11 +137,11 @@ public class User extends BaseEntity {
 		this.jwtToken = jwtToken;
 	}
 
-	public String getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 
@@ -167,19 +169,19 @@ public class User extends BaseEntity {
 		this.address = address;
 	}
 
-	public int getIsLock() {
+	public boolean isLock() {
 		return isLock;
 	}
 
-	public void setIsLock(int isLock) {
+	public void setLock(boolean isLock) {
 		this.isLock = isLock;
 	}
 
-	public int getIsActivated() {
+	public boolean isActivated() {
 		return isActivated;
 	}
 
-	public void setIsActivated(int isActivated) {
+	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
 	}
 

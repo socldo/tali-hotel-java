@@ -21,6 +21,8 @@ import com.vn.tali.hotel.response.UserResponse;
 import com.vn.tali.hotel.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 
 @RestController
 @RequestMapping(path = "/api/users")
@@ -31,10 +33,10 @@ public class UserController {
 
 	@Operation(summary = "API tạo tài khoản", description = "API tạo tài khoản")
 	@PostMapping(value = "/create", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<UserResponse>> create(@Validated @RequestBody UserCreateRequest request)
+	public ResponseEntity<BaseResponse<UserResponse>> create(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Validated @RequestBody UserCreateRequest request)
 			throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
-
 		User user = new User();
 		user.setRoleId(request.getRoleId());
 		user.setEmail(request.getEmail());
@@ -50,6 +52,8 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API lấy chi tiết tài khoản", description = "API lấy chi tiết tài khoản")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<UserResponse>> findOne(@PathVariable("id") int id) throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
@@ -64,6 +68,7 @@ public class UserController {
 
 	}
 
+	@Operation(summary = "API lấy danh sách tài khoản", description = "API lấy danh sách tài khoản")
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<UserResponse>>> findAll() throws Exception {
 		BaseResponse<List<UserResponse>> response = new BaseResponse<>();
@@ -71,7 +76,25 @@ public class UserController {
 
 		response.setData(new UserResponse().mapToList(users));
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 
+	@Operation(summary = "API khóa tài khoản", description = "API khóa tài khoản")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+	@PostMapping(value = "{id}/lock", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<UserResponse>> lock(@PathVariable("id") int id) throws Exception {
+		BaseResponse<UserResponse> response = new BaseResponse<>();
+		User user = userService.findOne(id);
+		if (user == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		user.setLock(!user.isLock());
+
+		userService.update(user);
+		response.setData(new UserResponse(user));
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }

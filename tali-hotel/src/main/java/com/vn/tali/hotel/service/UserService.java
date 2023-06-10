@@ -10,8 +10,6 @@ public interface UserService {
 
 	User create(User entity);
 
-	void remove(User entity);
-
 	void update(User entity);
 
 	User findByPhone(String phone);

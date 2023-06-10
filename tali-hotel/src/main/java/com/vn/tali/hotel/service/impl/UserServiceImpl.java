@@ -31,11 +31,6 @@ public class UserServiceImpl implements UserService {
 		return dao.save(entity);
 	}
 
-	@Override
-	public void remove(User entity) {
-		dao.delete(entity);
-
-	}
 
 	@Override
 	public void update(User entity) {
