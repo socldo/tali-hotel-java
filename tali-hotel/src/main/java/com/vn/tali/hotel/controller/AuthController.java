@@ -54,10 +54,9 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@CrossOrigin(origins = "*", maxAge = 3600)
+	@CrossOrigin()
 	@PostMapping("/signin")
-	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
-			HttpServletRequest request) {
+	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		BaseResponse<Object> response = new BaseResponse<>();
 		try {
 
