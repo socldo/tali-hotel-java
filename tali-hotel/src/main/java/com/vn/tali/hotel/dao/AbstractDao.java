@@ -42,7 +42,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return (T) getSession().get(persistentClass, key);
 	}
 
-	public void update(T entity) {
+	public void update(T entity) throws Exception {
 		executeInTransaction(session -> {
 			session.update(entity);
 			session.flush();

@@ -33,9 +33,8 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 	}
 
 	@Override
-	public News update(News entity) throws Exception {
-		this.getSession().update(entity);
-		return entity;
+	public void update(News entity) throws Exception {
+		this.executeInTransaction(session -> session.update(entity));
 	}
 
 	@Override

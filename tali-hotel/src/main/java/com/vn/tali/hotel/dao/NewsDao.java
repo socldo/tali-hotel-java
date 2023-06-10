@@ -8,7 +8,7 @@ public interface NewsDao {
 
 	List<News> findAll() throws Exception;
 
-	News update(News entity) throws Exception;
+	void update(News entity) throws Exception;
 
 	News create(News entity) throws Exception;
 
