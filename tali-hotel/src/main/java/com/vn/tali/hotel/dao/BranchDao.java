@@ -8,7 +8,7 @@ public interface BranchDao {
 
 	Branch findOne(int id) throws Exception;
 
-	Branch create(Branch entity) throws Exception;
+	void create(Branch entity) throws Exception;
 
 	void update(Branch entity) throws Exception;
 

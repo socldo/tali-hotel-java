@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -93,13 +92,15 @@ public class AuthController {
 	@PostMapping("/signup")
 	public BaseResponse<User> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
 		BaseResponse<User> response = new BaseResponse<>();
+
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Số điện thoại đã tồn tại, vui lòng thử lại!");
 			return response;
 		}
 
-		if (roleService.findOne(signUpRequest.getRoleId()) == null) {
+		Role role = roleService.findOne(signUpRequest.getRoleId());
+		if (role == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại quyền này!");
 			return response;
@@ -108,8 +109,6 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getFirstName(),
 				signUpRequest.getLastName(), encoder.encode(signUpRequest.getPassword()));
-
-		Role role = roleService.findOne(signUpRequest.getRoleId());
 
 		user.setRoleId(role.getId());
 		userService.update(user);

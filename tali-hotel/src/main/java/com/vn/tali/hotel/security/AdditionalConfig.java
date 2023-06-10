@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+
 public class AdditionalConfig implements Filter {
 
 	@Override

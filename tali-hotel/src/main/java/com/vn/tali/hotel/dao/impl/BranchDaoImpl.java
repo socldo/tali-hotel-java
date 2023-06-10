@@ -24,13 +24,12 @@ public class BranchDaoImpl extends AbstractDao<Integer, Branch> implements Branc
 
 	@Override
 	public void update(Branch entity) {
-		this.getSession().update(entity);
+		this.executeInTransaction(session -> session.update(entity));
 	}
 
 	@Override
-	public Branch create(Branch entity) {
-		this.getSession().save(entity);
-		return entity;
+	public void create(Branch entity) {
+		this.executeInTransaction(session -> session.save(entity));
 	}
 
 	@Override

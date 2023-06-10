@@ -1,6 +1,7 @@
 package com.vn.tali.hotel.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AuthTokenFilter authTokenFilter;
 
+	@Value("${springdoc.api-docs.enabled}")
+	private boolean isSpringdocEnable;
+
 //	@Bean
 //	public AuthTokenFilter authenticationJwtTokenFilter() {
 //		return new AuthTokenFilter();
@@ -56,12 +60,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/api/auth/**").permitAll().anyRequest()
-				.permitAll(); 
-//				.authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-//				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Cấu hình cho
+																									// Swagger UI
+				.anyRequest().authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
@@ -69,5 +75,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().mvcMatchers("/api/auth/**");
+		web.ignoring().antMatchers("/v3/api-docs", // Tài liệu API
+				"/swagger-ui/**", // Giao diện Swagger UI
+				"/swagger-ui.html", // Giao diện Swagger UI HTML
+				"/swagger-resources/**", // Các tài nguyên Swagger
+				"/webjars/**" // Các tài nguyên webjar
+		);
 	}
 }

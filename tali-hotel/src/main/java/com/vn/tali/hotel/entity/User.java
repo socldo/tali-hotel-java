@@ -12,6 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -22,7 +27,7 @@ public class User extends BaseEntity {
 
 	private String birthday;
 
-	private String avatar;
+	private String avatar = "";
 
 	@Column(name = "first_name")
 	@JsonProperty("first_name")
@@ -40,7 +45,7 @@ public class User extends BaseEntity {
 
 	private String password;
 
-	private String address;
+	private String address = "";
 
 	@Column(name = "is_locked")
 	@JsonProperty("is_locked")
@@ -52,7 +57,7 @@ public class User extends BaseEntity {
 
 	@Column(name = "jwt_token")
 	@JsonProperty("jwt_token")
-	private String jwtToken;
+	private String jwtToken = "";
 
 	public User() {
 
