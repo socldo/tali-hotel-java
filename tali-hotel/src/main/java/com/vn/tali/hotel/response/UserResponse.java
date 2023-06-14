@@ -18,11 +18,7 @@ public class UserResponse {
 
 	private String avatar = "";
 
-	@JsonProperty("first_name")
-	private String firstName;
-
-	@JsonProperty("last_name")
-	private String lastName;
+	private String name;
 
 	private int gender;
 
@@ -59,8 +55,7 @@ public class UserResponse {
 		this.roleId = e.getRoleId();
 		this.birthday = e.getBirthday() == null ? "" : Utils.getDateFormatVN(e.getBirthday());
 		this.avatar = e.getAvatar() == null ? "" : e.getAvatar();
-		this.firstName = e.getFirstName();
-		this.lastName = e.getLastName();
+		this.name = e.getName();
 		this.gender = e.getGender();
 		this.phone = e.getPhone();
 		this.email = e.getEmail();
@@ -109,20 +104,13 @@ public class UserResponse {
 		this.avatar = avatar;
 	}
 
-	public String getFirstName() {
-		return firstName;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getGender() {

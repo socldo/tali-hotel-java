@@ -31,13 +31,7 @@ public class User extends BaseEntity {
 
 	private String avatar = "";
 
-	@Column(name = "first_name")
-	@JsonProperty("first_name")
-	private String firstName;
-
-	@Column(name = "last_name")
-	@JsonProperty("last_name")
-	private String lastName;
+	private String name;
 
 	private int gender;
 
@@ -65,11 +59,10 @@ public class User extends BaseEntity {
 
 	}
 
-	public User(String email, String phone, String firstName, String lastName, String password) {
+	public User(String email, String phone, String name,String password) {
 		this.email = email;
 		this.phone = phone;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.name = name;
 		this.password = password;
 	}
 
@@ -105,20 +98,12 @@ public class User extends BaseEntity {
 		this.email = email;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPassword() {

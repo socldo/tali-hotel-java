@@ -112,8 +112,8 @@ public class AuthController {
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getFirstName(),
-				signUpRequest.getLastName(), encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getName(),
+				encoder.encode(signUpRequest.getPassword()));
 
 		user.setRoleId(role.getId());
 		userService.update(user);
@@ -126,7 +126,7 @@ public class AuthController {
 	 * 
 	 * @return
 	 */
-	
+
 	@Operation(summary = "API đăng xuất", description = "API đăng xuất")
 	@PostMapping("/signout")
 	public BaseResponse<Object> logoutUser(HttpServletResponse responseHttp) {
