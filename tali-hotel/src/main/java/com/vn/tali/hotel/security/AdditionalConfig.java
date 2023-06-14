@@ -44,6 +44,7 @@ public class AdditionalConfig implements Filter {
 	public void destroy() {
 	}
 
+
 	
 	 @Bean
 	    public CorsFilter corsFilter() {
@@ -56,5 +57,6 @@ public class AdditionalConfig implements Filter {
 	        source.registerCorsConfiguration("/**", corsConfig);
 	        
 	        return new CorsFilter(source);
+	
 	    }
 }
