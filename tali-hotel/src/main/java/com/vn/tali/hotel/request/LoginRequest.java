@@ -3,7 +3,7 @@ package com.vn.tali.hotel.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginRequest {
-	@JsonProperty("username")
+	@JsonProperty("phone")
 	private String username;
 
 	@JsonProperty("password")
