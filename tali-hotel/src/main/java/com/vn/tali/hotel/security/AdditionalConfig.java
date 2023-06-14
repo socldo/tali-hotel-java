@@ -1,6 +1,7 @@
 package com.vn.tali.hotel.security;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,7 +12,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 
@@ -39,5 +44,15 @@ public class AdditionalConfig implements Filter {
 	@Override
 	public void destroy() {
 	}
+	 @Bean
+	    public CorsConfigurationSource corsConfigurationSource() {
+	        CorsConfiguration configuration = new CorsConfiguration();
+	        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Cho phép yêu cầu từ địa chỉ http://localhost:3000
+	        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Cho phép các phương thức GET, POST, PUT, DELETE
+	        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization")); // Cho phép các tiêu đề Content-Type và Authorization
 
+	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        source.registerCorsConfiguration("/**", configuration);
+	        return source;
+	    }
 }

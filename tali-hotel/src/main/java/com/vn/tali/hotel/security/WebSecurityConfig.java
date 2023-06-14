@@ -64,9 +64,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // Cấu hình cho
-																									// Swagger UI
-				.anyRequest().authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() 														// Swagger UI
+				.anyRequest()
+//				.permitAll()
+				.authenticated()
+				.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 		http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
