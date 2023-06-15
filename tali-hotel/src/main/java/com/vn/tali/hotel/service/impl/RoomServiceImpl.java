@@ -42,4 +42,12 @@ public class RoomServiceImpl implements RoomService {
 		return dao.findByName(branchId, name);
 	}
 
+	@Override
+	public List<Room> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
+			int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.filter(
+				branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate, checkIn, checkOut, keySearch, page, limit);
+	}
+
 }

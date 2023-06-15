@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Room;
 import com.vn.tali.hotel.request.CRUDRoomRequest;
@@ -33,10 +35,24 @@ public class RoomController {
 	BranchService branchService;
 
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<List<RoomResponse>>> getList() throws Exception {
+	public ResponseEntity<BaseResponse<List<RoomResponse>>> getList(
+			@RequestParam(name = "branch_id", required = false, defaultValue = "-1") int branchId,
+			@RequestParam(name = "status", required = false, defaultValue = "-1") int status,
+			@RequestParam(name = "people_number", required = false, defaultValue = "-1") int peopleNumber,
+			@RequestParam(name = "bed_number", required = false, defaultValue = "-1") int bedNumber,
+			@RequestParam(name = "min_price", required = false, defaultValue = "0") int minPrice,
+			@RequestParam(name = "max_price", required = false, defaultValue = "999999999") int maxPrice,
+			@RequestParam(name = "avarage_rate", required = false, defaultValue = "-1") int avarageRate,
+			@RequestParam(name = "check_in", required = false, defaultValue = "") String checkIn,
+			@RequestParam(name = "check_out", required = false, defaultValue = "") String checkOut,
+			@RequestParam(name = "key_search", required = false, defaultValue = "") String keySearch,
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "limit", required = false, defaultValue = "20") int limit) throws Exception {
 		BaseResponse<List<RoomResponse>> response = new BaseResponse<>();
 
-		List<Room> room = roomService.findAll();
+		List<Room> room = roomService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate,
+				Utils.convertStringToDateTimeStringDBFormat(checkIn),
+				Utils.convertStringToDateTimeStringDBFormat(checkOut), keySearch, page, limit);
 		response.setData(new RoomResponse().mapToList(room));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
