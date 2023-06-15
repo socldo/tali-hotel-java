@@ -24,8 +24,8 @@ public class BranchServiceImpl implements BranchService {
 	}
 
 	@Override
-	public Branch create(Branch entity) throws Exception {
-		return branchDao.create(entity);
+	public void create(Branch entity) throws Exception {
+		branchDao.create(entity);
 	}
 
 	@Override

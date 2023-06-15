@@ -1,5 +1,7 @@
 package com.vn.tali.hotel.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	private UserDao dao;
 
 	@Override
-	public User findOne(int id) {
+	public User findOne(long id) {
 		return dao.findById(id).get();
 	}
 
@@ -29,11 +31,6 @@ public class UserServiceImpl implements UserService {
 		return dao.save(entity);
 	}
 
-	@Override
-	public void remove(User entity) {
-		dao.delete(entity);
-
-	}
 
 	@Override
 	public void update(User entity) {
@@ -42,7 +39,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findByPhone(String phone) {
-		return (User) dao.findByPhone(phone);
+		return dao.findByPhone(phone);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return (List<User>) dao.findAll();
 	}
 
 }

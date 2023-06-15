@@ -3,14 +3,14 @@ package com.vn.tali.hotel.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.RoomDao;
 import com.vn.tali.hotel.entity.Room;
 import com.vn.tali.hotel.service.RoomService;
 
-@Repository
+@Service
 @Transactional
 public class RoomServiceImpl implements RoomService {
 
@@ -18,7 +18,7 @@ public class RoomServiceImpl implements RoomService {
 	RoomDao dao;
 
 	@Override
-	public void update(Room entity) {
+	public void update(Room entity) throws Exception {
 		dao.update(entity);
 	}
 

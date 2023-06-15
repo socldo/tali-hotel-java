@@ -19,6 +19,9 @@ public class BranchResponse {
 	@JsonProperty("address")
 	private String address;
 
+	@JsonProperty("phone")
+	private String phone;
+
 	@JsonProperty("status")
 	private int status;
 
@@ -38,6 +41,7 @@ public class BranchResponse {
 		this.name = e.getName();
 		this.emaill = e.getEmaill();
 		this.address = e.getAddress();
+		this.phone = e.getPhone();
 		this.status = e.isStatus() ? 1 : 0;
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
@@ -45,6 +49,14 @@ public class BranchResponse {
 
 	public List<BranchResponse> mapToList(List<Branch> baseEntities) {
 		return baseEntities.stream().map(e -> new BranchResponse(e)).collect(Collectors.toList());
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public int getId() {

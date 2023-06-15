@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.common.HttpException;
-import com.vn.tali.hotel.common.StoreProcedureStatusCodeEnum;
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.NewsDao;
 import com.vn.tali.hotel.entity.News;
+import com.vn.tali.hotel.entity.StoreProcedureStatusCodeEnum;
 
 @Repository("newsDao")
 @Transactional
@@ -33,9 +33,8 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 	}
 
 	@Override
-	public News update(News entity) throws Exception {
-		this.getSession().update(entity);
-		return entity;
+	public void update(News entity) throws Exception {
+		this.executeInTransaction(session -> session.update(entity));
 	}
 
 	@Override

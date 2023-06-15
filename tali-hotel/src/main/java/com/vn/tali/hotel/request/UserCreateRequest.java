@@ -12,11 +12,8 @@ public class UserCreateRequest {
 	@JsonProperty("phone")
 	private String phone;
 
-	@JsonProperty("first_name")
-	private String firstName;
-
-	@JsonProperty("last_name")
-	private String lastName;
+	@JsonProperty("name")
+	private String name;
 
 	@JsonProperty("password")
 	private String password;
@@ -45,20 +42,12 @@ public class UserCreateRequest {
 		this.email = email;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPassword() {

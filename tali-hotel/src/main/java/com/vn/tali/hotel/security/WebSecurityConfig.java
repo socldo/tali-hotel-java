@@ -1,6 +1,7 @@
 package com.vn.tali.hotel.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,21 +22,25 @@ import com.vn.tali.hotel.securiry.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
-		prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
+	@Autowired
+	private AuthTokenFilter authTokenFilter;
+
+	@Value("${springdoc.api-docs.enabled}")
+	private boolean isSpringdocEnable;
+
+//	@Bean
+//	public AuthTokenFilter authenticationJwtTokenFilter() {
+//		return new AuthTokenFilter();
+//	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -55,21 +60,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
-				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests()
-				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/cc/**").permitAll()
-				.anyRequest()
-//				.permitAll(); 
-				.authenticated();
 
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() 
+
+				.anyRequest()
+//				.permitAll()
+				.authenticated()
+				.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().mvcMatchers("/api/auth/signup");
+		web.ignoring().mvcMatchers("/api/auth/**");
+		web.ignoring().antMatchers("/v3/api-docs", // Tài liệu API
+				"/swagger-ui/**", // Giao diện Swagger UI
+				"/swagger-ui.html", // Giao diện Swagger UI HTML
+				"/swagger-resources/**", // Các tài nguyên Swagger
+				"/webjars/**" // Các tài nguyên webjar
+		);
 	}
 }

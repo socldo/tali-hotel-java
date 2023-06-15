@@ -3,7 +3,8 @@ package com.vn.tali.hotel.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,13 @@ import com.vn.tali.hotel.request.LoginRequest;
 import com.vn.tali.hotel.request.UserCreateRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.UserInforResponse;
+import com.vn.tali.hotel.response.UserResponse;
 import com.vn.tali.hotel.securiry.jwt.JwtUtils;
 import com.vn.tali.hotel.securiry.service.UserDetailsImpl;
 import com.vn.tali.hotel.service.RoleService;
 import com.vn.tali.hotel.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -52,10 +56,10 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@CrossOrigin(origins = "*", maxAge = 3600)
+	@Operation(summary = "API đăng nhập", description = "API đăng nhập")
+	@CrossOrigin()
 	@PostMapping("/signin")
-	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
-			HttpServletRequest request) {
+	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		BaseResponse<Object> response = new BaseResponse<>();
 		try {
 
@@ -68,7 +72,7 @@ public class AuthController {
 
 			User user = userService.findByPhone(userDetails.getUsername());
 
-			user.setJwtToken(jwtUtils.getJwtFromCookies(request));
+			user.setJwtToken(jwtUtils.generateTokenFromUsername(loginRequest.getUsername()));
 
 			userService.update(user);
 
@@ -78,8 +82,7 @@ public class AuthController {
 					.collect(Collectors.toList());
 			ResponseEntity data = ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
 					.body(new UserInforResponse(userDetails.getId(), userDetails.getEmail(), userDetails.getUsername(),
-							userDetails.getUsername(), userDetails.getUsername(), roles.get(0),
-							jwtUtils.getJwtFromCookies(request)));
+							userDetails.getUsername(), userDetails.getUsername(), roles.get(0), user.getJwtToken()));
 			response.setData(data.getBody());
 			return response;
 		} catch (BadCredentialsException e) {
@@ -90,30 +93,31 @@ public class AuthController {
 
 	}
 
+	@Operation(summary = "API đăng ký", description = "API đăng ký")
 	@PostMapping("/signup")
-	public BaseResponse<User> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
-		BaseResponse<User> response = new BaseResponse<>();
+	public BaseResponse<UserResponse> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
+		BaseResponse<UserResponse> response = new BaseResponse<>();
+
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Số điện thoại đã tồn tại, vui lòng thử lại!");
 			return response;
 		}
 
-		if (roleService.findOne(signUpRequest.getRoleId()) == null) {
+		Role role = roleService.findOne(signUpRequest.getRoleId());
+		if (role == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại quyền này!");
 			return response;
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getFirstName(),
-				signUpRequest.getLastName(), encoder.encode(signUpRequest.getPassword()));
-
-		Role role = roleService.findOne(signUpRequest.getRoleId());
+		User user = new User(signUpRequest.getEmail(), signUpRequest.getPhone(), signUpRequest.getName(),
+				encoder.encode(signUpRequest.getPassword()));
 
 		user.setRoleId(role.getId());
 		userService.update(user);
-		response.setData(user);
+		response.setData(new UserResponse(user));
 		return response;
 	}
 
@@ -122,10 +126,15 @@ public class AuthController {
 	 * 
 	 * @return
 	 */
+
+	@Operation(summary = "API đăng xuất", description = "API đăng xuất")
 	@PostMapping("/signout")
-	public BaseResponse<Object> logoutUser() {
+	public BaseResponse<Object> logoutUser(HttpServletResponse responseHttp) {
 		BaseResponse<Object> response = new BaseResponse<>();
 		jwtUtils.getCleanJwtCookie();
+		Cookie cookie = new Cookie("cookieName", null);
+		cookie.setMaxAge(0);
+		responseHttp.addCookie(cookie);
 		response.setStatus(HttpStatus.OK);
 		response.setData("You have been sign out!");
 		return response;

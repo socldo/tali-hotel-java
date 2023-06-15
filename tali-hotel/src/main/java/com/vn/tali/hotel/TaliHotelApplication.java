@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @ComponentScan({ "com.vn.tali.hotel" })
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class })

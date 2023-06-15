@@ -24,12 +24,12 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 
 	@Override
 	public void update(Room entity) {
-		this.getSession().update(entity);
+		this.executeInTransaction(session -> session.update(entity));
 	}
 
 	@Override
 	public void create(Room entity) {
-		this.getSession().save(entity);
+		this.executeInTransaction(session -> session.save(entity));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.vn.tali.hotel.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -20,17 +27,11 @@ public class User extends BaseEntity {
 	@JsonProperty("role_id")
 	private int roleId;
 
-	private String birthday;
+	private Date birthday;
 
-	private String avatar;
+	private String avatar = "";
 
-	@Column(name = "first_name")
-	@JsonProperty("first_name")
-	private String firstName;
-
-	@Column(name = "last_name")
-	@JsonProperty("last_name")
-	private String lastName;
+	private String name;
 
 	private int gender;
 
@@ -40,29 +41,28 @@ public class User extends BaseEntity {
 
 	private String password;
 
-	private String address;
+	private String address = "";
 
 	@Column(name = "is_locked")
 	@JsonProperty("is_locked")
-	private int isLock;
+	private boolean isLock;
 
 	@Column(name = "is_activated")
 	@JsonProperty("is_activated")
-	private int isActivated;
+	private boolean isActivated;
 
 	@Column(name = "jwt_token")
 	@JsonProperty("jwt_token")
-	private String jwtToken;
+	private String jwtToken = "";
 
 	public User() {
 
 	}
 
-	public User(String email, String phone, String firstName, String lastName, String password) {
+	public User(String email, String phone, String name,String password) {
 		this.email = email;
 		this.phone = phone;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.name = name;
 		this.password = password;
 	}
 
@@ -98,20 +98,12 @@ public class User extends BaseEntity {
 		this.email = email;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPassword() {
@@ -130,11 +122,11 @@ public class User extends BaseEntity {
 		this.jwtToken = jwtToken;
 	}
 
-	public String getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 
@@ -162,19 +154,19 @@ public class User extends BaseEntity {
 		this.address = address;
 	}
 
-	public int getIsLock() {
+	public boolean isLock() {
 		return isLock;
 	}
 
-	public void setIsLock(int isLock) {
+	public void setLock(boolean isLock) {
 		this.isLock = isLock;
 	}
 
-	public int getIsActivated() {
+	public boolean isActivated() {
 		return isActivated;
 	}
 
-	public void setIsActivated(int isActivated) {
+	public void setActivated(boolean isActivated) {
 		this.isActivated = isActivated;
 	}
 

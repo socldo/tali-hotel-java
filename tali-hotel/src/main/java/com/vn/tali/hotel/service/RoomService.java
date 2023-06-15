@@ -6,7 +6,7 @@ import com.vn.tali.hotel.entity.Room;
 
 public interface RoomService {
 
-	void update(Room entity);
+	void update(Room entity) throws Exception;
 
 	void create(Room entity);
 

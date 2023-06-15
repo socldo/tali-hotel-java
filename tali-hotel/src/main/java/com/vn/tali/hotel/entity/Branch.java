@@ -32,6 +32,9 @@ public class Branch extends BaseEntity {
 	@Column(name = "phone")
 	private String phone;
 
+	@Column(name = "images")
+	private String images = "[]";
+
 	@Column(name = "status")
 	private boolean status;
 
@@ -81,6 +84,14 @@ public class Branch extends BaseEntity {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
 	}
 
 }
