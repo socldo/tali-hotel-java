@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.RoomDao;
 import com.vn.tali.hotel.entity.Room;
+import com.vn.tali.hotel.entity.RoomDetail;
 
 @Repository
 @Transactional
@@ -50,9 +51,10 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 	}
 
 	@Override
-	public List<Room> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
-			int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("filter_rooms", Room.class)
+	public List<RoomDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice,
+			int maxPrice, int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit)
+			throws Exception {
+		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("filter_rooms", RoomDetail.class)
 				.registerStoredProcedureParameter("branchId", Integer.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("status", Integer.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("peopleNumber", Integer.class, ParameterMode.IN)
@@ -83,11 +85,11 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 
 		int statusCode = (int) query.getOutputParameterValue("status_code");
 		String messageError = query.getOutputParameterValue("message_error").toString();
-
+		System.out.println(query.getFirstResult());
 		switch (statusCode) {
 		case 0:
 			return query.getResultList();
-		case 2:
+		case 1:
 			throw new Exception("Bad request");
 		default:
 			throw new Exception(messageError);

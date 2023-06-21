@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.RoomDao;
 import com.vn.tali.hotel.entity.Room;
+import com.vn.tali.hotel.entity.RoomDetail;
 import com.vn.tali.hotel.service.RoomService;
 
 @Service
@@ -43,11 +44,12 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public List<Room> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
-			int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
+	public List<RoomDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice,
+			int maxPrice, int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit)
+			throws Exception {
 		// TODO Auto-generated method stub
-		return dao.filter(
-				branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate, checkIn, checkOut, keySearch, page, limit);
+		return dao.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate, checkIn, checkOut,
+				keySearch, page, limit);
 	}
 
 }

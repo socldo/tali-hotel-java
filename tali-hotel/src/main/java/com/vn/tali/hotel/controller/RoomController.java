@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Room;
+import com.vn.tali.hotel.entity.RoomDetail;
 import com.vn.tali.hotel.request.CRUDRoomRequest;
 import com.vn.tali.hotel.response.BaseResponse;
+import com.vn.tali.hotel.response.RoomDetailResponse;
 import com.vn.tali.hotel.response.RoomResponse;
 import com.vn.tali.hotel.service.BranchService;
 import com.vn.tali.hotel.service.RoomService;
@@ -35,7 +36,7 @@ public class RoomController {
 	BranchService branchService;
 
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<List<RoomResponse>>> getList(
+	public ResponseEntity<BaseResponse<List<RoomDetailResponse>>> getList(
 			@RequestParam(name = "branch_id", required = false, defaultValue = "-1") int branchId,
 			@RequestParam(name = "status", required = false, defaultValue = "-1") int status,
 			@RequestParam(name = "people_number", required = false, defaultValue = "-1") int peopleNumber,
@@ -48,12 +49,10 @@ public class RoomController {
 			@RequestParam(name = "key_search", required = false, defaultValue = "") String keySearch,
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "limit", required = false, defaultValue = "20") int limit) throws Exception {
-		BaseResponse<List<RoomResponse>> response = new BaseResponse<>();
-
-		List<Room> room = roomService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate,
-				Utils.convertStringToDateTimeStringDBFormat(checkIn),
-				Utils.convertStringToDateTimeStringDBFormat(checkOut), keySearch, page, limit);
-		response.setData(new RoomResponse().mapToList(room));
+		BaseResponse<List<RoomDetailResponse>> response = new BaseResponse<>();
+		List<RoomDetail> room = roomService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice,
+				avarageRate, checkIn, checkOut, keySearch, page, limit);
+		response.setData(new RoomDetailResponse().mapToList(room));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -3,6 +3,7 @@ package com.vn.tali.hotel.service;
 import java.util.List;
 
 import com.vn.tali.hotel.entity.Room;
+import com.vn.tali.hotel.entity.RoomDetail;
 
 public interface RoomService {
 
@@ -16,6 +17,6 @@ public interface RoomService {
 
 	Room findByName(int branchId, String name);
 
-	List<Room> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
+	List<RoomDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
 			int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception;
 }
