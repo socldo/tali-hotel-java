@@ -10,14 +10,26 @@ import com.vn.tali.hotel.entity.Room;
 public class RoomResponse {
 	private int id;
 
-	@JsonProperty("branch_id")
-	private int branchId;
+	@JsonProperty("hotel_id")
+	private int hotelId;
 
 	@JsonProperty("name")
 	private String name;
 
 	@JsonProperty("description")
 	private String description;
+
+	@JsonProperty("bed_number")
+	private int bedNumber;
+
+	@JsonProperty("people_number")
+	private int peopleNumber;
+
+	@JsonProperty("size")
+	private String size;
+
+	@JsonProperty("images")
+	private String images;
 
 	@JsonProperty("type")
 	private int type;
@@ -28,35 +40,22 @@ public class RoomResponse {
 	@JsonProperty("status")
 	private int status;
 
-	@JsonProperty("rate_count")
-	private int rateCount;
-
-	@JsonProperty("average_rate")
-	private double averageRate;
-
-	@JsonProperty("created_at")
-	private String createdAt;
-
-	@JsonProperty("updated_at")
-	private String updatedAt;
-
 	public RoomResponse() {
 		super();
 	}
 
 	public RoomResponse(Room e) {
-		super();
 		this.id = e.getId();
-		this.branchId = e.getBranchId();
+		this.hotelId = e.getHotelId();
 		this.name = e.getName();
 		this.description = e.getDescription();
+		this.bedNumber = e.getBedNumber();
+		this.peopleNumber = e.getPeopleNumber();
+		this.size = e.getSize();
+		this.images = e.getImages();
 		this.type = e.getType();
 		this.price = e.getPrice();
-		this.status = e.isStatus() ? 1 : 0;
-		this.rateCount = e.getRateCount();
-		this.averageRate = e.getAverageRate();
-		this.createdAt = e.getCreatedAt();
-		this.updatedAt = e.getUpdatedAt();
+		this.status = e.isStatus() == true ? 1 : 0;
 	}
 
 	public List<RoomResponse> mapToList(List<Room> baseEntities) {
@@ -71,12 +70,12 @@ public class RoomResponse {
 		this.id = id;
 	}
 
-	public int getBranchId() {
-		return branchId;
+	public int getHotelId() {
+		return hotelId;
 	}
 
-	public void setBranchId(int branchId) {
-		this.branchId = branchId;
+	public void setHotelId(int hotelId) {
+		this.hotelId = hotelId;
 	}
 
 	public String getName() {
@@ -95,6 +94,38 @@ public class RoomResponse {
 		this.description = description;
 	}
 
+	public int getBedNumber() {
+		return bedNumber;
+	}
+
+	public void setBedNumber(int bedNumber) {
+		this.bedNumber = bedNumber;
+	}
+
+	public int getPeopleNumber() {
+		return peopleNumber;
+	}
+
+	public void setPeopleNumber(int peopleNumber) {
+		this.peopleNumber = peopleNumber;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
 	public int getType() {
 		return type;
 	}
@@ -111,48 +142,12 @@ public class RoomResponse {
 		this.price = price;
 	}
 
-	public int isStatus() {
+	public int getStatus() {
 		return status;
 	}
 
 	public void setStatus(int status) {
 		this.status = status;
-	}
-
-	public int getRateCount() {
-		return rateCount;
-	}
-
-	public void setRateCount(int rateCount) {
-		this.rateCount = rateCount;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public double getAverageRate() {
-		return averageRate;
-	}
-
-	public void setAverageRate(double averageRate) {
-		this.averageRate = averageRate;
-	}
-
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
 	}
 
 }

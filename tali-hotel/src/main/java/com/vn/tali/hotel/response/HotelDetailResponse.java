@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vn.tali.hotel.entity.RoomDetail;
+import javax.persistence.Column;
 
-public class RoomDetailResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vn.tali.hotel.entity.HotelDetail;
+import com.vn.tali.hotel.entity.RoomTypeEnum;
+
+public class HotelDetailResponse {
 	private int id;
 
 	@JsonProperty("branch_id")
@@ -20,7 +23,7 @@ public class RoomDetailResponse {
 	private String description;
 
 	@JsonProperty("type")
-	private int type;
+	private String type;
 
 	@JsonProperty("price")
 	private BigDecimal price;
@@ -43,28 +46,92 @@ public class RoomDetailResponse {
 	@JsonProperty("updated_at")
 	private String updatedAt;
 
-	public RoomDetailResponse() {
+	@JsonProperty("is_popular")
+	private int isPopular;
+
+	@JsonProperty("is_have_wifi")
+	private int isHaveWifi;
+
+	@JsonProperty("is_have_parking")
+	private int isHaveParking;
+
+	@JsonProperty("total_reviews")
+	private int totalReviews;
+
+	@JsonProperty("short_description")
+	private String shortDescription;
+
+	@JsonProperty("highlight_property")
+	private String highlightProperty;
+
+	public HotelDetailResponse() {
 		super();
 	}
 
-	public RoomDetailResponse(RoomDetail e) {
+	public HotelDetailResponse(HotelDetail e) {
 		super();
 		this.id = e.getId();
 		this.branchId = e.getBranchId();
 		this.name = e.getName();
 		this.description = e.getDescription();
-		this.type = e.getType();
+		this.type = RoomTypeEnum.valueOf(e.getType()).getName();
 		this.price = e.getPrice();
 		this.status = e.isStatus() ? 1 : 0;
 		this.rateCount = e.getRateCount();
 		this.averageRate = e.getAverageRate();
 		this.address = e.getAddress();
+		this.isPopular = e.getIsPopular();
+		this.isHaveWifi = e.getIsHaveWifi();
+		this.isHaveParking = e.getIsHaveParking();
+		this.totalReviews = e.getTotalReviews();
+		this.shortDescription = e.getShortDescription();
+		this.highlightProperty = e.getHighlightProperty();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
 	}
 
-	public List<RoomDetailResponse> mapToList(List<RoomDetail> baseEntities) {
-		return baseEntities.stream().map(e -> new RoomDetailResponse(e)).collect(Collectors.toList());
+	public List<HotelDetailResponse> mapToList(List<HotelDetail> baseEntities) {
+		return baseEntities.stream().map(e -> new HotelDetailResponse(e)).collect(Collectors.toList());
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public String getHighlightProperty() {
+		return highlightProperty;
+	}
+
+	public void setHighlightProperty(String highlightProperty) {
+		this.highlightProperty = highlightProperty;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getIsPopular() {
+		return isPopular;
+	}
+
+	public void setIsPopular(int isPopular) {
+		this.isPopular = isPopular;
+	}
+
+	public int getTotalReviews() {
+		return totalReviews;
+	}
+
+	public void setTotalReviews(int totalReviews) {
+		this.totalReviews = totalReviews;
 	}
 
 	public int getId() {
@@ -99,12 +166,28 @@ public class RoomDetailResponse {
 		this.description = description;
 	}
 
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
+	}
+
+	public int getIsHaveWifi() {
+		return isHaveWifi;
+	}
+
+	public void setIsHaveWifi(int isHaveWifi) {
+		this.isHaveWifi = isHaveWifi;
+	}
+
+	public int getIsHaveParking() {
+		return isHaveParking;
+	}
+
+	public void setIsHaveParking(int isHaveParking) {
+		this.isHaveParking = isHaveParking;
 	}
 
 	public BigDecimal getPrice() {

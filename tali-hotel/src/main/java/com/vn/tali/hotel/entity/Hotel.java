@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "rooms")
-public class Room extends BaseEntity {
+@Table(name = "hotels")
+public class Hotel extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,26 +19,14 @@ public class Room extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "hotel_id")
-	private int hotelId;
+	@Column(name = "branch_id")
+	private int branchId;
 
 	@Column(name = "name")
 	private String name;
 
 	@Column(name = "description")
 	private String description;
-
-	@Column(name = "bed_number")
-	private int bedNumber;
-
-	@Column(name = "people_number")
-	private int peopleNumber;
-
-	@Column(name = "size")
-	private String size;
-
-	@Column(name = "images")
-	private String images;
 
 	@Column(name = "type")
 	private int type;
@@ -49,6 +37,12 @@ public class Room extends BaseEntity {
 	@Column(name = "status")
 	private boolean status;
 
+	@Column(name = "rate_count")
+	private int rateCount;
+
+	@Column(name = "average_rate")
+	private double averageRate;
+
 	public int getId() {
 		return id;
 	}
@@ -57,12 +51,12 @@ public class Room extends BaseEntity {
 		this.id = id;
 	}
 
-	public int getHotelId() {
-		return hotelId;
+	public int getBranchId() {
+		return branchId;
 	}
 
-	public void setHotelId(int hotelId) {
-		this.hotelId = hotelId;
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
 
 	public String getName() {
@@ -79,38 +73,6 @@ public class Room extends BaseEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public int getBedNumber() {
-		return bedNumber;
-	}
-
-	public void setBedNumber(int bedNumber) {
-		this.bedNumber = bedNumber;
-	}
-
-	public int getPeopleNumber() {
-		return peopleNumber;
-	}
-
-	public void setPeopleNumber(int peopleNumber) {
-		this.peopleNumber = peopleNumber;
-	}
-
-	public String getSize() {
-		return size;
-	}
-
-	public void setSize(String size) {
-		this.size = size;
-	}
-
-	public String getImages() {
-		return images;
-	}
-
-	public void setImages(String images) {
-		this.images = images;
 	}
 
 	public int getType() {
@@ -135,6 +97,22 @@ public class Room extends BaseEntity {
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public int getRateCount() {
+		return rateCount;
+	}
+
+	public void setRateCount(int rateCount) {
+		this.rateCount = rateCount;
+	}
+
+	public double getAverageRate() {
+		return averageRate;
+	}
+
+	public void setAverageRate(double averageRate) {
+		this.averageRate = averageRate;
 	}
 
 }

@@ -12,17 +12,25 @@ public class UserInforResponse {
 	@JsonProperty("phone")
 	private String phone;
 
-	@JsonProperty("first_name")
-	private String firstName;
-
-	@JsonProperty("last_name")
-	private String lastName;
+	@JsonProperty("name")
+	private String name;
 
 	@JsonProperty("role")
 	private String role;
 
 	@JsonProperty("jwt_token")
 	private String jwtToken;
+
+	@JsonProperty("avatar")
+	private String avatar;
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
 	public long getId() {
 		return id;
@@ -48,20 +56,12 @@ public class UserInforResponse {
 		this.phone = phone;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getRole() {
@@ -80,16 +80,16 @@ public class UserInforResponse {
 		this.jwtToken = jwtToken;
 	}
 
-	public UserInforResponse(long id, String email, String phone, String firstName, String lastName, String role,
-			String jwtToken) {
+	public UserInforResponse(long id, String email, String phone, String name, String role, String jwtToken,
+			String avatar) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.phone = phone;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.name = name;
 		this.role = role;
 		this.jwtToken = jwtToken;
+		this.avatar = avatar;
 	}
 
 	public UserInforResponse() {
