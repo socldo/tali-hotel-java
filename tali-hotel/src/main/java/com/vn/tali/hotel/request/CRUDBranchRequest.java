@@ -22,6 +22,17 @@ public class CRUDBranchRequest {
 	@JsonProperty("phone")
 	private String phone;
 
+	@JsonProperty("images")
+	private String images;
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
 	public String getName() {
 		return name;
 	}
