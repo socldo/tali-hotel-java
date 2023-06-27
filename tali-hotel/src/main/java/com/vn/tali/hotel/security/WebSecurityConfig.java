@@ -78,6 +78,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().mvcMatchers("/api/auth/**");
+		web.ignoring().mvcMatchers("/api/branches/**");
+		web.ignoring().mvcMatchers("/api/rooms/**");
+		web.ignoring().mvcMatchers("/api/rooms/{id}**");
+		web.ignoring().mvcMatchers("/api/hotels/**");
+		web.ignoring().mvcMatchers("/api/hotels/{id}**");
 		web.ignoring().antMatchers("/v3/api-docs", // Tài liệu API
 				"/swagger-ui/**", // Giao diện Swagger UI
 				"/swagger-ui.html", // Giao diện Swagger UI HTML
