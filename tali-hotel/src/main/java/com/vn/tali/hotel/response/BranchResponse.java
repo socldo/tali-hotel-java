@@ -25,7 +25,6 @@ public class BranchResponse {
 	@JsonProperty("status")
 	private int status;
 
-	private String images;
 
 	@JsonProperty("created_at")
 	private String createdAt;
