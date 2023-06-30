@@ -49,6 +49,16 @@ public class Room extends BaseEntity {
 	@Column(name = "status")
 	private boolean status;
 
+	private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public int getId() {
 		return id;
 	}

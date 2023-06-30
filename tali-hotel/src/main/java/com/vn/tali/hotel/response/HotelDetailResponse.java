@@ -1,12 +1,14 @@
 package com.vn.tali.hotel.response;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.entity.RoomTypeEnum;
 
@@ -64,11 +66,14 @@ public class HotelDetailResponse {
 	@JsonProperty("highlight_property")
 	private String highlightProperty;
 
+	@JsonProperty("images")
+	private List<String> images = new ArrayList<>();
+
 	public HotelDetailResponse() {
 		super();
 	}
 
-	public HotelDetailResponse(HotelDetail e) {
+	public HotelDetailResponse(HotelDetail e) throws Exception {
 		super();
 		this.id = e.getId();
 		this.branchId = e.getBranchId();
@@ -86,12 +91,29 @@ public class HotelDetailResponse {
 		this.totalReviews = e.getTotalReviews();
 		this.shortDescription = e.getShortDescription();
 		this.highlightProperty = e.getHighlightProperty();
+		this.images = Utils.convertJsonStringToListObject(e.getImages(), String[].class);
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
 	}
 
-	public List<HotelDetailResponse> mapToList(List<HotelDetail> baseEntities) {
-		return baseEntities.stream().map(e -> new HotelDetailResponse(e)).collect(Collectors.toList());
+	public List<HotelDetailResponse> mapToList(List<HotelDetail> baseEntities) throws Exception {
+		return baseEntities.stream().map(e -> {
+			try {
+				return new HotelDetailResponse(e);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return null;
+		}).collect(Collectors.toList());
+	}
+
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
 	}
 
 	public String getAddress() {
