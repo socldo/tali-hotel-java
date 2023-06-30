@@ -25,13 +25,15 @@ public class BranchResponse {
 	@JsonProperty("status")
 	private int status;
 
-	private String images;
 
 	@JsonProperty("created_at")
 	private String createdAt;
 
 	@JsonProperty("updated_at")
 	private String updatedAt;
+
+	@JsonProperty("images")
+	private String images;
 
 	public BranchResponse() {
 		super();
@@ -48,6 +50,7 @@ public class BranchResponse {
 		this.images = e.getImages();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
+		this.images = e.getImages();
 	}
 
 	public List<BranchResponse> mapToList(List<Branch> baseEntities) {

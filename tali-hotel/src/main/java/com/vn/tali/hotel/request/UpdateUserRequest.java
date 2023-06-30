@@ -13,11 +13,8 @@ public class UpdateUserRequest {
 	@JsonProperty("phone")
 	private String phone;
 
-	@JsonProperty("first_name")
-	private String firstName;
-
-	@JsonProperty("last_name")
-	private String lastName;
+	@JsonProperty("name")
+	private String name;
 
 	private String birthday;
 
@@ -51,20 +48,12 @@ public class UpdateUserRequest {
 		this.phone = phone;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getBirthday() {
