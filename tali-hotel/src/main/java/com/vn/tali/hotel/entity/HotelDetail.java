@@ -61,6 +61,16 @@ public class HotelDetail extends BaseEntity {
 
 	@Column(name = "highlight_property")
 	private String highlightProperty;
+	
+	private String images;
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
 
 	public String getShortDescription() {
 		return shortDescription;

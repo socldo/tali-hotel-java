@@ -39,6 +39,9 @@ public class RoomResponse {
 
 	@JsonProperty("status")
 	private int status;
+	
+	@JsonProperty("quantity")
+	private int quantity;
 
 	public RoomResponse() {
 		super();
@@ -56,6 +59,7 @@ public class RoomResponse {
 		this.type = e.getType();
 		this.price = e.getPrice();
 		this.status = e.isStatus() == true ? 1 : 0;
+		this.quantity = e.getQuantity();
 	}
 
 	public List<RoomResponse> mapToList(List<Room> baseEntities) {

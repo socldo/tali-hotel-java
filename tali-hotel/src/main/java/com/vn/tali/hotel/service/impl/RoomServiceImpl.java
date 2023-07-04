@@ -9,52 +9,43 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vn.tali.hotel.dao.RoomDao;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
-import com.vn.tali.hotel.service.HotelService;
+import com.vn.tali.hotel.entity.Room;
+import com.vn.tali.hotel.service.RoomService;
 
 @Service
 @Transactional
-public class RoomServiceImpl implements HotelService {
+public class RoomServiceImpl implements RoomService {
 
 	@Autowired
 	RoomDao dao;
 
 	@Override
-	public void update(Hotel entity) throws Exception {
-		dao.update(entity);
-	}
-
-	@Override
-	public void create(Hotel entity) {
+	public void create(Room entity) {
 		dao.create(entity);
 	}
 
 	@Override
-	public Hotel findOne(int id) throws Exception {
+	public Room findOne(int id) throws Exception {
 		return dao.findOne(id);
 	}
 
 	@Override
-	public List<Hotel> findAll() throws Exception {
+	public List<Room> findAll() throws Exception {
 		return dao.findAll();
 	}
 
 	@Override
-	public Hotel findByName(int branchId, String name) {
-		return dao.findByName(branchId, name);
-	}
-
-	@Override
-	public List<HotelDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice,
-			int maxPrice, int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit)
-			throws Exception {
+	public List<Room> filter(int hotelId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
+			String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate, checkIn, checkOut,
-				keySearch, page, limit);
+		return dao.filter(hotelId, status, peopleNumber, bedNumber, minPrice, maxPrice, checkIn, checkOut, keySearch,
+				page, limit);
 	}
 
 	@Override
-	public HotelDetail getDetailRoom(int id) throws Exception {
-		return dao.getDetailRoom(id);
+	public void update(Room entity) {
+		dao.update(entity);
+
 	}
 
 }
