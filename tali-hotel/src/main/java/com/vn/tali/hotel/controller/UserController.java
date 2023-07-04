@@ -98,6 +98,11 @@ public class UserController {
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
+		if (user.getId() == 3) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
 		user.setLock(!user.isLock());
 
 		userService.update(user);
