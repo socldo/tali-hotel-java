@@ -84,13 +84,13 @@ public class HotelDetailResponse {
 		this.status = e.isStatus() ? 1 : 0;
 		this.rateCount = e.getRateCount();
 		this.averageRate = e.getAverageRate();
-		this.address = e.getAddress();
+		this.address = e.getAddress() == null ? "" : e.getAddress();
 		this.isPopular = e.getIsPopular();
 		this.isHaveWifi = e.getIsHaveWifi();
 		this.isHaveParking = e.getIsHaveParking();
 		this.totalReviews = e.getTotalReviews();
 		this.shortDescription = e.getShortDescription();
-		this.highlightProperty = e.getHighlightProperty();
+		this.highlightProperty = e.getHighlightProperty() == null ? "" : e.getHighlightProperty();
 		this.images = Utils.convertJsonStringToListObject(e.getImages(), String[].class);
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();

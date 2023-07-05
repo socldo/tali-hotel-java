@@ -28,20 +28,86 @@ public class Hotel extends BaseEntity {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "status")
+	private boolean status;
+
+	@Column(name = "is_popular")
+	private boolean isPopular;
+
+	@Column(name = "is_have_wifi")
+	private boolean isHaveWifi;
+
+	@Column(name = "is_have_parking")
+	private boolean isHaveParking;
+
+	@Column(name = "short_description")
+	private String shortDescription;
+
+	@Column(name = "highlight_property")
+	private String highlightProperty;
+
+	@Column(name = "images")
+	private String images;
+
 	@Column(name = "type")
 	private int type;
 
 	@Column(name = "price")
-	private BigDecimal price;
-
-	@Column(name = "status")
-	private boolean status;
+	private BigDecimal price = BigDecimal.ZERO;
 
 	@Column(name = "rate_count")
 	private int rateCount;
 
 	@Column(name = "average_rate")
 	private double averageRate;
+
+	public boolean isPopular() {
+		return isPopular;
+	}
+
+	public void setPopular(boolean isPopular) {
+		this.isPopular = isPopular;
+	}
+
+	public boolean isHaveWifi() {
+		return isHaveWifi;
+	}
+
+	public void setHaveWifi(boolean isHaveWifi) {
+		this.isHaveWifi = isHaveWifi;
+	}
+
+	public boolean isHaveParking() {
+		return isHaveParking;
+	}
+
+	public void setHaveParking(boolean isHaveParking) {
+		this.isHaveParking = isHaveParking;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public String getHighlightProperty() {
+		return highlightProperty;
+	}
+
+	public void setHighlightProperty(String highlightProperty) {
+		this.highlightProperty = highlightProperty;
+	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
 
 	public int getId() {
 		return id;

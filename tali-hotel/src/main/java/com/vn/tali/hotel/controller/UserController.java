@@ -47,6 +47,13 @@ public class UserController {
 			@io.swagger.v3.oas.annotations.parameters.RequestBody @Validated @RequestBody UserCreateRequest request)
 			throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
+		
+		User findByPhone = userService.findByPhone(request.getPhone());
+		if (findByPhone != null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Số điện thoại đã tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
 		User user = new User();
 		user.setRoleId(request.getRoleId());
 		user.setEmail(request.getEmail());

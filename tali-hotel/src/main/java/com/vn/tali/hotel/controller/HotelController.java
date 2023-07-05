@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
-import com.vn.tali.hotel.request.CRUDRoomRequest;
+import com.vn.tali.hotel.request.CRUDHotelRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.HotelDetailResponse;
 import com.vn.tali.hotel.response.HotelResponse;
@@ -48,11 +49,11 @@ public class HotelController {
 			@RequestParam(name = "check_out", required = false, defaultValue = "") String checkOut,
 			@RequestParam(name = "key_search", required = false, defaultValue = "") String keySearch,
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "limit", required = false, defaultValue = "20") int limit) throws Exception {
+			@RequestParam(name = "limit", required = false, defaultValue = "2000") int limit) throws Exception {
 		BaseResponse<List<HotelDetailResponse>> response = new BaseResponse<>();
-		List<HotelDetail> room = hotelService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice,
+		List<HotelDetail> hotels = hotelService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice,
 				avarageRate, checkIn, checkOut, keySearch, page, limit);
-		response.setData(new HotelDetailResponse().mapToList(room));
+		response.setData(new HotelDetailResponse().mapToList(hotels));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class HotelController {
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelDetailResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelDetailResponse> response = new BaseResponse<>();
-		Hotel room = hotelService.findOne(id);
-		if (room == null) {
+		Hotel hotel = hotelService.findOne(id);
+		if (hotel == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -74,22 +75,22 @@ public class HotelController {
 	public ResponseEntity<BaseResponse<HotelResponse>> changeStatus(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelResponse> response = new BaseResponse<>();
 
-		Hotel room = hotelService.findOne(id);
-		if (room == null) {
+		Hotel hotel = hotelService.findOne(id);
+		if (hotel == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		room.setStatus(!room.isStatus());
+		hotel.setStatus(!hotel.isStatus());
 
-		hotelService.update(room);
+		hotelService.update(hotel);
 
-		response.setData(new HotelResponse(room));
+		response.setData(new HotelResponse(hotel));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/create", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<HotelResponse>> create(@RequestBody @Valid CRUDRoomRequest wrapper)
+	public ResponseEntity<BaseResponse<HotelResponse>> create(@RequestBody @Valid CRUDHotelRequest wrapper)
 			throws Exception {
 		BaseResponse<HotelResponse> response = new BaseResponse<>();
 		Branch branch = branchService.findOne(wrapper.getBranchId());
@@ -99,34 +100,38 @@ public class HotelController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
-		Hotel roomFindName = hotelService.findByName(wrapper.getBranchId(), wrapper.getName());
-		if (roomFindName != null) {
+		Hotel hotelFindName = hotelService.findByName(wrapper.getBranchId(), wrapper.getName());
+		if (hotelFindName != null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Tên phòng đã tồn tại!");
+			response.setMessageError("Tên khách sạn đã tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
-		Hotel room = new Hotel();
-		room.setName(wrapper.getName());
-		room.setBranchId(wrapper.getBranchId());
-		room.setDescription(wrapper.getDescription());
-		room.setType(wrapper.getType());
-		room.setPrice(wrapper.getPrice());
-		room.setStatus(true);
+		Hotel hotel = new Hotel();
+		hotel.setName(wrapper.getName());
+		hotel.setBranchId(wrapper.getBranchId());
+		hotel.setDescription(wrapper.getDescription());
+		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
+		hotel.setPopular(wrapper.getIsPopular() == 1);
+		hotel.setHaveWifi(wrapper.getIsHaveWifi() == 1);
+		hotel.setHaveParking(wrapper.getIsHaveParking() == 1);
+		hotel.setShortDescription(wrapper.getShortDescription());
+		hotel.setHighlightProperty(wrapper.getHighlightProperty());
+		hotel.setStatus(true);
 
-		hotelService.create(room);
+		hotelService.create(hotel);
 
-		response.setData(new HotelResponse(room));
+		response.setData(new HotelResponse(hotel));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/{id}/update", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelResponse>> update(@PathVariable("id") int id,
-			@RequestBody @Valid CRUDRoomRequest wrapper) throws Exception {
+			@RequestBody @Valid CRUDHotelRequest wrapper) throws Exception {
 		BaseResponse<HotelResponse> response = new BaseResponse<>();
 
-		Hotel room = hotelService.findOne(id);
-		if (room == null) {
+		Hotel hotel = hotelService.findOne(id);
+		if (hotel == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Phòng không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -140,21 +145,19 @@ public class HotelController {
 		}
 
 		Hotel roomFindName = hotelService.findByName(wrapper.getBranchId(), wrapper.getName());
-		if (roomFindName != null && room.getId() != roomFindName.getId()) {
+		if (roomFindName != null && hotel.getId() != roomFindName.getId()) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Tên phòng đã tồn tại!");
+			response.setMessageError("Tên khách sạn đã tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
-		room.setName(wrapper.getName());
-		room.setBranchId(wrapper.getBranchId());
-		room.setDescription(wrapper.getDescription());
-		room.setType(wrapper.getType());
-		room.setPrice(wrapper.getPrice());
+		hotel.setName(wrapper.getName());
+		hotel.setBranchId(wrapper.getBranchId());
+		hotel.setDescription(wrapper.getDescription());
 
-		hotelService.update(room);
+		hotelService.update(hotel);
 
-		response.setData(new HotelResponse(room));
+		response.setData(new HotelResponse(hotel));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
