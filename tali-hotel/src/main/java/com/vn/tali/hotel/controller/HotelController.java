@@ -154,7 +154,12 @@ public class HotelController {
 		hotel.setName(wrapper.getName());
 		hotel.setBranchId(wrapper.getBranchId());
 		hotel.setDescription(wrapper.getDescription());
-
+		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
+		hotel.setPopular(wrapper.getIsPopular() == 1);
+		hotel.setHaveWifi(wrapper.getIsHaveWifi() == 1);
+		hotel.setHaveParking(wrapper.getIsHaveParking() == 1);
+		hotel.setShortDescription(wrapper.getShortDescription());
+		hotel.setHighlightProperty(wrapper.getHighlightProperty());
 		hotelService.update(hotel);
 
 		response.setData(new HotelResponse(hotel));
