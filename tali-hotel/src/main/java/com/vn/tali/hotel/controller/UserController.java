@@ -2,12 +2,13 @@ package com.vn.tali.hotel.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 
 @RestController
 @RequestMapping(path = "/api/users")
-public class UserController {
+public class UserController extends BaseController {
 
 	@Autowired
 	private UserService userService;
@@ -44,10 +45,13 @@ public class UserController {
 	@Operation(summary = "API tạo tài khoản", description = "API tạo tài khoản")
 	@PostMapping(value = "/create", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<UserResponse>> create(
-			@io.swagger.v3.oas.annotations.parameters.RequestBody @Validated @RequestBody UserCreateRequest request)
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest request)
 			throws Exception {
+
+		this.getUser();
+
 		BaseResponse<UserResponse> response = new BaseResponse<>();
-		
+
 		User findByPhone = userService.findByPhone(request.getPhone());
 		if (findByPhone != null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
@@ -122,7 +126,7 @@ public class UserController {
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@PostMapping(value = "/{id}/update", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<UserResponse>> update(@PathVariable("id") int id,
-			@io.swagger.v3.oas.annotations.parameters.RequestBody @Validated @RequestBody UpdateUserRequest wrapper)
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UpdateUserRequest wrapper)
 			throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
 		User user = userService.findOne(id);

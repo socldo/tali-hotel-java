@@ -1,6 +1,7 @@
 package com.vn.tali.hotel.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -20,21 +21,29 @@ import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
+import com.vn.tali.hotel.entity.Review;
 import com.vn.tali.hotel.request.CRUDHotelRequest;
 import com.vn.tali.hotel.response.BaseResponse;
+import com.vn.tali.hotel.response.CountStarHotelResponse;
 import com.vn.tali.hotel.response.HotelDetailResponse;
 import com.vn.tali.hotel.response.HotelResponse;
 import com.vn.tali.hotel.service.BranchService;
 import com.vn.tali.hotel.service.HotelService;
+import com.vn.tali.hotel.service.ReviewService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(path = "/api/hotels")
-public class HotelController {
+public class HotelController extends BaseController {
 	@Autowired
 	HotelService hotelService;
 
 	@Autowired
 	BranchService branchService;
+
+	@Autowired
+	ReviewService reviewService;
 
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<HotelDetailResponse>>> getList(
@@ -51,6 +60,7 @@ public class HotelController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "limit", required = false, defaultValue = "2000") int limit) throws Exception {
 		BaseResponse<List<HotelDetailResponse>> response = new BaseResponse<>();
+
 		List<HotelDetail> hotels = hotelService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice,
 				avarageRate, checkIn, checkOut, keySearch, page, limit);
 		response.setData(new HotelDetailResponse().mapToList(hotels));
@@ -68,6 +78,50 @@ public class HotelController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 		response.setData(new HotelDetailResponse(hotelService.getDetailRoom(id)));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	@GetMapping(value = "/get-list", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<List<HotelResponse>>> findAll() throws Exception {
+		BaseResponse<List<HotelResponse>> response = new BaseResponse<>();
+		List<Hotel> hotels = hotelService.findAll();
+
+		List<Branch> branches = branchService
+				.findByIds(hotels.stream().map(x -> x.getBranchId()).collect(Collectors.toList()));
+
+		List<HotelResponse> hotelResponses = new HotelResponse().mapToList(hotels);
+
+		hotelResponses = hotelResponses.stream().map(x -> {
+			x.setBranchName(branches.stream().filter(y -> y.getId() == x.getBranchId()).map(y -> y.getName())
+					.findFirst().orElse(""));
+			return x;
+		}).collect(Collectors.toList());
+		response.setData(hotelResponses);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API lấy đếm số sao đã đánh giá cho khách sạn", description = "API lấy đếm số sao đã đánh giá cho khách sạn")
+	@GetMapping(value = "{id}/get-count-star", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<CountStarHotelResponse>> getCountStar(@PathVariable("id") int id) throws Exception {
+		BaseResponse<CountStarHotelResponse> response = new BaseResponse<>();
+
+		Hotel hotel = hotelService.findOne(id);
+		if (hotel == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		List<Review> reviews = reviewService.findAll(0, -1, id, 0);
+
+		CountStarHotelResponse count = new CountStarHotelResponse();
+
+		count.setRateCount(reviews.size());
+		count.setAverageRate(reviews.stream().mapToDouble(x -> x.getScoreRate()).average().orElse(0.0));
+		
+
+		response.setData(count);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -109,6 +163,9 @@ public class HotelController {
 
 		Hotel hotel = new Hotel();
 		hotel.setName(wrapper.getName());
+		hotel.setAddress(wrapper.getAddress());
+		hotel.setPhone(wrapper.getPhone());
+		hotel.setEmail(wrapper.getEmail());
 		hotel.setBranchId(wrapper.getBranchId());
 		hotel.setDescription(wrapper.getDescription());
 		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
@@ -153,6 +210,9 @@ public class HotelController {
 
 		hotel.setName(wrapper.getName());
 		hotel.setBranchId(wrapper.getBranchId());
+		hotel.setAddress(wrapper.getAddress());
+		hotel.setPhone(wrapper.getPhone());
+		hotel.setEmail(wrapper.getEmail());
 		hotel.setDescription(wrapper.getDescription());
 		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
 		hotel.setPopular(wrapper.getIsPopular() == 1);

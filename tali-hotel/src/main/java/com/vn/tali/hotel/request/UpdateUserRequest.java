@@ -1,21 +1,39 @@
 package com.vn.tali.hotel.request;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class UpdateUserRequest {
 
+	@Schema(description = "Bộ phận")
+	@Min(value = 0, message = "Id bộ phận phải lớn hơn hoặc bằng 0")
+	@Max(value = 4, message = "Id bộ phận phải bé hơn hoặc bằng 4")
 	@JsonProperty("role_id")
 	private int roleId;
 
+	@Schema(description = "Email")
+	@NotEmpty(message = "Không được để trống")
 	@JsonProperty("email")
 	private String email;
 
+	@Schema(description = "Số điện thoại")
+	@NotEmpty(message = "Không được để trống")
 	@JsonProperty("phone")
 	private String phone;
 
+	@Schema(description = "Tên")
+	@NotEmpty(message = "Không được để trống")
 	@JsonProperty("name")
 	private String name;
 
+	@Schema(description = "Ngày sinh")
+	@NotNull(message = "Không được để null")
 	private String birthday;
 
 	private int gender;

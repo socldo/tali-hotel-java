@@ -45,24 +45,6 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 		return this.getSession().createQuery(criteria).getResultList();
 	}
 
-	@Override
-	public int spList() throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("sp_list", int.class)
 
-				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
-				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
-
-		int statusCode = (int) query.getOutputParameterValue("status_code");
-		String messageError = query.getOutputParameterValue("message_error").toString();
-
-		switch (StoreProcedureStatusCodeEnum.valueOf(statusCode)) {
-		case SUCCESS:
-			return (int) query.getResultList().stream().findFirst().orElse(null);
-		case INPUT_INVALID:
-			throw new HttpException(HttpStatus.BAD_REQUEST, messageError);
-		default:
-			throw new Exception(messageError);
-		}
-	}
 
 }

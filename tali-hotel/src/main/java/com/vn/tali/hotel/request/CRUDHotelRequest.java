@@ -24,6 +24,18 @@ public class CRUDHotelRequest {
 	@JsonProperty("name")
 	private String name;
 
+	@NotEmpty(message = "Địa chỉ không được để trống")
+	@JsonProperty("address")
+	private String address;
+
+	@NotEmpty(message = "Email không được để trống")
+	@JsonProperty("email")
+	private String email;
+
+	@NotEmpty(message = "Số điện thoại không được để trống")
+	@JsonProperty("phone")
+	private String phone;
+
 	@Schema(description = "Mô tả khách sạn")
 	@NotNull(message = "Mô tả không được null")
 	@JsonProperty("description")
@@ -61,6 +73,30 @@ public class CRUDHotelRequest {
 	@NotEmpty(message = "Tính năng đặc biệt không được trống")
 	@JsonProperty("highlight_property")
 	private String highlightProperty;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public int getIsPopular() {
 		return isPopular;

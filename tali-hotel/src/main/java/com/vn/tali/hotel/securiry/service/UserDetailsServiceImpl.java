@@ -1,7 +1,5 @@
 package com.vn.tali.hotel.securiry.service;
 
-import java.util.ArrayList;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;

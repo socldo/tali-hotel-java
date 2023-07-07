@@ -21,7 +21,7 @@ public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private int id;
 
 	@Column(name = "role_id")
 	@JsonProperty("role_id")
@@ -59,7 +59,7 @@ public class User extends BaseEntity {
 
 	}
 
-	public User(String email, String phone, String name,String password) {
+	public User(String email, String phone, String name, String password) {
 		this.email = email;
 		this.phone = phone;
 		this.name = name;
@@ -74,11 +74,11 @@ public class User extends BaseEntity {
 		this.phone = phone;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

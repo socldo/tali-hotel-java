@@ -22,19 +22,18 @@ public class UserServiceImpl implements UserService {
 	private UserDao dao;
 
 	@Override
-	public User findOne(long id) {
-		return dao.findById(id).get();
+	public User findOne(int id) throws Exception {
+		return dao.findOne(id);
 	}
 
 	@Override
 	public User create(User entity) {
-		return dao.save(entity);
+		return dao.create(entity);
 	}
-
 
 	@Override
 	public void update(User entity) {
-		dao.save(entity);
+		dao.update(entity);
 	}
 
 	@Override
@@ -43,8 +42,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findAll() {
-		return (List<User>) dao.findAll();
+	public List<User> findAll() throws Exception {
+		return dao.findAll();
+	}
+
+	@Override
+	public User findByUserName(String userName) {
+		return dao.findByUserName(userName);
+	}
+
+	@Override
+	public List<User> findByIds(List<Integer> ids) {
+		return dao.findByIds(ids);
 	}
 
 }

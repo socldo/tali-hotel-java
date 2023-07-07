@@ -1,10 +1,13 @@
 package com.vn.tali.hotel.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.criterion.Restrictions;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.HotelDao;
+import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 
@@ -49,7 +53,29 @@ public class HotelDaoImpl extends AbstractDao<Integer, Hotel> implements HotelDa
 		return (Hotel) this.getSession().createCriteria(Hotel.class).add(Restrictions.eq("branchId", branchId))
 				.add(Restrictions.eq("name", name)).list().stream().findFirst().orElse(null);
 	}
+	
+	@Override
+	public List<Hotel> findByIds(List<Integer> hotelIds) {
 
+		CriteriaQuery<Hotel> criteriaQuery = this.getBuilder().createQuery(Hotel.class);
+		Root<Hotel> root = criteriaQuery.from(Hotel.class);
+
+		List<Predicate> predicates = new ArrayList<>();
+
+		if (!hotelIds.isEmpty()) {
+			Expression<Integer> expression = root.get("id");
+			predicates.add(expression.in(hotelIds));
+
+			criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+			return this.getSession().createQuery(criteriaQuery).list();
+		} else {
+			return new ArrayList<>();
+		}
+
+	}
+	
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<HotelDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice,
 			int maxPrice, int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit)
@@ -97,6 +123,7 @@ public class HotelDaoImpl extends AbstractDao<Integer, Hotel> implements HotelDa
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public HotelDetail getDetailRoom(int id) throws Exception {
 		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("get_detail_hotel", HotelDetail.class)

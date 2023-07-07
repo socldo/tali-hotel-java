@@ -13,18 +13,17 @@ public class BranchResponse {
 	@JsonProperty("name")
 	private String name;
 
-	@JsonProperty("email")
-	private String emaill;
-
+//	@JsonProperty("email")
+//	private String emaill;
+//
 	@JsonProperty("address")
 	private String address;
-
-	@JsonProperty("phone")
-	private String phone;
+//
+//	@JsonProperty("phone")
+//	private String phone;
 
 	@JsonProperty("status")
 	private int status;
-
 
 	@JsonProperty("created_at")
 	private String createdAt;
@@ -43,9 +42,9 @@ public class BranchResponse {
 		super();
 		this.id = e.getId();
 		this.name = e.getName();
-		this.emaill = e.getEmaill();
+//		this.emaill = e.getEmaill();
 		this.address = e.getAddress();
-		this.phone = e.getPhone();
+//		this.phone = e.getPhone();
 		this.status = e.isStatus() ? 1 : 0;
 		this.images = e.getImages();
 		this.createdAt = e.getCreatedAt();
@@ -65,13 +64,13 @@ public class BranchResponse {
 		this.images = images;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+//	public String getPhone() {
+//		return phone;
+//	}
+//
+//	public void setPhone(String phone) {
+//		this.phone = phone;
+//	}
 
 	public int getId() {
 		return id;
@@ -89,13 +88,13 @@ public class BranchResponse {
 		this.name = name;
 	}
 
-	public String getEmaill() {
-		return emaill;
-	}
-
-	public void setEmaill(String emaill) {
-		this.emaill = emaill;
-	}
+//	public String getEmaill() {
+//		return emaill;
+//	}
+//
+//	public void setEmaill(String emaill) {
+//		this.emaill = emaill;
+//	}
 
 	public String getAddress() {
 		return address;

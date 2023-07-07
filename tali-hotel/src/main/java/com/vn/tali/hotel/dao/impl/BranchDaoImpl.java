@@ -1,8 +1,11 @@
 package com.vn.tali.hotel.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.criterion.Restrictions;
@@ -46,5 +49,25 @@ public class BranchDaoImpl extends AbstractDao<Integer, Branch> implements Branc
 	public Branch findByName(String name) {
 		return (Branch) this.getSession().createCriteria(Branch.class).add(Restrictions.eq("name", name)).list()
 				.stream().findFirst().orElse(null);
+	}
+	
+	@Override
+	public List<Branch> findByIds(List<Integer> branchIds) {
+
+		CriteriaQuery<Branch> criteriaQuery = this.getBuilder().createQuery(Branch.class);
+		Root<Branch> root = criteriaQuery.from(Branch.class);
+
+		List<Predicate> predicates = new ArrayList<>();
+
+		if (!branchIds.isEmpty()) {
+			Expression<Integer> expression = root.get("id");
+			predicates.add(expression.in(branchIds));
+
+			criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+			return this.getSession().createQuery(criteriaQuery).list();
+		} else {
+			return new ArrayList<>();
+		}
+
 	}
 }

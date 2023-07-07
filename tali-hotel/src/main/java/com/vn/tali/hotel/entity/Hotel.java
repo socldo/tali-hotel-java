@@ -1,7 +1,5 @@
 package com.vn.tali.hotel.entity;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +22,15 @@ public class Hotel extends BaseEntity {
 
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "phone")
+	private String phone;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "address")
+	private String address;
 
 	@Column(name = "description")
 	private String description;
@@ -52,14 +59,38 @@ public class Hotel extends BaseEntity {
 	@Column(name = "type")
 	private int type;
 
-	@Column(name = "price")
-	private BigDecimal price = BigDecimal.ZERO;
+//	@Column(name = "price")
+//	private BigDecimal price = BigDecimal.ZERO;
 
-	@Column(name = "rate_count")
-	private int rateCount;
+//	@Column(name = "rate_count")
+//	private int rateCount;
+//
+//	@Column(name = "average_rate")
+//	private double averageRate;
 
-	@Column(name = "average_rate")
-	private double averageRate;
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 	public boolean isPopular() {
 		return isPopular;
@@ -149,13 +180,13 @@ public class Hotel extends BaseEntity {
 		this.type = type;
 	}
 
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
+//	public BigDecimal getPrice() {
+//		return price;
+//	}
+//
+//	public void setPrice(BigDecimal price) {
+//		this.price = price;
+//	}
 
 	public boolean isStatus() {
 		return status;
@@ -165,20 +196,20 @@ public class Hotel extends BaseEntity {
 		this.status = status;
 	}
 
-	public int getRateCount() {
-		return rateCount;
-	}
-
-	public void setRateCount(int rateCount) {
-		this.rateCount = rateCount;
-	}
-
-	public double getAverageRate() {
-		return averageRate;
-	}
-
-	public void setAverageRate(double averageRate) {
-		this.averageRate = averageRate;
-	}
+//	public int getRateCount() {
+//		return rateCount;
+//	}
+//
+//	public void setRateCount(int rateCount) {
+//		this.rateCount = rateCount;
+//	}
+//
+//	public double getAverageRate() {
+//		return averageRate;
+//	}
+//
+//	public void setAverageRate(double averageRate) {
+//		this.averageRate = averageRate;
+//	}
 
 }

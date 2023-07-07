@@ -47,7 +47,6 @@ public class HotelServiceImpl implements HotelService {
 	public List<HotelDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice,
 			int maxPrice, int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit)
 			throws Exception {
-		// TODO Auto-generated method stub
 		return dao.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice, avarageRate, checkIn, checkOut,
 				keySearch, page, limit);
 	}
@@ -55,6 +54,11 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	public HotelDetail getDetailRoom(int id) throws Exception {
 		return dao.getDetailRoom(id);
+	}
+
+	@Override
+	public List<Hotel> findByIds(List<Integer> hotelIds) {
+		return dao.findByIds(hotelIds);
 	}
 
 }
