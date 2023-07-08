@@ -103,15 +103,16 @@ public class UserController extends BaseController {
 	@PostMapping(value = "{id}/lock", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<UserResponse>> lock(@PathVariable("id") int id) throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
+		User u = this.getUser();
 		User user = userService.findOne(id);
 		if (user == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		if (user.getId() == 3) {
+		if (user.getId() == u.getId()) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Không tồn tại!");
+			response.setMessageError("Không thể tạm ngưng chính mình");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 		user.setLock(!user.isLock());

@@ -5,25 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CountStarHotelResponse {
 
 	@JsonProperty("rate_count")
-	private int rateCount;
+	private int rateCount = 0;
 
 	@JsonProperty("average_rate")
-	private double averageRate;
+	private double averageRate = 0;
 
 	@JsonProperty("total_one_star")
-	private int totalOneStar;
+	private int totalOneStar = 0;
 
 	@JsonProperty("total_two_star")
-	private int totalTwoStar;
+	private int totalTwoStar = 0;
 
 	@JsonProperty("total_three_star")
-	private int totalThreeStar;
+	private int totalThreeStar = 0;
 
 	@JsonProperty("total_four_star")
-	private int totalFourStar;
+	private int totalFourStar = 0;
 
 	@JsonProperty("total_five_star")
-	private int totalFiveStar;
+	private int totalFiveStar = 0;
 
 	public CountStarHotelResponse() {
 		super();

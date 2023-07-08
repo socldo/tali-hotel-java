@@ -102,7 +102,7 @@ public class HotelController extends BaseController {
 	}
 
 	@Operation(summary = "API lấy đếm số sao đã đánh giá cho khách sạn", description = "API lấy đếm số sao đã đánh giá cho khách sạn")
-	@GetMapping(value = "{id}/get-count-star", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "{id}/get-rating-rate", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<CountStarHotelResponse>> getCountStar(@PathVariable("id") int id)
 			throws Exception {
 		BaseResponse<CountStarHotelResponse> response = new BaseResponse<>();
@@ -117,20 +117,20 @@ public class HotelController extends BaseController {
 		List<Review> reviews = reviewService.findAll(0, -1, id, 0);
 
 		CountStarHotelResponse count = new CountStarHotelResponse();
-
-		count.setRateCount(reviews.size());
-		count.setAverageRate(reviews.stream().mapToDouble(x -> x.getScoreRate()).average().orElse(0.0));
-		count.setTotalOneStar(
-				reviews.stream().filter(review -> review.getScoreRate() == 1).mapToInt(review -> 1).sum());
-		count.setTotalTwoStar(
-				reviews.stream().filter(review -> review.getScoreRate() == 2).mapToInt(review -> 1).sum());
-		count.setTotalThreeStar(
-				reviews.stream().filter(review -> review.getScoreRate() == 3).mapToInt(review -> 1).sum());
-		count.setTotalFourStar(
-				reviews.stream().filter(review -> review.getScoreRate() == 4).mapToInt(review -> 1).sum());
-		count.setTotalFiveStar(
-				reviews.stream().filter(review -> review.getScoreRate() == 5).mapToInt(review -> 1).sum());
-
+		if (!reviews.isEmpty()) {
+			count.setRateCount(reviews.size());
+			count.setAverageRate(reviews.stream().mapToDouble(x -> x.getScoreRate()).average().orElse(0.0));
+			count.setTotalOneStar(
+					reviews.stream().filter(review -> review.getScoreRate() == 1).mapToInt(review -> 1).sum());
+			count.setTotalTwoStar(
+					reviews.stream().filter(review -> review.getScoreRate() == 2).mapToInt(review -> 1).sum());
+			count.setTotalThreeStar(
+					reviews.stream().filter(review -> review.getScoreRate() == 3).mapToInt(review -> 1).sum());
+			count.setTotalFourStar(
+					reviews.stream().filter(review -> review.getScoreRate() == 4).mapToInt(review -> 1).sum());
+			count.setTotalFiveStar(
+					reviews.stream().filter(review -> review.getScoreRate() == 5).mapToInt(review -> 1).sum());
+		}
 		response.setData(count);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
