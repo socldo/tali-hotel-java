@@ -23,6 +23,7 @@ import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.entity.Review;
 import com.vn.tali.hotel.request.CRUDHotelRequest;
+import com.vn.tali.hotel.request.CreateUpdateImageRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.CountStarHotelResponse;
 import com.vn.tali.hotel.response.HotelDetailResponse;
@@ -32,6 +33,8 @@ import com.vn.tali.hotel.service.HotelService;
 import com.vn.tali.hotel.service.ReviewService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 
 @RestController
 @RequestMapping(path = "/api/hotels")
@@ -68,6 +71,9 @@ public class HotelController extends BaseController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	
+	@Operation(summary = "API lấy chi tiết", description = "API lấy chi tiết")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelDetailResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelDetailResponse> response = new BaseResponse<>();
@@ -135,6 +141,8 @@ public class HotelController extends BaseController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API update trạng thái", description = "API update trạng thái")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@PostMapping(value = "{id}/change-status", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelResponse>> changeStatus(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelResponse> response = new BaseResponse<>();
@@ -153,8 +161,10 @@ public class HotelController extends BaseController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API tạo mới", description = "API tạo mới")
 	@PostMapping(value = "/create", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<HotelResponse>> create(@RequestBody @Valid CRUDHotelRequest wrapper)
+	public ResponseEntity<BaseResponse<HotelResponse>> create(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody @Valid CRUDHotelRequest wrapper)
 			throws Exception {
 		BaseResponse<HotelResponse> response = new BaseResponse<>();
 		Branch branch = branchService.findOne(wrapper.getBranchId());
@@ -163,6 +173,7 @@ public class HotelController extends BaseController {
 			response.setMessageError("Chi nhánh không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
+	
 
 		Hotel hotelFindName = hotelService.findByName(wrapper.getBranchId(), wrapper.getName());
 		if (hotelFindName != null) {
@@ -178,12 +189,14 @@ public class HotelController extends BaseController {
 		hotel.setEmail(wrapper.getEmail());
 		hotel.setBranchId(wrapper.getBranchId());
 		hotel.setDescription(wrapper.getDescription());
-		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
+//		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
 		hotel.setPopular(wrapper.getIsPopular() == 1);
 		hotel.setHaveWifi(wrapper.getIsHaveWifi() == 1);
 		hotel.setHaveParking(wrapper.getIsHaveParking() == 1);
 		hotel.setShortDescription(wrapper.getShortDescription());
 		hotel.setHighlightProperty(wrapper.getHighlightProperty());
+		hotel.setType(wrapper.getType());
+
 		hotel.setStatus(true);
 
 		hotelService.create(hotel);
@@ -192,9 +205,12 @@ public class HotelController extends BaseController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API update", description = "API update ")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@PostMapping(value = "/{id}/update", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelResponse>> update(@PathVariable("id") int id,
-			@RequestBody @Valid CRUDHotelRequest wrapper) throws Exception {
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody @Valid CRUDHotelRequest wrapper)
+			throws Exception {
 		BaseResponse<HotelResponse> response = new BaseResponse<>();
 
 		Hotel hotel = hotelService.findOne(id);
@@ -224,16 +240,38 @@ public class HotelController extends BaseController {
 		hotel.setPhone(wrapper.getPhone());
 		hotel.setEmail(wrapper.getEmail());
 		hotel.setDescription(wrapper.getDescription());
-		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
+//		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
 		hotel.setPopular(wrapper.getIsPopular() == 1);
 		hotel.setHaveWifi(wrapper.getIsHaveWifi() == 1);
 		hotel.setHaveParking(wrapper.getIsHaveParking() == 1);
 		hotel.setShortDescription(wrapper.getShortDescription());
 		hotel.setHighlightProperty(wrapper.getHighlightProperty());
+		hotel.setType(wrapper.getType());
 		hotelService.update(hotel);
 
 		response.setData(new HotelResponse(hotel));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API update hình ảnh ", description = "API update hình ảnh")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+	@PostMapping(value = "/{id}/update-images", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<HotelResponse>> updateImage(@PathVariable("id") int id,
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody @Valid CreateUpdateImageRequest wrapper)
+			throws Exception {
+		BaseResponse<HotelResponse> response = new BaseResponse<>();
+
+		Hotel hotel = hotelService.findOne(id);
+		if (hotel == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Khách sạn không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
+		hotelService.update(hotel);
+
+		response.setData(new HotelResponse(hotel));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

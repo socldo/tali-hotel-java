@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Hotel;
-import com.vn.tali.hotel.entity.RoomTypeEnum;
+import com.vn.tali.hotel.entity.HotelTypeEnum;
 
 public class HotelResponse {
 	private int id;
@@ -15,7 +15,7 @@ public class HotelResponse {
 	private int branchId;
 
 	@JsonProperty("branch_name")
-	private String branchName;
+	private String branchName = "";
 
 	@JsonProperty("name")
 	private String name;
@@ -94,7 +94,7 @@ public class HotelResponse {
 		this.shortDescription = e.getShortDescription();
 		this.highlightProperty = e.getHighlightProperty() == null ? "" : e.getHighlightProperty();
 		this.type = e.getType();
-		this.typeName = RoomTypeEnum.valueOf(e.getType()).getName();
+		this.typeName = HotelTypeEnum.valueOf(e.getType()).getName();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
 	}

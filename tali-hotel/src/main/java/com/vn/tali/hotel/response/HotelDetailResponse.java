@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.HotelDetail;
-import com.vn.tali.hotel.entity.RoomTypeEnum;
+import com.vn.tali.hotel.entity.HotelTypeEnum;
 
 public class HotelDetailResponse {
 	private int id;
@@ -77,7 +77,7 @@ public class HotelDetailResponse {
 		this.branchId = e.getBranchId();
 		this.name = e.getName();
 		this.description = e.getDescription();
-		this.type = RoomTypeEnum.valueOf(e.getType()).getName();
+		this.type = HotelTypeEnum.valueOf(e.getType()).getName();
 		this.price = e.getPrice();
 		this.status = e.isStatus() ? 1 : 0;
 		this.rateCount = e.getRateCount();

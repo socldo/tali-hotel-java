@@ -3,7 +3,7 @@ package com.vn.tali.hotel.entity;
 * 
  *
  */
-public enum RoomTypeEnum {
+public enum HotelTypeEnum {
 
 	HOTEL(1), // Khách sạn
 	HOMSTAY(2), // homstay
@@ -12,7 +12,7 @@ public enum RoomTypeEnum {
 
 	private final int value;
 
-	private RoomTypeEnum(int value) {
+	private HotelTypeEnum(int value) {
 		this.value = value;
 	}
 
@@ -20,18 +20,18 @@ public enum RoomTypeEnum {
 		return value;
 	}
 
-	public static RoomTypeEnum valueOf(int value) {
+	public static HotelTypeEnum valueOf(int value) {
 		switch (value) {
 		case 1:
-			return RoomTypeEnum.HOTEL;
+			return HotelTypeEnum.HOTEL;
 		case 2:
-			return RoomTypeEnum.HOMSTAY;
+			return HotelTypeEnum.HOMSTAY;
 		case 3:
-			return RoomTypeEnum.VILLA;
+			return HotelTypeEnum.VILLA;
 		case 4:
-			return RoomTypeEnum.RESORT;
+			return HotelTypeEnum.RESORT;
 		default:
-			return RoomTypeEnum.HOTEL;
+			return HotelTypeEnum.HOTEL;
 		}
 	}
 

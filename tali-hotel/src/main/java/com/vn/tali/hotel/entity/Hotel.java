@@ -54,7 +54,7 @@ public class Hotel extends BaseEntity {
 	private String highlightProperty;
 
 	@Column(name = "images")
-	private String images;
+	private String images = "[]";
 
 	@Column(name = "type")
 	private int type;

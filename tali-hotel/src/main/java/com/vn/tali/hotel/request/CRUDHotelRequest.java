@@ -1,12 +1,8 @@
 package com.vn.tali.hotel.request;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,27 +20,31 @@ public class CRUDHotelRequest {
 	@JsonProperty("name")
 	private String name;
 
+	@Schema(description = "Địa chỉ của khách sạn")
 	@NotEmpty(message = "Địa chỉ không được để trống")
 	@JsonProperty("address")
 	private String address;
 
+	@Schema(description = "Email của khách sạn")
 	@NotEmpty(message = "Email không được để trống")
 	@JsonProperty("email")
 	private String email;
 
+	@Schema(description = "Số điện thoại của khách sạn")
 	@NotEmpty(message = "Số điện thoại không được để trống")
 	@JsonProperty("phone")
 	private String phone;
 
 	@Schema(description = "Mô tả khách sạn")
-	@NotNull(message = "Mô tả không được null")
+	@NotEmpty(message = "Mô tả không được null")
 	@JsonProperty("description")
 	private String description;
 
-	@Schema(description = "Hình ảnh khách sạn")
-	@NotNull(message = "Hình ảnh của khách sạn")
-	@JsonProperty("images")
-	private List<String> images = new ArrayList<>();
+	@Schema(description = "Loại hình kinh doanh")
+	@Min(value = 1, message = "Vui lòng nhập lớn hơn hoặc bằng 1")
+	@Max(value = 4, message = "Vui lòng nhập bé hơn hoặc bằng 4")
+	@JsonProperty("type")
+	private int type;
 
 	@Schema(description = "Có nổi tiếng hay không")
 	@Min(value = 0, message = "Vui lòng nhập lớn hơn hoặc bằng 0")
@@ -73,6 +73,14 @@ public class CRUDHotelRequest {
 	@NotEmpty(message = "Tính năng đặc biệt không được trống")
 	@JsonProperty("highlight_property")
 	private String highlightProperty;
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public String getAddress() {
 		return address;
@@ -136,14 +144,6 @@ public class CRUDHotelRequest {
 
 	public void setHighlightProperty(String highlightProperty) {
 		this.highlightProperty = highlightProperty;
-	}
-
-	public List<String> getImages() {
-		return images;
-	}
-
-	public void setImages(List<String> images) {
-		this.images = images;
 	}
 
 	public int getBranchId() {
