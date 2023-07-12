@@ -1,13 +1,17 @@
 package com.vn.tali.hotel.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import com.vn.tali.hotel.common.Utils;
+
+import antlr.collections.List;
 
 @Entity
 public class HotelDetail extends BaseEntity {
@@ -61,7 +65,7 @@ public class HotelDetail extends BaseEntity {
 
 	@Column(name = "highlight_property")
 	private String highlightProperty;
-	
+
 	private String images;
 
 	public String getImages() {

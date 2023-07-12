@@ -65,9 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() 
-
 				.anyRequest()
-//				.permitAll()
 				.authenticated()
 				.and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -80,9 +78,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().mvcMatchers("/api/auth/**");
 		web.ignoring().mvcMatchers("/api/branches/**");
 		web.ignoring().mvcMatchers("/api/rooms/**");
-		web.ignoring().mvcMatchers("/api/rooms/{id}**");
 		web.ignoring().mvcMatchers("/api/hotels/**");
-		web.ignoring().mvcMatchers("/api/hotels/{id}**");
+		web.ignoring().mvcMatchers("/api/vnpay/**");
+		web.ignoring().mvcMatchers("/api/reviews/**");
 		web.ignoring().antMatchers("/v3/api-docs", // Tài liệu API
 				"/swagger-ui/**", // Giao diện Swagger UI
 				"/swagger-ui.html", // Giao diện Swagger UI HTML

@@ -60,8 +60,7 @@ public class HotelController {
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelDetailResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelDetailResponse> response = new BaseResponse<>();
-		Hotel room = hotelService.findOne(id);
-		if (room == null) {
+		if (hotelService.findOne(id) == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
