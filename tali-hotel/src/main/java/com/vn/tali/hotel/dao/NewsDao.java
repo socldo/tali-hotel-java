@@ -14,6 +14,4 @@ public interface NewsDao {
 
 	News findOne(int id) throws Exception;
 
-	int spList() throws Exception;
-
 }

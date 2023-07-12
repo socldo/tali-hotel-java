@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.HotelDetail;
-import com.vn.tali.hotel.entity.RoomTypeEnum;
+import com.vn.tali.hotel.entity.HotelTypeEnum;
 
 public class HotelDetailResponse {
 	private int id;
@@ -79,18 +77,18 @@ public class HotelDetailResponse {
 		this.branchId = e.getBranchId();
 		this.name = e.getName();
 		this.description = e.getDescription();
-		this.type = RoomTypeEnum.valueOf(e.getType()).getName();
+		this.type = HotelTypeEnum.valueOf(e.getType()).getName();
 		this.price = e.getPrice();
 		this.status = e.isStatus() ? 1 : 0;
 		this.rateCount = e.getRateCount();
 		this.averageRate = e.getAverageRate();
-		this.address = e.getAddress();
+		this.address = e.getAddress() == null ? "" : e.getAddress();
 		this.isPopular = e.getIsPopular();
 		this.isHaveWifi = e.getIsHaveWifi();
 		this.isHaveParking = e.getIsHaveParking();
 		this.totalReviews = e.getTotalReviews();
 		this.shortDescription = e.getShortDescription();
-		this.highlightProperty = e.getHighlightProperty();
+		this.highlightProperty = e.getHighlightProperty() == null ? "" : e.getHighlightProperty();
 		this.images = Utils.convertJsonStringToListObject(e.getImages(), String[].class);
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();

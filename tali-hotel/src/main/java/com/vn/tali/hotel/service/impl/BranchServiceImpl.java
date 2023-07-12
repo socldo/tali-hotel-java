@@ -45,4 +45,9 @@ public class BranchServiceImpl implements BranchService {
 		return branchDao.findByName(name);
 	}
 
+	@Override
+	public List<Branch> findByIds(List<Integer> branchIds) {
+		return branchDao.findByIds(branchIds);
+	}
+
 }

@@ -10,23 +10,16 @@ import com.vn.tali.hotel.dao.ReviewDao;
 import com.vn.tali.hotel.entity.Review;
 import com.vn.tali.hotel.service.ReviewService;
 
-@Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
+@Service("reviewService")
 public class ReviewServiceImpl implements ReviewService {
-
+	
 	@Autowired
-	ReviewDao dao;
+	private ReviewDao dao;
 
 	@Override
-	public void update(Review Review) {
-		dao.update(Review);
-
-	}
-
-	@Override
-	public void create(Review Review) {
-		dao.create(Review);
-
+	public void create(Review entity) {
+		dao.create(entity);
 	}
 
 	@Override
@@ -35,14 +28,12 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> findAll() throws Exception {
-		return dao.findAll();
+	public void update(Review entity) {
+		dao.update(entity);
 	}
 
 	@Override
-	public List<Review> filter(int hotelId) throws Exception {
-		return dao.filter(hotelId);
-
+	public List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) {
+		return dao.findAll(parentReviewId, userId, hotelId, isDeleted);
 	}
-
 }

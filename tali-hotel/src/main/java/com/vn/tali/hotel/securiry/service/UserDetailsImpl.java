@@ -19,7 +19,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private int id;
 
 	private String username;
 
@@ -30,7 +30,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	private GrantedAuthority authorities;
 
-	public UserDetailsImpl(Long id, String phone, String email, String password, GrantedAuthority authorities) {
+	public UserDetailsImpl(int id, String phone, String email, String password, GrantedAuthority authorities) {
 		this.id = id;
 		this.username = phone;
 		this.email = email;
@@ -57,7 +57,7 @@ public class UserDetailsImpl implements UserDetails {
 		return array;
 	}
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 

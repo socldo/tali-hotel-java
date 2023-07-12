@@ -24,6 +24,17 @@ public class UserInforResponse {
 	@JsonProperty("avatar")
 	private String avatar;
 
+	@JsonProperty("role_id")
+	private int roleId;
+
+	public int getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
+
 	public String getAvatar() {
 		return avatar;
 	}
@@ -81,7 +92,7 @@ public class UserInforResponse {
 	}
 
 	public UserInforResponse(long id, String email, String phone, String name, String role, String jwtToken,
-			String avatar) {
+			String avatar, int roleId) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -90,21 +101,12 @@ public class UserInforResponse {
 		this.role = role;
 		this.jwtToken = jwtToken;
 		this.avatar = avatar;
+		this.roleId = roleId;
 	}
 
 	public UserInforResponse() {
 
 	}
 
-//	public UserInforResponse(User user, Role role) {
-//		this.id = user.getId();
-//		this.roleId = user.getRoleId();
-//		this.email = user.getEmail();
-//		this.phone = user.getPhone();
-//		this.firstName = user.getFirstName();
-//		this.lastName = user.getLastName();
-//		this.password = user.getPassword();
-//		this.accessToken = user.getAccessToken();
-//	}
 
 }

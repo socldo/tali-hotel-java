@@ -5,14 +5,13 @@ import java.util.List;
 import com.vn.tali.hotel.entity.Review;
 
 public interface ReviewService {
-	void update(Review Review);
-
-	void create(Review Review);
+	
+	void create(Review entity);
 
 	Review findOne(int id) throws Exception;
 
-	List<Review> findAll() throws Exception;
+	void update(Review entity);
 
-	List<Review> filter(int hotelId) throws Exception;
+	List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted);
 
 }

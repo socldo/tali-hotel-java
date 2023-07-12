@@ -37,9 +37,4 @@ public class NewsServiceImpl implements NewsService {
 		return dao.findOne(id);
 	}
 
-	@Override
-	public int spList() throws Exception {
-		return dao.spList();
-	}
-
 }

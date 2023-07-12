@@ -33,14 +33,4 @@ public class NewsController {
 
 	}
 
-	@GetMapping(value = "/test", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<NewsResponse>> test(@PathVariable("id") int id) throws Exception {
-
-		BaseResponse<NewsResponse> response = new BaseResponse<>();
-
-		System.out.println(newsService.spList());
-
-		return new ResponseEntity<>(response, HttpStatus.OK);
-
-	}
 }

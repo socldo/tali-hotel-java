@@ -16,4 +16,6 @@ public interface BranchDao {
 
 	Branch findByName(String name);
 
+	List<Branch> findByIds(List<Integer> branchIds);
+
 }

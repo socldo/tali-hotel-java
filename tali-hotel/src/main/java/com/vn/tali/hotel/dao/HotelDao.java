@@ -22,4 +22,6 @@ public interface HotelDao {
 
 	Hotel findByName(int branchId, String name);
 
+	List<Hotel> findByIds(List<Integer> hotelIds);
+
 }
