@@ -19,34 +19,37 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vn.tali.hotel.response.BaseResponse;
 
+
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
-	
-	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
-		logger.error("Unauthorized error: {}", authException.getMessage());
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException, ServletException {
+        logger.error("Lỗi không được xác thực: {}", authException.getMessage());
 
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//		final Map<String, Object> body = new HashMap<>();
-//		body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-//		body.put("error", "Unauthorized");
-//		body.put("message", authException.getMessage());
-//		body.put("path", request.getServletPath());
+        int statusCode;
+        String errorMessage;
 
-		BaseResponse<Object> body = new BaseResponse<>();
-		body.setStatus(HttpStatus.UNAUTHORIZED);
-		body.setMessageError(authException.getMessage());
-		body.setData(null);
+        if (authException.getClass().getSimpleName().equals("AccessDeniedException")) {
+            statusCode = HttpServletResponse.SC_FORBIDDEN;
+            errorMessage = "Truy cập vào tài nguyên này bị từ chối";
+        } else {
+            statusCode = HttpServletResponse.SC_UNAUTHORIZED;
+            errorMessage = "Yêu cầu xác thực đầy đủ để truy cập tài nguyên này";
+        }
 
-		
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(response.getOutputStream(), body);
-	}
-	
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(statusCode);
 
+        BaseResponse<Object> body = new BaseResponse<>();
+        body.setStatus(HttpStatus.valueOf(statusCode));
+        body.setMessageError(errorMessage);
+        body.setData(null);
+
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(response.getOutputStream(), body);
+    }
 }

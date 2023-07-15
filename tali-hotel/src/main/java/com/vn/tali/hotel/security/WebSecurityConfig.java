@@ -64,6 +64,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
 				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/api/branches/**").permitAll()
+			    .antMatchers("/api/rooms/**").permitAll()
+			    .antMatchers("/api/hotels/**").permitAll()
+			    .antMatchers("/api/reviews/**").permitAll()
+			    .antMatchers("/api/vnpay/**").permitAll()
 				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() 
 				.anyRequest()
 				.authenticated()
@@ -76,11 +81,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().mvcMatchers("/api/auth/**");
-		web.ignoring().mvcMatchers("/api/branches/**");
-		web.ignoring().mvcMatchers("/api/rooms/**");
-		web.ignoring().mvcMatchers("/api/hotels/**");
-		web.ignoring().mvcMatchers("/api/vnpay/**");
-		web.ignoring().mvcMatchers("/api/reviews/**");
+//		web.ignoring().mvcMatchers("/api/branches/**");
+//		web.ignoring().mvcMatchers("/api/rooms/**");
+//		web.ignoring().mvcMatchers("/api/hotels/**");
+//		web.ignoring().mvcMatchers("/api/vnpay/**");
+//		web.ignoring().mvcMatchers("/api/reviews/**");
 		web.ignoring().antMatchers("/v3/api-docs", // Tài liệu API
 				"/swagger-ui/**", // Giao diện Swagger UI
 				"/swagger-ui.html", // Giao diện Swagger UI HTML
