@@ -2,23 +2,17 @@ package com.vn.tali.hotel.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import com.vn.tali.hotel.common.Utils;
 
 @Entity
-@Table(name = "reviews")
-public class Review extends BaseEntity {
-
-	private static final long serialVersionUID = 1L;
-
+public class Review {
+	/**
+	 * 
+	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@Column(name = "parent_review_id")
-	private int parentReviewId;
+	private long id;
 
 	@Column(name = "user_id")
 	private int userId;
@@ -26,29 +20,31 @@ public class Review extends BaseEntity {
 	@Column(name = "hotel_id")
 	private int hotelId;
 
-	@Column(name = "content")
-	private String content;
-
-	@Column(name = "score_rate")
-	private int scoreRate;
+	private String content = "";
 
 	@Column(name = "is_deleted")
-	private boolean isDeleted;
+	private int isDeleted;
 
-	public int getId() {
+	@Column(name = "score_rate")
+	private float score_rate;
+
+	@Column(name = "users")
+	private String users;
+
+	public UserDataJson getUsers() throws Exception {
+		return (UserDataJson) Utils.convertJsonStringToListObject(this.users, UserDataJson[].class).get(0);
+	}
+
+	public void setUsers(String users) {
+		this.users = users;
+	}
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
-	}
-
-	public int getParentReviewId() {
-		return parentReviewId;
-	}
-
-	public void setParentReviewId(int parentReviewId) {
-		this.parentReviewId = parentReviewId;
 	}
 
 	public int getUserId() {
@@ -75,20 +71,20 @@ public class Review extends BaseEntity {
 		this.content = content;
 	}
 
-	public int getScoreRate() {
-		return scoreRate;
-	}
-
-	public void setScoreRate(int scoreRate) {
-		this.scoreRate = scoreRate;
-	}
-
-	public boolean isDeleted() {
+	public int getIsDeleted() {
 		return isDeleted;
 	}
 
-	public void setDeleted(boolean isDeleted) {
+	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public float getScore_rate() {
+		return score_rate;
+	}
+
+	public void setScore_rate(float score_rate) {
+		this.score_rate = score_rate;
 	}
 
 }
