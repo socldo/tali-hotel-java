@@ -47,7 +47,7 @@ public class ReviewController extends BaseController {
 	HotelService hotelService;
 
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<List<ReviewResponseFilter>>> getList(
+	public ResponseEntity<BaseResponse<List<ReviewResponseFilter>>> filter(
 			@RequestParam(name = "hotel_id", required = false, defaultValue = "-1") int hotelId) throws Exception {
 		BaseResponse<List<ReviewResponseFilter>> response = new BaseResponse<>();
 		List<ReviewModel> room = reviewService.filter(hotelId);
@@ -85,7 +85,7 @@ public class ReviewController extends BaseController {
 	@Parameter(in = ParameterIn.QUERY, name = "hotel_id", description = "Id của khách sạn")
 	@Parameter(in = ParameterIn.QUERY, name = "is_deleted", description = "Đã bị xóa hay chưa")
 
-	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "/get-list ", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<ReviewResponse>>> getList(
 			@RequestParam(name = "parent_review_id", required = false, defaultValue = "-1") int parentReviewId,
 			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId,
