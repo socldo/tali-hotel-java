@@ -26,8 +26,8 @@ public class CRUDReviewRequest {
 	private String content;
 
 	@Schema(description = "Điểm đánh giá")
-	@Min(value = 1, message = "lớn hơn hoặc bằng 2")
-	@Max(value = 5, message = "bé hơn hoặc bằng 5")
+	@Min(value = 1, message = "Điểm đánh giá lớn hơn hoặc bằng 1")
+	@Max(value = 5, message = "Điểm đánh giá bé hơn hoặc bằng 5")
 	@JsonProperty("score_rate")
 	private int scoreRate;
 

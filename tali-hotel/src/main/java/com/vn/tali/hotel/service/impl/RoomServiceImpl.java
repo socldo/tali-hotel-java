@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.RoomDao;
-import com.vn.tali.hotel.entity.Hotel;
-import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.entity.Room;
 import com.vn.tali.hotel.service.RoomService;
 
@@ -37,7 +35,6 @@ public class RoomServiceImpl implements RoomService {
 	@Override
 	public List<Room> filter(int hotelId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
 			String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
-		// TODO Auto-generated method stub
 		return dao.filter(hotelId, status, peopleNumber, bedNumber, minPrice, maxPrice, checkIn, checkOut, keySearch,
 				page, limit);
 	}
@@ -46,6 +43,11 @@ public class RoomServiceImpl implements RoomService {
 	public void update(Room entity) {
 		dao.update(entity);
 
+	}
+
+	@Override
+	public Room findByName(int hotelId, String name) {
+		return dao.findByName(hotelId, name);
 	}
 
 }

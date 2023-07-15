@@ -71,7 +71,6 @@ public class HotelController extends BaseController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	
 	@Operation(summary = "API lấy chi tiết", description = "API lấy chi tiết")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -173,7 +172,6 @@ public class HotelController extends BaseController {
 			response.setMessageError("Chi nhánh không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-	
 
 		Hotel hotelFindName = hotelService.findByName(wrapper.getBranchId(), wrapper.getName());
 		if (hotelFindName != null) {
@@ -216,14 +214,14 @@ public class HotelController extends BaseController {
 		Hotel hotel = hotelService.findOne(id);
 		if (hotel == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Phòng không tồn tại!");
+			response.setMessageError("Khách sạn không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
 		Branch branch = branchService.findOne(wrapper.getBranchId());
 		if (branch == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Chi nhánh không tồn tại!");
+			response.setMessageError("Khu vực không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 

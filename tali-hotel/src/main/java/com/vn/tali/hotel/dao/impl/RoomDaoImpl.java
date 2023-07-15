@@ -36,6 +36,13 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 		this.executeInTransaction(session -> session.save(entity));
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@Override
+	public Room findByName(int hotelId, String name) {
+		return (Room) this.getSession().createCriteria(Room.class).add(Restrictions.eq("hotelId", hotelId))
+				.add(Restrictions.eq("name", name)).list().stream().findFirst().orElse(null);
+	}
+
 	@Override
 	public List<Room> findAll() throws Exception {
 		CriteriaQuery<Room> criteria = this.getBuilder().createQuery(Room.class);
