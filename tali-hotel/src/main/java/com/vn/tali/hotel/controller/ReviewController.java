@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.Review;
+import com.vn.tali.hotel.entity.ReviewModel;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.CRUDReviewRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.ReviewResponse;
+import com.vn.tali.hotel.response.ReviewResponseFilter;
 import com.vn.tali.hotel.service.HotelService;
 import com.vn.tali.hotel.service.ReviewService;
 import com.vn.tali.hotel.service.UserService;
@@ -43,6 +45,17 @@ public class ReviewController extends BaseController {
 
 	@Autowired
 	HotelService hotelService;
+
+	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<List<ReviewResponseFilter>>> getList(
+			@RequestParam(name = "hotel_id", required = false, defaultValue = "-1") int hotelId) throws Exception {
+		BaseResponse<List<ReviewResponseFilter>> response = new BaseResponse<>();
+		List<ReviewModel> room = reviewService.filter(hotelId);
+		response.setData(new ReviewResponseFilter().mapToList(room));
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 
 	@Operation(summary = "API lấy chi tiết review", description = "API lấy chi tiết review")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")

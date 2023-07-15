@@ -8,18 +8,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.ReviewDao;
 import com.vn.tali.hotel.entity.Review;
+import com.vn.tali.hotel.entity.ReviewModel;
 import com.vn.tali.hotel.service.ReviewService;
 
-@Transactional(rollbackFor = Exception.class)
-@Service("reviewService")
+@Service
+@Transactional
 public class ReviewServiceImpl implements ReviewService {
-	
+
 	@Autowired
-	private ReviewDao dao;
+	ReviewDao dao;
 
 	@Override
-	public void create(Review entity) {
-		dao.create(entity);
+	public void update(Review Review) {
+		dao.update(Review);
+
+	}
+
+	@Override
+	public void create(Review Review) {
+		dao.create(Review);
+
 	}
 
 	@Override
@@ -28,12 +36,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void update(Review entity) {
-		dao.update(entity);
+	public List<ReviewModel> filter(int hotelId) throws Exception {
+		return dao.filter(hotelId);
+
 	}
 
 	@Override
 	public List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) {
 		return dao.findAll(parentReviewId, userId, hotelId, isDeleted);
 	}
+
 }

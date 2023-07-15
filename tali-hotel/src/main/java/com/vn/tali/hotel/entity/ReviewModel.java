@@ -3,22 +3,17 @@ package com.vn.tali.hotel.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import com.vn.tali.hotel.common.Utils;
 
 @Entity
-@Table(name = "review")
-public class Review extends BaseEntity {
+public class ReviewModel {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
 	@Id
-	private int id;
-
-	@Column(name = "parent_review_id")
-	private int parentReviewId;
+	private long id;
 
 	@Column(name = "user_id")
 	private int userId;
@@ -29,25 +24,28 @@ public class Review extends BaseEntity {
 	private String content = "";
 
 	@Column(name = "is_deleted")
-	private boolean isDeleted;
+	private int isDeleted;
 
 	@Column(name = "score_rate")
-	private int scoreRate;
+	private float score_rate;
 
-	public int getId() {
+	@Column(name = "users")
+	private String users;
+
+	public UserDataJson getUsers() throws Exception {
+		return (UserDataJson) Utils.convertJsonStringToListObject(this.users, UserDataJson[].class).get(0);
+	}
+
+	public void setUsers(String users) {
+		this.users = users;
+	}
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
-	}
-
-	public int getParentReviewId() {
-		return parentReviewId;
-	}
-
-	public void setParentReviewId(int parentReviewId) {
-		this.parentReviewId = parentReviewId;
 	}
 
 	public int getUserId() {
@@ -74,20 +72,19 @@ public class Review extends BaseEntity {
 		this.content = content;
 	}
 
-	public boolean isDeleted() {
+	public int getIsDeleted() {
 		return isDeleted;
 	}
 
-	public void setDeleted(boolean isDeleted) {
+	public void setIsDeleted(int isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 
-	public int getScoreRate() {
-		return scoreRate;
+	public float getScore_rate() {
+		return score_rate;
 	}
 
-	public void setScoreRate(int scoreRate) {
-		this.scoreRate = scoreRate;
+	public void setScore_rate(float score_rate) {
+		this.score_rate = score_rate;
 	}
-
 }
