@@ -71,7 +71,6 @@ public class HotelDaoImpl extends AbstractDao<Integer, Hotel> implements HotelDa
 		} else {
 			return new ArrayList<>();
 		}
-
 	}
 	
 

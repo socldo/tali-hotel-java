@@ -107,6 +107,8 @@ public class HotelController extends BaseController {
 	}
 
 	@Operation(summary = "API lấy đếm số sao đã đánh giá cho khách sạn", description = "API lấy đếm số sao đã đánh giá cho khách sạn")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+
 	@GetMapping(value = "{id}/get-rating-rate", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<CountStarHotelResponse>> getCountStar(@PathVariable("id") int id)
 			throws Exception {

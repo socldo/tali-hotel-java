@@ -1,5 +1,7 @@
 package com.vn.tali.hotel.request;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -47,7 +49,7 @@ public class CRUDRoomRequest {
 	@NotNull(message = "price không được để trống")
 	@Min(value = 0, message = "Số tiền phải lớn hơn hoặc bằng 0")
 	@JsonProperty("price")
-	private String price;
+	private BigDecimal price;
 
 	public int getHotelId() {
 		return hotelId;
@@ -97,11 +99,11 @@ public class CRUDRoomRequest {
 		this.size = size;
 	}
 
-	public String getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
