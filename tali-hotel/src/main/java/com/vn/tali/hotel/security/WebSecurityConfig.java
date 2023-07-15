@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().mvcMatchers("/api/rooms/**");
 		web.ignoring().mvcMatchers("/api/hotels/**");
 		web.ignoring().mvcMatchers("/api/vnpay/**");
+		web.ignoring().mvcMatchers("/api/bookings/**");
 		web.ignoring().mvcMatchers("/api/reviews/**");
 		web.ignoring().antMatchers("/v3/api-docs", // Tài liệu API
 				"/swagger-ui/**", // Giao diện Swagger UI

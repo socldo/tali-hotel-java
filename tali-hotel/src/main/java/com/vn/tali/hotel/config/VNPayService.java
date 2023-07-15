@@ -27,6 +27,7 @@ public class VNPayService {
 		String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
 		String vnp_IpAddr = "127.0.0.1";
 		String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
+		String vnp_OrderType = "other";
 
 		Map<String, String> vnp_Params = new HashMap<>();
 		vnp_Params.put("vnp_Version", vnp_Version);
@@ -37,6 +38,7 @@ public class VNPayService {
 
 		vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
 		vnp_Params.put("vnp_OrderInfo", orderInfor);
+		vnp_Params.put("vnp_OrderType", vnp_OrderType);
 
 		String locate = "vn";
 		vnp_Params.put("vnp_Locale", locate);
@@ -105,6 +107,7 @@ public class VNPayService {
 		}
 
 		String vnp_SecureHash = request.getParameter("vnp_SecureHash");
+		System.out.println(vnp_SecureHash);
 		if (fields.containsKey("vnp_SecureHashType")) {
 			fields.remove("vnp_SecureHashType");
 		}
@@ -112,6 +115,7 @@ public class VNPayService {
 			fields.remove("vnp_SecureHash");
 		}
 		String signValue = VNPayConfig.hashAllFields(fields);
+		System.out.println(signValue);
 		if (signValue.equals(vnp_SecureHash)) {
 			if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
 				return 1;
