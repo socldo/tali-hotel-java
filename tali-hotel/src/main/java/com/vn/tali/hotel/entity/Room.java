@@ -38,7 +38,7 @@ public class Room extends BaseEntity {
 	private String size;
 
 	@Column(name = "images")
-	private String images;
+	private String images = "[]";
 
 	@Column(name = "type")
 	private int type;

@@ -51,6 +51,20 @@ public class CRUDRoomRequest {
 	@JsonProperty("price")
 	private BigDecimal price;
 
+	@Schema(description = "Số lượng phòng")
+	@Min(value = 1, message = "Số lượng lớn hơn hoặc bằng 1")
+	@Max(value = 999999999, message = "Số lượng bé hơn hoặc bằng 999999999")
+	@JsonProperty("quantity")
+	private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public int getHotelId() {
 		return hotelId;
 	}

@@ -109,6 +109,11 @@ public class RoomController {
 		room.setBedNumber(wrapper.getBedNumber());
 		room.setPeopleNumber(wrapper.getPeopleNumber());
 		room.setPrice(wrapper.getPrice());
+		room.setSize(wrapper.getSize());
+		room.setQuantity(wrapper.getQuantity());
+
+		room.setStatus(true);
+
 		roomService.create(room);
 		response.setData(new RoomResponse(room));
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -147,6 +152,8 @@ public class RoomController {
 		room.setBedNumber(wrapper.getBedNumber());
 		room.setPeopleNumber(wrapper.getPeopleNumber());
 		room.setPrice(wrapper.getPrice());
+		room.setSize(wrapper.getSize());
+		room.setQuantity(wrapper.getQuantity());
 		roomService.update(room);
 		response.setData(new RoomResponse(room));
 		return new ResponseEntity<>(response, HttpStatus.OK);
