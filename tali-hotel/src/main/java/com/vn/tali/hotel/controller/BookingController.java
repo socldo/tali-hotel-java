@@ -46,7 +46,7 @@ public class BookingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/{id}/pay", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BookingResponse>> changePaymentStatus(@PathVariable("id") int id)
 			throws Exception {
 		BaseResponse<BookingResponse> response = new BaseResponse<>();
