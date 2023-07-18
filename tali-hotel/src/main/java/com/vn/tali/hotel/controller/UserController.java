@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.entity.Role;
+import com.vn.tali.hotel.entity.RoleEnum;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.UpdateUserRequest;
+import com.vn.tali.hotel.request.UpdateUserRoleRequest;
 import com.vn.tali.hotel.request.UserCreateRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.UserResponse;
@@ -152,6 +154,43 @@ public class UserController extends BaseController {
 		user.setAvatar(wrapper.getAvatar());
 		user.setGender(wrapper.getGender());
 		user.setAvatar(wrapper.getAvatar());
+		userService.update(user);
+		response.setData(new UserResponse(user));
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API update bộ phận", description = "API update bộ phận")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+	@PostMapping(value = "/{id}/update-role", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<UserResponse>> updateRole(@PathVariable("id") int id,
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UpdateUserRoleRequest wrapper)
+			throws Exception {
+		User userDo = this.getUser();
+
+		BaseResponse<UserResponse> response = new BaseResponse<>();
+		User user = userService.findOne(id);
+		if (user == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		Role role = roleService.findOne(wrapper.getRoleId());
+		if (role == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại quyền này!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		if ((userDo.getRoleId() == RoleEnum.ROLE_MANAGER.getValue() && wrapper.getRoleId() >= 3)
+				|| (userDo.getRoleId() == RoleEnum.ROLE_EMPLOYEE.getValue() && wrapper.getRoleId() >= 2)) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Bộ phận không hợp lệ!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+
+		}
+
+		user.setRoleId(wrapper.getRoleId());
 		userService.update(user);
 		response.setData(new UserResponse(user));
 

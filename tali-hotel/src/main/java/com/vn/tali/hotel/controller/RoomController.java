@@ -1,7 +1,6 @@
 package com.vn.tali.hotel.controller;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -220,11 +219,15 @@ public class RoomController {
 		roomResponses = roomResponses.stream().map(x -> {
 
 			Hotel hotel = hotels.stream().filter(y -> y.getId() == x.getHotelId()).findFirst().orElse(null);
-
 			x.setHotelName(hotel == null ? "" : hotel.getName());
+			if (hotel != null) {
+				Branch branch = branches.stream().filter(z -> z.getId() == hotel.getBranchId()).findFirst()
+						.orElse(null);
 
-			x.setBranchName(branches.stream().filter(z -> z.getId() == hotel.getBranchId()).map(z -> z.getName())
-					.findFirst().orElse(""));
+				x.setBranchId(branch.getId());
+				x.setBranchName(branch.getName());
+			}
+
 			return x;
 		}).collect(Collectors.toList());
 

@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "review")
+@Table(name = "reviews")
 public class Review extends BaseEntity {
 
 	/**

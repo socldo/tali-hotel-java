@@ -80,7 +80,7 @@ public class AuthController {
 
 			List<String> roles = userDetails.getAuthorities().stream().map(x -> x.getAuthority())
 					.collect(Collectors.toList());
-			
+
 			ResponseEntity data = ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
 					.body(new UserInforResponse(userDetails.getId(), userDetails.getEmail(), userDetails.getUsername(),
 							user.getName(), roles.get(0), user.getJwtToken(), user.getAvatar(), user.getRoleId()));
@@ -96,7 +96,8 @@ public class AuthController {
 
 	@Operation(summary = "API đăng ký", description = "API đăng ký")
 	@PostMapping("/signup")
-	public BaseResponse<UserResponse> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
+	public BaseResponse<UserResponse> registerUser(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest signUpRequest) {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
 
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
@@ -117,7 +118,7 @@ public class AuthController {
 				encoder.encode(signUpRequest.getPassword()));
 
 		user.setRoleId(role.getId());
-		userService.update(user);
+		userService.create(user);
 		response.setData(new UserResponse(user));
 		return response;
 	}
