@@ -72,8 +72,6 @@ public class BranchController {
 		}
 		Branch branch = new Branch();
 		branch.setName(wrapper.getName());
-//		branch.setEmaill(wrapper.getEmail());
-//		branch.setPhone(wrapper.getPhone());
 		branch.setAddress(wrapper.getAddress());
 		branch.setStatus(true);
 		branch.setImages(wrapper.getImages());
@@ -105,9 +103,8 @@ public class BranchController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 		branch.setName(wrapper.getName());
-//		branch.setEmaill(wrapper.getEmail());
-//		branch.setPhone(wrapper.getPhone());
 		branch.setAddress(wrapper.getAddress());
+		branch.setImages(wrapper.getImages());
 
 		branchService.update(branch);
 		response.setData(new BranchResponse(branch));

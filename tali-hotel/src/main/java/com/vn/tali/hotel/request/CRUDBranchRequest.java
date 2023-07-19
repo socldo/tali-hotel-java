@@ -17,19 +17,20 @@ public class CRUDBranchRequest {
 	@NotEmpty(message = "Địa chỉ không được để trống")
 	@JsonProperty("address")
 	private String address;
-
-	@Schema(description = "Email")
-	@NotEmpty(message = "Email không được để trống")
-	@JsonProperty("email")
-	private String email;
-
-	@Schema(description = "Số điện thoại")
-	@NotEmpty(message = "Số điện thoại không được để trống")
-	@JsonProperty("phone")
-	private String phone;
+	
+//
+//	@Schema(description = "Email")
+//	@NotEmpty(message = "Email không được để trống")
+//	@JsonProperty("email")
+//	private String email;
+//
+//	@Schema(description = "Số điện thoại")
+//	@NotEmpty(message = "Số điện thoại không được để trống")
+//	@JsonProperty("phone")
+//	private String phone;
 
 	@Schema(description = "Hình ảnh")
-	@NotEmpty(message = "Không được để trống")
+	@NotEmpty(message = "Hình ảnh không được để trống")
 	@JsonProperty("images")
 	private String images;
 
@@ -57,20 +58,20 @@ public class CRUDBranchRequest {
 		this.address = address;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+//	public String getEmail() {
+//		return email;
+//	}
+//
+//	public void setEmail(String email) {
+//		this.email = email;
+//	}
+//
+//	public String getPhone() {
+//		return phone;
+//	}
+//
+//	public void setPhone(String phone) {
+//		this.phone = phone;
+//	}
 
 }

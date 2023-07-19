@@ -23,14 +23,14 @@ public class Branch extends BaseEntity {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "email")
-	private String emaill;
+//	@Column(name = "email")
+//	private String emaill;
 
 	@Column(name = "address")
 	private String address;
 
-	@Column(name = "phone")
-	private String phone;
+//	@Column(name = "phone")
+//	private String phone;
 
 	@Column(name = "images")
 	private String images = "[]";
@@ -38,13 +38,13 @@ public class Branch extends BaseEntity {
 	@Column(name = "status")
 	private boolean status;
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+//	public String getPhone() {
+//		return phone;
+//	}
+//
+//	public void setPhone(String phone) {
+//		this.phone = phone;
+//	}
 
 	public int getId() {
 		return id;
@@ -62,13 +62,13 @@ public class Branch extends BaseEntity {
 		this.name = name;
 	}
 
-	public String getEmaill() {
-		return emaill;
-	}
-
-	public void setEmaill(String emaill) {
-		this.emaill = emaill;
-	}
+//	public String getEmaill() {
+//		return emaill;
+//	}
+//
+//	public void setEmaill(String emaill) {
+//		this.emaill = emaill;
+//	}
 
 	public String getAddress() {
 		return address;
