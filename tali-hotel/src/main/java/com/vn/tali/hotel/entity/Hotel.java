@@ -1,5 +1,7 @@
 package com.vn.tali.hotel.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -59,14 +61,14 @@ public class Hotel extends BaseEntity {
 	@Column(name = "type")
 	private int type;
 
-//	@Column(name = "price")
-//	private BigDecimal price = BigDecimal.ZERO;
+	@Column(name = "price")
+	private BigDecimal price = BigDecimal.ZERO;
 
-//	@Column(name = "rate_count")
-//	private int rateCount;
-//
-//	@Column(name = "average_rate")
-//	private double averageRate;
+	@Column(name = "rate_count")
+	private int rateCount;
+
+	@Column(name = "average_rate")
+	private double averageRate;
 
 	public String getPhone() {
 		return phone;
@@ -180,14 +182,6 @@ public class Hotel extends BaseEntity {
 		this.type = type;
 	}
 
-//	public BigDecimal getPrice() {
-//		return price;
-//	}
-//
-//	public void setPrice(BigDecimal price) {
-//		this.price = price;
-//	}
-
 	public boolean isStatus() {
 		return status;
 	}
@@ -196,20 +190,28 @@ public class Hotel extends BaseEntity {
 		this.status = status;
 	}
 
-//	public int getRateCount() {
-//		return rateCount;
-//	}
-//
-//	public void setRateCount(int rateCount) {
-//		this.rateCount = rateCount;
-//	}
-//
-//	public double getAverageRate() {
-//		return averageRate;
-//	}
-//
-//	public void setAverageRate(double averageRate) {
-//		this.averageRate = averageRate;
-//	}
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public int getRateCount() {
+		return rateCount;
+	}
+
+	public void setRateCount(int rateCount) {
+		this.rateCount = rateCount;
+	}
+
+	public double getAverageRate() {
+		return averageRate;
+	}
+
+	public void setAverageRate(double averageRate) {
+		this.averageRate = averageRate;
+	}
 
 }
