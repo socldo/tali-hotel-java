@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.Review;
 import com.vn.tali.hotel.entity.ReviewModel;
+import com.vn.tali.hotel.entity.RoleEnum;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.CRUDReviewRequest;
 import com.vn.tali.hotel.response.BaseResponse;
+import com.vn.tali.hotel.response.ReviewDetailResponse;
 import com.vn.tali.hotel.response.ReviewResponse;
 import com.vn.tali.hotel.response.ReviewResponseFilter;
 import com.vn.tali.hotel.service.HotelService;
@@ -55,7 +57,6 @@ public class ReviewController extends BaseController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
 
 	@Operation(summary = "API lấy chi tiết review", description = "API lấy chi tiết review")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
@@ -85,13 +86,13 @@ public class ReviewController extends BaseController {
 	@Parameter(in = ParameterIn.QUERY, name = "hotel_id", description = "Id của khách sạn")
 	@Parameter(in = ParameterIn.QUERY, name = "is_deleted", description = "Đã bị xóa hay chưa")
 
-	@GetMapping(value = "/get-list ", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<List<ReviewResponse>>> getList(
+	@GetMapping(value = "/get-list", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<List<ReviewDetailResponse>>> getList(
 			@RequestParam(name = "parent_review_id", required = false, defaultValue = "-1") int parentReviewId,
 			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId,
 			@RequestParam(name = "hotel_id", required = false, defaultValue = "-1") int hotelId,
 			@RequestParam(name = "is_deleted", required = false, defaultValue = "0") int isDeleted) throws Exception {
-		BaseResponse<List<ReviewResponse>> response = new BaseResponse<>();
+		BaseResponse<List<ReviewDetailResponse>> response = new BaseResponse<>();
 
 		List<Review> reviews = reviewService.findAll(parentReviewId, userId, hotelId, isDeleted);
 
@@ -100,15 +101,21 @@ public class ReviewController extends BaseController {
 
 		List<User> users = userService.findByIds(reviews.stream().map(x -> x.getUserId()).collect(Collectors.toList()));
 
-		List<ReviewResponse> reviewResponse = new ReviewResponse().mapToList(reviews);
+		List<ReviewDetailResponse> reviewResponse = new ReviewDetailResponse().mapToList(reviews);
 
 		reviewResponse = reviewResponse.stream().map(x -> {
 			x.setHotelName(hotels.stream().filter(y -> y.getId() == x.getHotelId()).map(y -> y.getName()).findFirst()
 					.orElse(""));
 
-			x.setUserName(users.stream().filter(z -> z.getId() == x.getUserId()).map(z -> z.getName()).findFirst()
-					.orElse(""));
+			User user = users.stream().filter(z -> z.getId() == x.getUserId()).findFirst().orElse(null);
 
+			x.setUserName(user.getName());
+
+			x.setUserAvatar(user.getAvatar());
+
+			x.setUserRoleId(RoleEnum.valueOf(user.getRoleId()).getValue());
+			x.setUserRoleName(RoleEnum.valueOf(user.getRoleId()).getName());
+			
 			return x;
 
 		}).collect(Collectors.toList());
@@ -117,6 +124,7 @@ public class ReviewController extends BaseController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
 
 	@Operation(summary = "API xóa review", description = "API xóa review")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
@@ -159,7 +167,11 @@ public class ReviewController extends BaseController {
 			response.setMessageError("Review không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-
+		if (request.getParentReviewId() == 0 && request.getScoreRate() == 0) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Đánh giá từ 1->5 sao");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
 		review.setUserId(user.getId());
 		review.setParentReviewId(request.getParentReviewId());
 		review.setContent(request.getContent());
