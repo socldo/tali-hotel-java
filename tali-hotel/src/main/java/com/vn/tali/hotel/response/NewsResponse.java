@@ -13,6 +13,9 @@ public class NewsResponse {
 	@JsonProperty("user_id")
 	private int userId;
 
+	@JsonProperty("user_name")
+	private String userName = "";
+
 	@JsonProperty("title")
 	private String title;
 
@@ -27,6 +30,9 @@ public class NewsResponse {
 
 	@JsonProperty("type")
 	private int type;
+
+	@JsonProperty("views")
+	private int views;
 
 	@JsonProperty("is_deleted")
 	private int isDeleted;
@@ -50,6 +56,7 @@ public class NewsResponse {
 		this.summary = e.getSummary();
 		this.content = e.getContent();
 		this.type = e.getType();
+		this.views = e.getViews();
 		this.isDeleted = e.isDeleted() ? 1 : 0;
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
@@ -57,6 +64,22 @@ public class NewsResponse {
 
 	public List<NewsResponse> mapToList(List<News> entiies) {
 		return entiies.stream().map(x -> new NewsResponse(x)).collect(Collectors.toList());
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public int getViews() {
+		return views;
+	}
+
+	public void setViews(int views) {
+		this.views = views;
 	}
 
 	public int getId() {
