@@ -1,5 +1,6 @@
 package com.vn.tali.hotel.response;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,9 @@ public class HotelResponse {
 	@JsonProperty("type_name")
 	private String typeName;
 
+	@JsonProperty("price")
+	private BigDecimal price;
+
 	@JsonProperty("rate_count")
 	private int rateCount;
 
@@ -95,6 +99,7 @@ public class HotelResponse {
 		this.highlightProperty = e.getHighlightProperty() == null ? "" : e.getHighlightProperty();
 		this.type = e.getType();
 		this.typeName = HotelTypeEnum.valueOf(e.getType()).getName();
+		this.price = e.getPrice();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
 	}
@@ -109,6 +114,14 @@ public class HotelResponse {
 			}
 			return null;
 		}).collect(Collectors.toList());
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 	public String getBranchName() {
