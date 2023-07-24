@@ -189,13 +189,13 @@ public class HotelController extends BaseController {
 		hotel.setEmail(wrapper.getEmail());
 		hotel.setBranchId(wrapper.getBranchId());
 		hotel.setDescription(wrapper.getDescription());
-//		hotel.setImages(Utils.convertListObjectToJsonArray(wrapper.getImages()));
 		hotel.setPopular(wrapper.getIsPopular() == 1);
 		hotel.setHaveWifi(wrapper.getIsHaveWifi() == 1);
 		hotel.setHaveParking(wrapper.getIsHaveParking() == 1);
 		hotel.setShortDescription(wrapper.getShortDescription());
 		hotel.setHighlightProperty(wrapper.getHighlightProperty());
 		hotel.setType(wrapper.getType());
+		hotel.setPrice(wrapper.getPrice());
 
 		hotel.setStatus(true);
 
@@ -247,6 +247,7 @@ public class HotelController extends BaseController {
 		hotel.setShortDescription(wrapper.getShortDescription());
 		hotel.setHighlightProperty(wrapper.getHighlightProperty());
 		hotel.setType(wrapper.getType());
+		hotel.setPrice(wrapper.getPrice());
 		hotelService.update(hotel);
 
 		response.setData(new HotelResponse(hotel));

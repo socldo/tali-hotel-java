@@ -38,8 +38,19 @@ public class News extends BaseEntity {
 	@Column(name = "type")
 	private int type;
 
+	@Column(name = "views")
+	private int views;
+
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
+
+	public int getViews() {
+		return views;
+	}
+
+	public void setViews(int views) {
+		this.views = views;
+	}
 
 	public int getId() {
 		return id;

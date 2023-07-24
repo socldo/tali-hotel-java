@@ -1,14 +1,13 @@
 package com.vn.tali.hotel.response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.Review;
-import com.vn.tali.hotel.entity.User;
 
-public class ReviewResponse {
+public class ReviewDetailResponse {
 
 	private int id;
 
@@ -19,16 +18,22 @@ public class ReviewResponse {
 	private int hotelId;
 
 	@JsonProperty("hotel_name")
-	private String hotelName = "";
+	private String hotelName;
 
 	@JsonProperty("user_id")
 	private int userId;
 
 	@JsonProperty("user_name")
-	private String userName = "";
+	private String userName;
 
 	@JsonProperty("user_avatar")
 	private String userAvatar = "";
+
+	@JsonProperty("user_role_id")
+	private int userRoleId;
+
+	@JsonProperty("user_role_name")
+	private String userRoleName = "";
 
 	@JsonProperty("content")
 	private String content;
@@ -45,11 +50,14 @@ public class ReviewResponse {
 	@JsonProperty("updated_at")
 	private String updatedAt;
 
-	public ReviewResponse() {
+	@JsonProperty("comments")
+	private List<ReviewResponse> comments = new ArrayList<>();
+
+	public ReviewDetailResponse() {
 		super();
 	}
 
-	public ReviewResponse(Review e) {
+	public ReviewDetailResponse(Review e) {
 		super();
 		this.id = e.getId();
 		this.parentReviewId = e.getParentReviewId();
@@ -64,26 +72,10 @@ public class ReviewResponse {
 		this.updatedAt = e.getUpdatedAt();
 	}
 
-	public ReviewResponse(Review e, Hotel h, User u) {
-		super();
-		this.id = e.getId();
-		this.parentReviewId = e.getParentReviewId();
-		this.hotelId = e.getHotelId();
-		this.hotelName = h == null || h.getName() == null ? "" : h.getName();
-		this.userId = e.getUserId();
-		this.userName = u == null || u.getName() == null ? "" : u.getName();
-		this.userAvatar = u == null || u.getAvatar() == null ? "" : u.getAvatar();
-		this.content = e.getContent();
-		this.isDeleted = e.isDeleted() ? 1 : 0;
-		this.scoreRate = e.getScoreRate();
-		this.createdAt = e.getCreatedAt();
-		this.updatedAt = e.getUpdatedAt();
-	}
-
-	public List<ReviewResponse> mapToList(List<Review> baseEntities) {
+	public List<ReviewDetailResponse> mapToList(List<Review> baseEntities) {
 		return baseEntities.stream().map(e -> {
 			try {
-				return new ReviewResponse(e);
+				return new ReviewDetailResponse(e);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -97,6 +89,22 @@ public class ReviewResponse {
 
 	public void setUserAvatar(String userAvatar) {
 		this.userAvatar = userAvatar;
+	}
+
+	public int getUserRoleId() {
+		return userRoleId;
+	}
+
+	public void setUserRoleId(int userRoleId) {
+		this.userRoleId = userRoleId;
+	}
+
+	public String getUserRoleName() {
+		return userRoleName;
+	}
+
+	public void setUserRoleName(String userRoleName) {
+		this.userRoleName = userRoleName;
 	}
 
 	public int getId() {
@@ -185,6 +193,14 @@ public class ReviewResponse {
 
 	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<ReviewResponse> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<ReviewResponse> comments) {
+		this.comments = comments;
 	}
 
 }

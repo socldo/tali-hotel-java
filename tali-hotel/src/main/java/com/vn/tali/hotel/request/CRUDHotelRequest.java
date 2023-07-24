@@ -1,8 +1,11 @@
 package com.vn.tali.hotel.request;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -73,6 +76,22 @@ public class CRUDHotelRequest {
 	@NotEmpty(message = "Tính năng đặc biệt không được trống")
 	@JsonProperty("highlight_property")
 	private String highlightProperty;
+
+	@Schema(description = "Giá")
+	@NotNull(message = "price không được để trống")
+	@Min(value = 0, message = "Số tiền phải lớn hơn hoặc bằng 0")
+	@JsonProperty("price")
+	private BigDecimal price;
+	
+	
+	
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 
 	public int getType() {
 		return type;
