@@ -2,7 +2,7 @@ package com.vn.tali.hotel.entity;
 
 public enum NewsTypeEnum {
 
-	HOTEL(0), TRAVEL(1), TRAVEL_EXPERIENCES_TIPS(2);
+	HOTEL(1), TRAVEL(2), TRAVEL_EXPERIENCES_TIPS(3);
 
 	private final int value;
 
@@ -16,11 +16,11 @@ public enum NewsTypeEnum {
 
 	public static NewsTypeEnum valueOf(int value) {
 		switch (value) {
-		case 0:
-			return NewsTypeEnum.HOTEL;
 		case 1:
-			return NewsTypeEnum.TRAVEL;
+			return NewsTypeEnum.HOTEL;
 		case 2:
+			return NewsTypeEnum.TRAVEL;
+		case 3:
 			return NewsTypeEnum.TRAVEL_EXPERIENCES_TIPS;
 		default:
 			return NewsTypeEnum.HOTEL;
@@ -29,11 +29,11 @@ public enum NewsTypeEnum {
 
 	public String getName() {
 		switch (this.value) {
-		case 0:
-			return "Khách sạn";
 		case 1:
-			return "Du lịch";
+			return "Khách sạn";
 		case 2:
+			return "Du lịch";
+		case 3:
 			return "Kinh nghiệm và lời khuyên";
 		default:
 			return "Khách sạn";
