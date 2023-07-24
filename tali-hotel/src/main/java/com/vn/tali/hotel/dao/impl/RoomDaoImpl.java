@@ -53,7 +53,7 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 
 	@Override
 	public List<Room> filter(int hotelId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
-			String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
+			String checkIn, String checkOut, String keySearch, int page, int limit, int bookingId) throws Exception {
 		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("filter_rooms", Room.class)
 				.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("status", Integer.class, ParameterMode.IN)
@@ -64,6 +64,7 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 				.registerStoredProcedureParameter("checkIn", String.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("checkOut", String.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("keySearch", String.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("bookingId", Integer.class, ParameterMode.IN)
 
 				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
 				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
@@ -76,6 +77,7 @@ public class RoomDaoImpl extends AbstractDao<Integer, Room> implements RoomDao {
 		query.setParameter("checkIn", checkIn);
 		query.setParameter("checkOut", checkOut);
 		query.setParameter("keySearch", keySearch);
+		query.setParameter("bookingId", bookingId);
 
 		int statusCode = (int) query.getOutputParameterValue("status_code");
 		String messageError = query.getOutputParameterValue("message_error").toString();

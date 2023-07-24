@@ -34,9 +34,9 @@ public class RoomServiceImpl implements RoomService {
 
 	@Override
 	public List<Room> filter(int hotelId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
-			String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception {
+			String checkIn, String checkOut, String keySearch, int page, int limit, int bookingId) throws Exception {
 		return dao.filter(hotelId, status, peopleNumber, bedNumber, minPrice, maxPrice, checkIn, checkOut, keySearch,
-				page, limit);
+				page, limit, bookingId);
 	}
 
 	@Override

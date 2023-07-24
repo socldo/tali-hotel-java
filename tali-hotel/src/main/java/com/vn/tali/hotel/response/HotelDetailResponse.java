@@ -67,6 +67,12 @@ public class HotelDetailResponse {
 	@JsonProperty("images")
 	private List<String> images = new ArrayList<>();
 
+	@JsonProperty("email")
+	private String emaill;
+
+	@JsonProperty("phone")
+	private String phone;
+
 	public HotelDetailResponse() {
 		super();
 	}
@@ -90,6 +96,8 @@ public class HotelDetailResponse {
 		this.shortDescription = e.getShortDescription();
 		this.highlightProperty = e.getHighlightProperty() == null ? "" : e.getHighlightProperty();
 		this.images = Utils.convertJsonStringToListObject(e.getImages(), String[].class);
+		this.phone = e.getPhone();
+		this.emaill = e.getEmail();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
 	}

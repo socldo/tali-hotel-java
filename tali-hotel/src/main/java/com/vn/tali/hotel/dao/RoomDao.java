@@ -17,7 +17,7 @@ public interface RoomDao {
 	List<Room> findAll() throws Exception;
 
 	List<Room> filter(int hotelId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
-			String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception;
+			String checkIn, String checkOut, String keySearch, int page, int limit, int bookingId) throws Exception;
 
 	Room findByName(int hotelId, String name);
 

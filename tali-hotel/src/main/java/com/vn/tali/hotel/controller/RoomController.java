@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.Room;
@@ -57,6 +58,7 @@ public class RoomController {
 	@Parameter(in = ParameterIn.QUERY, name = "checkout", description = "checkout")
 	@Parameter(in = ParameterIn.QUERY, name = "key_search", description = "Từ khóa tìm kiếm")
 	@Parameter(in = ParameterIn.QUERY, name = "page", description = "Số trang")
+	@Parameter(in = ParameterIn.QUERY, name = "booking_id")
 	@Parameter(in = ParameterIn.QUERY, name = "limit", description = "GIới hạn tìm kiếm")
 
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -71,13 +73,13 @@ public class RoomController {
 			@RequestParam(name = "check_in", required = false, defaultValue = "") String checkIn,
 			@RequestParam(name = "check_out", required = false, defaultValue = "") String checkOut,
 			@RequestParam(name = "key_search", required = false, defaultValue = "") String keySearch,
+			@RequestParam(name = "booking_id", required = false, defaultValue = "-1") int bookingId,
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "limit", required = false, defaultValue = "20") int limit) throws Exception {
 		BaseResponse<List<RoomResponse>> response = new BaseResponse<>();
 		List<Room> room = roomService.filter(hotelId, status, peopleNumber, bedNumber, minPrice, maxPrice, checkIn,
-				checkOut, keySearch, page, limit);
+				checkOut, keySearch, page, limit, bookingId);
 		response.setData(new RoomResponse().mapToList(room));
-
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -224,7 +226,7 @@ public class RoomController {
 				Branch branch = branches.stream().filter(z -> z.getId() == hotel.getBranchId()).findFirst()
 						.orElse(null);
 
-				x.setBranchId(branch.getId());
+//				x.setBranchId(branch.getId());
 				x.setBranchName(branch.getName());
 			}
 
