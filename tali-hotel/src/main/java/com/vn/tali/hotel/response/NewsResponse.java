@@ -16,6 +16,9 @@ public class NewsResponse {
 	@JsonProperty("user_name")
 	private String userName = "";
 
+	@JsonProperty("user_avatar")
+	private String userAvatar = "";
+	
 	@JsonProperty("title")
 	private String title;
 
@@ -64,6 +67,14 @@ public class NewsResponse {
 
 	public List<NewsResponse> mapToList(List<News> entiies) {
 		return entiies.stream().map(x -> new NewsResponse(x)).collect(Collectors.toList());
+	}
+
+	public String getUserAvatar() {
+		return userAvatar;
+	}
+
+	public void setUserAvatar(String userAvatar) {
+		this.userAvatar = userAvatar;
 	}
 
 	public String getUserName() {
