@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/rooms/**").permitAll().antMatchers("/api/hotels/**").permitAll()
 				.antMatchers("/api/bookings/**").permitAll().antMatchers("/api/reviews/**").permitAll()
 				.antMatchers("/api/vnpay/**").permitAll()
+				.antMatchers("/api/news/**").permitAll()
 				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll().anyRequest()
 				.authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -166,8 +166,10 @@ public class NewsController extends BaseController {
 		List<NewsResponse> newsReponse = new NewsResponse().mapToList(news);
 
 		newsReponse = newsReponse.stream().map(x -> {
-			x.setUserName(users.stream().filter(y -> y.getId() == x.getUserId()).map(y -> y.getName()).findFirst()
-					.orElse(""));
+
+			User user = users.stream().filter(y -> y.getId() == x.getUserId()).findFirst().orElse(null);
+			x.setUserName(user.getName());
+			x.setUserAvatar(user.getAvatar());
 			return x;
 		}).collect(Collectors.toList());
 		response.setData(newsReponse);
