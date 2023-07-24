@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.entity.Branch;
@@ -34,10 +35,11 @@ public class BranchController {
 
 	@Operation(summary = "API lấy danh sách chi nhánh", description = "API lấy danh sách chi nhánh")
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<List<BranchResponse>>> getList() throws Exception {
+	public ResponseEntity<BaseResponse<List<BranchResponse>>> getList(
+			@RequestParam(name = "key_search", required = false, defaultValue = "") String keySearch) throws Exception {
 		BaseResponse<List<BranchResponse>> response = new BaseResponse<>();
 
-		List<Branch> branchs = branchService.findAll();
+		List<Branch> branchs = branchService.findAll(keySearch);
 		response.setData(new BranchResponse().mapToList(branchs));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);

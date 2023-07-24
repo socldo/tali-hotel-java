@@ -35,8 +35,8 @@ public class BranchServiceImpl implements BranchService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Branch> findAll() throws Exception {
-		return branchDao.findAll();
+	public List<Branch> findAll(String keySearch) throws Exception {
+		return branchDao.findAll(keySearch);
 	}
 
 	@Override

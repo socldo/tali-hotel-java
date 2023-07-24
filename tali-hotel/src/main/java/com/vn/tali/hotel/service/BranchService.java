@@ -12,10 +12,10 @@ public interface BranchService {
 
 	void update(Branch entity) throws Exception;
 
-	List<Branch> findAll() throws Exception;
+	List<Branch> findAll(String keySearch) throws Exception;
 
 	Branch findByName(String name);
-	
+
 	List<Branch> findByIds(List<Integer> branchIds);
 
 }

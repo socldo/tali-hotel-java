@@ -36,9 +36,17 @@ public class BranchDaoImpl extends AbstractDao<Integer, Branch> implements Branc
 	}
 
 	@Override
-	public List<Branch> findAll() throws Exception {
+	public List<Branch> findAll(String keySearch) throws Exception {
 		CriteriaQuery<Branch> criteria = this.getBuilder().createQuery(Branch.class);
 		Root<Branch> root = criteria.from(Branch.class);
+		List<Predicate> predicates = new ArrayList<>();
+		if (!keySearch.isEmpty()) {
+			String likePattern = "%" + keySearch + "%";
+			predicates.add(this.getBuilder().like(root.get("name"), likePattern));
+
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}));
+			return this.getSession().createQuery(criteria).getResultList();
+		}
 		criteria.select(root).orderBy(this.getBuilder().asc(root.get("id")));
 		return this.getSession().createQuery(criteria).getResultList();
 	}
@@ -50,7 +58,7 @@ public class BranchDaoImpl extends AbstractDao<Integer, Branch> implements Branc
 		return (Branch) this.getSession().createCriteria(Branch.class).add(Restrictions.eq("name", name)).list()
 				.stream().findFirst().orElse(null);
 	}
-	
+
 	@Override
 	public List<Branch> findByIds(List<Integer> branchIds) {
 
