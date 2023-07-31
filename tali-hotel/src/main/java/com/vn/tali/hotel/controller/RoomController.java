@@ -79,7 +79,17 @@ public class RoomController {
 		BaseResponse<List<RoomResponse>> response = new BaseResponse<>();
 		List<Room> room = roomService.filter(hotelId, status, peopleNumber, bedNumber, minPrice, maxPrice, checkIn,
 				checkOut, keySearch, page, limit, bookingId);
-		response.setData(new RoomResponse().mapToList(room));
+		Hotel hotel = hotelService.findOne(hotelId);
+
+		List<RoomResponse> data = new RoomResponse().mapToList(room);
+		if (hotel != null) {
+			data.stream().map(x -> {
+				x.setLat(hotel.getLat());
+				x.setLng(hotel.getLng());
+				return x;
+			}).collect(Collectors.toList());
+		}
+		response.setData(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

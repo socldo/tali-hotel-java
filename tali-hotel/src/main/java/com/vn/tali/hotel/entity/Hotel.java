@@ -58,6 +58,22 @@ public class Hotel extends BaseEntity {
 	@Column(name = "images")
 	private String images = "[]";
 
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
+
 	@Column(name = "type")
 	private int type;
 
@@ -69,6 +85,12 @@ public class Hotel extends BaseEntity {
 
 	@Column(name = "average_rate")
 	private double averageRate;
+	
+	@Column(name = "lat")
+	private String lat = "";
+	
+	@Column(name = "lng")
+	private String lng = "";
 
 	public String getPhone() {
 		return phone;

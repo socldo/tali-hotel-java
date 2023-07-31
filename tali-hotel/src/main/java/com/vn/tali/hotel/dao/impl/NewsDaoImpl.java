@@ -1,10 +1,12 @@
 package com.vn.tali.hotel.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.http.HttpStatus;
@@ -38,13 +40,20 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 	}
 
 	@Override
-	public List<News> findAll() throws Exception {
+	public List<News> findAll(int sort, String keySearch) throws Exception {
 		CriteriaQuery<News> criteria = this.getBuilder().createQuery(News.class);
 		Root<News> root = criteria.from(News.class);
-		criteria.select(root).orderBy(this.getBuilder().asc(root.get("id")));
+		List<Predicate> predicates = new ArrayList<>();
+		String likePattern = "%" + keySearch + "%";
+		predicates.add(this.getBuilder().like(root.get("title"), likePattern));
+		if (sort == 1) {
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}))
+					.orderBy(this.getBuilder().desc(root.get("views")));
+		} else {
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}))
+					.orderBy(this.getBuilder().desc(root.get("id")));
+		}
 		return this.getSession().createQuery(criteria).getResultList();
 	}
-
-
 
 }

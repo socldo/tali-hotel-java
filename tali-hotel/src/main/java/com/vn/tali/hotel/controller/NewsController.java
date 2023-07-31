@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.entity.News;
@@ -53,10 +54,10 @@ public class NewsController extends BaseController {
 		}
 
 		User user = userService.findOne(news.getUserId());
-
+		
 		NewsResponse data = new NewsResponse(news);
 		data.setUserName(user.getName());
-
+		data.setUserAvatar(user.getAvatar());
 		response.setData(data);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -157,9 +158,12 @@ public class NewsController extends BaseController {
 
 	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
 	@GetMapping(value = "/get-list", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<BaseResponse<List<NewsResponse>>> findAll() throws Exception {
+	public ResponseEntity<BaseResponse<List<NewsResponse>>> findAll(
+			@RequestParam(name = "sort", required = false, defaultValue = "0") int sort,
+			@RequestParam(name = "key_search", required = false, defaultValue = "") String keySearch) throws Exception {
 		BaseResponse<List<NewsResponse>> response = new BaseResponse<>();
-		List<News> news = newsService.findAll();
+
+		List<News> news = newsService.findAll(sort, keySearch);
 
 		List<User> users = userService.findByIds(news.stream().map(x -> x.getUserId()).collect(Collectors.toList()));
 
@@ -172,6 +176,7 @@ public class NewsController extends BaseController {
 			x.setUserAvatar(user.getAvatar());
 			return x;
 		}).collect(Collectors.toList());
+
 		response.setData(newsReponse);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

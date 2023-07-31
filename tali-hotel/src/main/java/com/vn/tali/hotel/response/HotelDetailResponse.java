@@ -73,6 +73,12 @@ public class HotelDetailResponse {
 	@JsonProperty("phone")
 	private String phone;
 
+	@JsonProperty("lat")
+	private String lat;
+
+	@JsonProperty("lng")
+	private String lng;
+
 	public HotelDetailResponse() {
 		super();
 	}
@@ -100,6 +106,8 @@ public class HotelDetailResponse {
 		this.emaill = e.getEmail();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
+		this.lat = e.getLat();
+		this.lng = e.getLng();
 	}
 
 	public List<HotelDetailResponse> mapToList(List<HotelDetail> baseEntities) throws Exception {

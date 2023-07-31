@@ -55,6 +55,12 @@ public class RoomDetailResponse {
 	@JsonProperty("updated_at")
 	private String updatedAt;
 
+	@JsonProperty("lat")
+	private String lat;
+
+	@JsonProperty("lng")
+	private String lng;
+
 	public RoomDetailResponse(Room e, Hotel h, Branch b) {
 		super();
 		this.id = e.getId();
@@ -72,6 +78,8 @@ public class RoomDetailResponse {
 		this.quantity = e.getQuantity();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
+		this.lat = h.getLat();
+		this.lng = h.getLng();
 	}
 
 	public RoomDetailResponse(Room e) {

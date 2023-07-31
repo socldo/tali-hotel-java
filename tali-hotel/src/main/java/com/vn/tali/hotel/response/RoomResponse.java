@@ -39,9 +39,15 @@ public class RoomResponse {
 
 	@JsonProperty("status")
 	private int status;
-	
+
 	@JsonProperty("quantity")
 	private int quantity;
+
+	@JsonProperty("lat")
+	private String lat;
+
+	@JsonProperty("lng")
+	private String lng;
 
 	public RoomResponse() {
 		super();
@@ -62,8 +68,49 @@ public class RoomResponse {
 		this.quantity = e.getQuantity();
 	}
 
+	public RoomResponse(Room e, String lat, String lng) {
+		this.id = e.getId();
+		this.hotelId = e.getHotelId();
+		this.name = e.getName();
+		this.description = e.getDescription();
+		this.bedNumber = e.getBedNumber();
+		this.peopleNumber = e.getPeopleNumber();
+		this.size = e.getSize();
+		this.images = e.getImages();
+		this.type = e.getType();
+		this.price = e.getPrice();
+		this.status = e.isStatus() == true ? 1 : 0;
+		this.quantity = e.getQuantity();
+		this.lat = lat;
+		this.lng = lng;
+	}
+
 	public List<RoomResponse> mapToList(List<Room> baseEntities) {
 		return baseEntities.stream().map(e -> new RoomResponse(e)).collect(Collectors.toList());
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
 	}
 
 	public int getId() {

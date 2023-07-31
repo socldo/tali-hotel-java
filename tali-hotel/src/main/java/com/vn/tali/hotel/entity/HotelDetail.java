@@ -73,6 +73,29 @@ public class HotelDetail extends BaseEntity {
 
 	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "lat")
+	private String lat;
+	
+	@Column(name = "lng")
+	private String lng;
+
+	
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
 
 	public String getImages() {
 		return images;

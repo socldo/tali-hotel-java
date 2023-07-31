@@ -6,7 +6,7 @@ import com.vn.tali.hotel.entity.News;
 
 public interface NewsService {
 
-	List<News> findAll() throws Exception;
+	List<News> findAll(int sort, String keySearch) throws Exception;
 
 	void update(News entity) throws Exception;
 

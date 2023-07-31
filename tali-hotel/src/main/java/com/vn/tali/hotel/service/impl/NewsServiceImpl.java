@@ -18,8 +18,8 @@ public class NewsServiceImpl implements NewsService {
 	private NewsDao dao;
 
 	@Override
-	public List<News> findAll() throws Exception {
-		return dao.findAll();
+	public List<News> findAll(int sort, String keySearch) throws Exception {
+		return dao.findAll(sort, keySearch);
 	}
 
 	@Override
