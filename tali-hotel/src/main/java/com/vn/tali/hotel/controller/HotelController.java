@@ -196,6 +196,8 @@ public class HotelController extends BaseController {
 		hotel.setHighlightProperty(wrapper.getHighlightProperty());
 		hotel.setType(wrapper.getType());
 		hotel.setPrice(wrapper.getPrice());
+		hotel.setLat(wrapper.getLat());
+		hotel.setLng(wrapper.getLng());
 
 		hotel.setStatus(true);
 
@@ -248,6 +250,9 @@ public class HotelController extends BaseController {
 		hotel.setHighlightProperty(wrapper.getHighlightProperty());
 		hotel.setType(wrapper.getType());
 		hotel.setPrice(wrapper.getPrice());
+		hotel.setLat(wrapper.getLat());
+		hotel.setLng(wrapper.getLng());
+		
 		hotelService.update(hotel);
 
 		response.setData(new HotelResponse(hotel));
