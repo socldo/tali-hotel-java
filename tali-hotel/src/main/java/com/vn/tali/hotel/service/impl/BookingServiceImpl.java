@@ -33,8 +33,8 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public List<Booking> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) {
-		return dao.findAll(parentReviewId, userId, hotelId, isDeleted);
+	public List<Booking> findAll(int userId, int hotelId, int status) {
+		return dao.findAll( userId, hotelId, status);
 	}
 
 	@Override

@@ -48,6 +48,20 @@ public class HotelController extends BaseController {
 	@Autowired
 	ReviewService reviewService;
 
+	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	@Parameter(in = ParameterIn.QUERY, name = "branch_id", description = "ID khu vực")
+	@Parameter(in = ParameterIn.QUERY, name = "status", description = "Trạng thái")
+	@Parameter(in = ParameterIn.QUERY, name = "people_number", description = "Số người")
+	@Parameter(in = ParameterIn.QUERY, name = "bed_number", description = "Số giường")
+	@Parameter(in = ParameterIn.QUERY, name = "min_price", description = "Giá thấp nhất")
+	@Parameter(in = ParameterIn.QUERY, name = "max_price", description = "Giá cao nhất")
+	@Parameter(in = ParameterIn.QUERY, name = "avarage_rate", description = "Đánh giá trung bình")
+	@Parameter(in = ParameterIn.QUERY, name = "checkin", description = "checkin")
+	@Parameter(in = ParameterIn.QUERY, name = "checkout", description = "checkout")
+	@Parameter(in = ParameterIn.QUERY, name = "key_search", description = "Từ khóa tìm kiếm")
+	@Parameter(in = ParameterIn.QUERY, name = "page", description = "Số trang")
+	@Parameter(in = ParameterIn.QUERY, name = "limit", description = "GIới hạn tìm kiếm")
+
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<HotelDetailResponse>>> getList(
 			@RequestParam(name = "branch_id", required = false, defaultValue = "-1") int branchId,
@@ -252,7 +266,7 @@ public class HotelController extends BaseController {
 		hotel.setPrice(wrapper.getPrice());
 		hotel.setLat(wrapper.getLat());
 		hotel.setLng(wrapper.getLng());
-		
+
 		hotelService.update(hotel);
 
 		response.setData(new HotelResponse(hotel));

@@ -1,11 +1,9 @@
 package com.vn.tali.hotel.controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.mail.internet.MimeMessage;
-import javax.persistence.Column;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.common.Utils;
@@ -33,6 +32,8 @@ import com.vn.tali.hotel.service.BookingService;
 import com.vn.tali.hotel.service.HotelService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 
 @RestController
 @RequestMapping(path = "/api/bookings")
@@ -63,6 +64,9 @@ public class BookingController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	@Operation(summary = "API thanh toán booking", description = "API thanh toán booking")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 
 	@PostMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BookingResponse>> changePaymentStatus(@PathVariable("id") int id)
@@ -100,12 +104,14 @@ public class BookingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API lấy chi tiết", description = "API lấy chi tiết")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@GetMapping(value = "/users/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<BookingDataResponse>>> getListByUserId(@PathVariable("id") int id)
 			throws Exception {
 		BaseResponse<List<BookingDataResponse>> response = new BaseResponse<>();
 
-		List<Booking> booking = bookingService.findAll(-1, id, -1, -1);
+		List<Booking> booking = bookingService.findAll(id, -1, -1);
 
 		List<BookingDataResponse> bookingResponse = new BookingDataResponse().mapToList(booking);
 
@@ -130,6 +136,8 @@ public class BookingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@Operation(summary = "API lấy chi tiết", description = "API lấy chi tiết")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BookingResponse>> getDetailBooking(@PathVariable("id") int id) throws Exception {
 		BaseResponse<BookingResponse> response = new BaseResponse<>();
@@ -140,4 +148,36 @@ public class BookingController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	@Parameter(in = ParameterIn.QUERY, name = "user_id", description = "ID tài khoản")
+	@Parameter(in = ParameterIn.QUERY, name = "hotel_id", description = "ID khách sạn")
+	@Parameter(in = ParameterIn.QUERY, name = "status", description = "Trạng thái")
+	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<List<BookingDataResponse>>> findAll(
+			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId,
+			@RequestParam(name = "hotel_id", required = false, defaultValue = "-1") int hotelId,
+			@RequestParam(name = "status", required = false, defaultValue = "-1") int status) throws Exception {
+		BaseResponse<List<BookingDataResponse>> response = new BaseResponse<>();
+
+		List<Booking> booking = bookingService.findAll(userId, hotelId, status);
+
+		List<BookingDataResponse> bookingDataResponsenew = new BookingDataResponse().mapToList(booking);
+
+		List<Hotel> hotels = hotelService
+				.findByIds(bookingDataResponsenew.stream().map(x -> x.getHotelId()).collect(Collectors.toList()));
+		bookingDataResponsenew.stream().map(x -> {
+			Hotel hotel = hotels.stream().filter(y -> y.getId() == x.getHotelId()).findFirst().orElse(null);
+
+			x.setHotelName(hotel.getName());
+			x.setImage(hotel.getImages());
+			x.setType(HotelTypeEnum.valueOf(hotel.getType()).getName());
+			return x;
+
+		}).collect(Collectors.toList());
+
+		response.setData(bookingDataResponsenew);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 }

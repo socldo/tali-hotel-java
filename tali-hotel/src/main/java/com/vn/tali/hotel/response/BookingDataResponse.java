@@ -1,6 +1,5 @@
 package com.vn.tali.hotel.response;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,20 +53,19 @@ public class BookingDataResponse {
 	private String email;
 
 	@JsonProperty("hotel_name")
-	private String hotelName;
+	private String hotelName = "";
 
 	@JsonProperty("image")
-	private String image;
+	private String image = "";
 
 	@JsonProperty("type")
-	private String type;
+	private String type = "";
 
 	@JsonProperty("rating")
 	private double rating;
-	
+
 	public BookingDataResponse() {
 	}
-
 
 	public BookingDataResponse(Booking e) {
 		this.id = e.getId();

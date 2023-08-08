@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.BookingDao;
 import com.vn.tali.hotel.entity.Booking;
-import com.vn.tali.hotel.entity.HotelDetail;
 
 @Repository
 @Transactional
@@ -37,23 +36,21 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 	}
 
 	@Override
-	public List<Booking> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) {
+	public List<Booking> findAll( int userId, int hotelId, int status) {
 		CriteriaQuery<Booking> criteria = this.getBuilder().createQuery(Booking.class);
 		Root<Booking> root = criteria.from(Booking.class);
 
 		List<Predicate> predicates = new ArrayList<>();
-		if (parentReviewId > -1) {
-			predicates.add(this.getBuilder().equal(root.get("parentReviewId"), parentReviewId));
-		}
 
 		if (userId > -1) {
 			predicates.add(this.getBuilder().equal(root.get("userId"), userId));
 		}
+		if (status > -1) {
+			predicates.add(this.getBuilder().equal(root.get("status"), status));
+		}
+		
 		if (hotelId > -1) {
 			predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
-		}
-		if (isDeleted > -1) {
-			predicates.add(this.getBuilder().equal(root.get("isDeleted"), isDeleted));
 		}
 		criteria.select(root).where(predicates.toArray(new Predicate[] {}))
 				.orderBy(this.getBuilder().asc(root.get("id")));

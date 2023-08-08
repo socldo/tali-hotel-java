@@ -66,7 +66,7 @@ public class NewsController extends BaseController {
 
 	@Operation(summary = "API update lượt xem", description = "API update lượt xem")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
-	@PostMapping(value = "{id}/increase", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(value = "/{id}/increase", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<NewsResponse>> increase(@PathVariable("id") int id) throws Exception {
 		BaseResponse<NewsResponse> response = new BaseResponse<>();
 
@@ -157,6 +157,7 @@ public class NewsController extends BaseController {
 	}
 
 	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	
 	@GetMapping(value = "/get-list", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<NewsResponse>>> findAll(
 			@RequestParam(name = "sort", required = false, defaultValue = "0") int sort,
