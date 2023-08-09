@@ -13,6 +13,9 @@ public class BookingDataResponse {
 	@JsonProperty("user_id")
 	private int userId;
 
+	@JsonProperty("branch_id")
+	private int branchId;
+
 	@JsonProperty("hotel_id")
 	private int hotelId;
 
@@ -64,6 +67,13 @@ public class BookingDataResponse {
 	@JsonProperty("rating")
 	private double rating;
 
+	@JsonProperty("created_at")
+	private String createdAt;
+
+	@JsonProperty("updated_at")
+	private String updatedAt;
+
+	
 	public BookingDataResponse() {
 	}
 
@@ -83,10 +93,20 @@ public class BookingDataResponse {
 		this.lastName = e.getLastName();
 		this.phone = e.getPhone();
 		this.email = e.getEmail();
+		this.createdAt = e.getCreatedAt();
+		this.updatedAt = e.getUpdatedAt();
 	}
 
 	public List<BookingDataResponse> mapToList(List<Booking> baseEntities) {
 		return baseEntities.stream().map(e -> new BookingDataResponse(e)).collect(Collectors.toList());
+	}
+
+	public int getBranchId() {
+		return branchId;
+	}
+
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
 
 	public int getId() {

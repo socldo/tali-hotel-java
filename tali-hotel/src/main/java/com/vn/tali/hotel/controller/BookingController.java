@@ -24,6 +24,7 @@ import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Booking;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelTypeEnum;
+import com.vn.tali.hotel.request.ChangeStatusBookingRequest;
 import com.vn.tali.hotel.request.CreateBookingRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.BookingDataResponse;
@@ -170,6 +171,7 @@ public class BookingController {
 			Hotel hotel = hotels.stream().filter(y -> y.getId() == x.getHotelId()).findFirst().orElse(null);
 
 			x.setHotelName(hotel.getName());
+			x.setBranchId(hotel.getBranchId());
 			x.setImage(hotel.getImages());
 			x.setType(HotelTypeEnum.valueOf(hotel.getType()).getName());
 			return x;
@@ -177,6 +179,34 @@ public class BookingController {
 		}).collect(Collectors.toList());
 
 		response.setData(bookingDataResponsenew);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API update trạng thái", description = "API update trạng thái")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+	@PostMapping(value = "/{id}/change-status", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<BookingDataResponse>> changeStatus(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ChangeStatusBookingRequest request,
+			@PathVariable("id") int id) throws Exception {
+		BaseResponse<BookingDataResponse> response = new BaseResponse<>();
+
+		Booking booking = bookingService.findOne(id);
+		if (booking == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		if (booking.getStatus() == 2 || booking.getStatus() == 3) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không thể chuyển trạng thái!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		booking.setStatus(request.getStatus());
+
+		bookingService.update(booking);
+
+		response.setData(new BookingDataResponse(booking));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
