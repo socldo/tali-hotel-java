@@ -69,6 +69,12 @@ public class HotelResponse {
 	@JsonProperty("average_rate")
 	private double averageRate;
 
+	@JsonProperty("lat")
+	private String lat;
+
+	@JsonProperty("lng")
+	private String lng;
+
 	@JsonProperty("created_at")
 	private String createdAt;
 
@@ -100,6 +106,8 @@ public class HotelResponse {
 		this.type = e.getType();
 		this.typeName = HotelTypeEnum.valueOf(e.getType()).getName();
 		this.price = e.getPrice();
+		this.lat = e.getLat();
+		this.lng = e.getLng();
 		this.createdAt = e.getCreatedAt();
 		this.updatedAt = e.getUpdatedAt();
 	}
@@ -114,6 +122,22 @@ public class HotelResponse {
 			}
 			return null;
 		}).collect(Collectors.toList());
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
 	}
 
 	public BigDecimal getPrice() {

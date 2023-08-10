@@ -48,6 +48,9 @@ public class ReviewController extends BaseController {
 	@Autowired
 	HotelService hotelService;
 
+	
+	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	@Parameter(in = ParameterIn.QUERY, name = "hotel_id", description = "Id của nhà hàng")
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<ReviewResponseFilter>>> filter(
 			@RequestParam(name = "hotel_id", required = false, defaultValue = "-1") int hotelId) throws Exception {

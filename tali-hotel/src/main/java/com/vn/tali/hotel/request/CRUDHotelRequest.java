@@ -82,9 +82,33 @@ public class CRUDHotelRequest {
 	@Min(value = 0, message = "Số tiền phải lớn hơn hoặc bằng 0")
 	@JsonProperty("price")
 	private BigDecimal price;
-	
-	
-	
+
+	@Schema(description = "Vĩ độ")
+	@NotEmpty(message = "Vĩ độ không được trống")
+	@JsonProperty("lat")
+	private String lat;
+
+	@Schema(description = "Kinh độ")
+	@NotEmpty(message = "Kinh độ không được trống")
+	@JsonProperty("lng")
+	private String lng;
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}

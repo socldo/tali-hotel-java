@@ -3,21 +3,16 @@ package com.vn.tali.hotel.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.ParameterMode;
-import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vn.tali.hotel.common.HttpException;
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.NewsDao;
 import com.vn.tali.hotel.entity.News;
-import com.vn.tali.hotel.entity.StoreProcedureStatusCodeEnum;
 
 @Repository("newsDao")
 @Transactional

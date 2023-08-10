@@ -1,7 +1,5 @@
 package com.vn.tali.hotel.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.config.VNPayService;
 import com.vn.tali.hotel.response.BaseResponse;
-import com.vn.tali.hotel.response.BranchResponse;
 
 @RestController
 @RequestMapping(path = "/api/vnpay")

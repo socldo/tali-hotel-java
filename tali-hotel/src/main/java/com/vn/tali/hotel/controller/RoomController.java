@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.Room;

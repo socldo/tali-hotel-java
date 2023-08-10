@@ -25,7 +25,7 @@ public class CRUDNewsRequest {
 	private String summary;
 
 	@Schema(description = "Nội dung")
-	@NotEmpty(message = "Nội dung không được để trống")
+	@NotEmpty(message = "Nội dung không được để trống")        
 	@JsonProperty("content")
 	private String content;
 
