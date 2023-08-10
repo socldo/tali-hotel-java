@@ -71,6 +71,11 @@ public class AuthController {
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 			User user = userService.findByPhone(userDetails.getUsername());
+			if(user.isLock()) {
+				response.setStatus(HttpStatus.UNAUTHORIZED);
+				response.setMessageError("Tài khoản đã bị khoá, vui lòng liên hệ tổng đài CSKH!");
+				return response;
+			}
 
 			user.setJwtToken(jwtUtils.generateTokenFromUsername(loginRequest.getUsername()));
 
