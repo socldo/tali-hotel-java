@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.ReportDao;
 import com.vn.tali.hotel.entity.RpNumberOfHotelByArea;
+import com.vn.tali.hotel.entity.RpNumberOfVisitorsAndRevenue;
 import com.vn.tali.hotel.service.ReportService;
 
 @Service("reportService")
@@ -20,6 +21,13 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<RpNumberOfHotelByArea> getRpNumberOfHotelByArea() throws Exception {
 		return dao.getRpNumberOfHotelByArea();
+	}
+
+
+	@Override
+	public List<RpNumberOfVisitorsAndRevenue> getRpNumberOfVisitorsAndRevenue(int areaId, int hotelId,
+			String fromDateString, String toDateString, int groupByType) throws Exception {
+		return dao.getRpNumberOfVisitorsAndRevenue(areaId, hotelId, fromDateString, toDateString, groupByType);
 	}
 
 }
