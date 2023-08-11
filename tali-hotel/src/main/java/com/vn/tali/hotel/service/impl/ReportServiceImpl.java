@@ -20,11 +20,6 @@ public class ReportServiceImpl implements ReportService {
 	private ReportDao dao;
 
 	@Override
-	public List<RpNumberOfHotelByArea> getRpNumberOfHotelByArea() throws Exception {
-		return dao.getRpNumberOfHotelByArea();
-	}
-
-	@Override
 	public List<RpNumberOfVisitorsAndRevenue> getRpNumberOfVisitorsAndRevenue(int areaId, int hotelId,
 			String fromDateString, String toDateString, int groupByType) throws Exception {
 		return dao.getRpNumberOfVisitorsAndRevenue(areaId, hotelId, fromDateString, toDateString, groupByType);
@@ -34,6 +29,12 @@ public class ReportServiceImpl implements ReportService {
 	public List<RpCustomerReview> getRpCustomerReview(int areaId, int hotelId, String fromDateString,
 			String toDateString, int groupByType) throws Exception {
 		return dao.getRpCustomerReview(areaId, hotelId, fromDateString, toDateString, groupByType);
+	}
+
+	@Override
+	public List<RpNumberOfHotelByArea> getRpNumberOfHotelByArea(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception {
+		return dao.getRpNumberOfHotelByArea(areaId, hotelId, fromDateString, toDateString, groupByType);
 	}
 
 }

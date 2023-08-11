@@ -21,12 +21,24 @@ public class ReportDaoImpl extends AbstractDao<Integer, News> implements ReportD
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<RpNumberOfHotelByArea> getRpNumberOfHotelByArea() throws Exception {
+	public List<RpNumberOfHotelByArea> getRpNumberOfHotelByArea(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception {
 		StoredProcedureQuery query = this.getSession()
 				.createStoredProcedureQuery("rp_number_of_hotel_by_area", RpNumberOfHotelByArea.class)
+				.registerStoredProcedureParameter("areaId", Integer.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("fromDateString", String.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("toDateString", String.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("groupByType", Integer.class, ParameterMode.IN)
 
 				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
 				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+
+		query.setParameter("areaId", areaId);
+		query.setParameter("hotelId", hotelId);
+		query.setParameter("fromDateString", fromDateString);
+		query.setParameter("toDateString", toDateString);
+		query.setParameter("groupByType", groupByType);
 
 		int statusCode = (int) query.getOutputParameterValue("status_code");
 		String messageError = query.getOutputParameterValue("message_error").toString();
@@ -76,12 +88,11 @@ public class ReportDaoImpl extends AbstractDao<Integer, News> implements ReportD
 		}
 
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<RpCustomerReview> getRpCustomerReview(int areaId, int hotelId,
-			String fromDateString, String toDateString, int groupByType) throws Exception {
+	public List<RpCustomerReview> getRpCustomerReview(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception {
 		StoredProcedureQuery query = this.getSession()
 				.createStoredProcedureQuery("rp_customer_reviews", RpCustomerReview.class)
 				.registerStoredProcedureParameter("areaId", Integer.class, ParameterMode.IN)
@@ -112,6 +123,5 @@ public class ReportDaoImpl extends AbstractDao<Integer, News> implements ReportD
 		}
 
 	}
-	
-	
+
 }
