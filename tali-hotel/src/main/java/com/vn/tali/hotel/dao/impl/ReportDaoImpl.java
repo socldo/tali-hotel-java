@@ -14,6 +14,7 @@ import com.vn.tali.hotel.entity.News;
 import com.vn.tali.hotel.entity.RpCustomerReview;
 import com.vn.tali.hotel.entity.RpNumberOfHotelByArea;
 import com.vn.tali.hotel.entity.RpNumberOfVisitorsAndRevenue;
+import com.vn.tali.hotel.entity.RpTotalBookingByRoom;
 
 @Repository("reportDao")
 @Transactional
@@ -95,6 +96,42 @@ public class ReportDaoImpl extends AbstractDao<Integer, News> implements ReportD
 			String toDateString, int groupByType) throws Exception {
 		StoredProcedureQuery query = this.getSession()
 				.createStoredProcedureQuery("rp_customer_reviews", RpCustomerReview.class)
+				.registerStoredProcedureParameter("areaId", Integer.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("fromDateString", String.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("toDateString", String.class, ParameterMode.IN)
+				.registerStoredProcedureParameter("groupByType", Integer.class, ParameterMode.IN)
+
+				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
+				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+
+		query.setParameter("areaId", areaId);
+		query.setParameter("hotelId", hotelId);
+		query.setParameter("fromDateString", fromDateString);
+		query.setParameter("toDateString", toDateString);
+		query.setParameter("groupByType", groupByType);
+
+		int statusCode = (int) query.getOutputParameterValue("status_code");
+		String messageError = query.getOutputParameterValue("message_error").toString();
+		System.out.println(query.getFirstResult());
+		switch (statusCode) {
+		case 0:
+			return query.getResultList();
+		case 1:
+			throw new Exception("Bad request");
+		default:
+			throw new Exception(messageError);
+		}
+
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<RpTotalBookingByRoom> getRpTotelBookingByRoom(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception {
+		StoredProcedureQuery query = this.getSession()
+				.createStoredProcedureQuery("rp_bookings_by_room", RpTotalBookingByRoom.class)
 				.registerStoredProcedureParameter("areaId", Integer.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
 				.registerStoredProcedureParameter("fromDateString", String.class, ParameterMode.IN)

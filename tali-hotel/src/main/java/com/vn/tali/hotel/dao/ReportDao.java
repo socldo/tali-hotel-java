@@ -5,6 +5,7 @@ import java.util.List;
 import com.vn.tali.hotel.entity.RpCustomerReview;
 import com.vn.tali.hotel.entity.RpNumberOfHotelByArea;
 import com.vn.tali.hotel.entity.RpNumberOfVisitorsAndRevenue;
+import com.vn.tali.hotel.entity.RpTotalBookingByRoom;
 
 public interface ReportDao {
 
@@ -15,6 +16,9 @@ public interface ReportDao {
 			int groupByType) throws Exception;
 
 	List<RpNumberOfHotelByArea> getRpNumberOfHotelByArea(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception;
+
+	List<RpTotalBookingByRoom> getRpTotelBookingByRoom(int areaId, int hotelId, String fromDateString,
 			String toDateString, int groupByType) throws Exception;
 
 }
