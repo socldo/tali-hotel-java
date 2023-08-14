@@ -136,7 +136,7 @@ public class UserController extends BaseController {
 			userService.update(user);
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Sai mật khẩu vui lòng thử lại!");
+			response.setMessageError("Mật khẩu không đúng!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
