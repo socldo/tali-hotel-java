@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/vnpay/**").permitAll()
 				.antMatchers("/api/news/**").permitAll()
 				.antMatchers("/api/users/**").permitAll()
+				.antMatchers("/api/reports/**").permitAll()
 				.antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll().anyRequest()
 				.authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

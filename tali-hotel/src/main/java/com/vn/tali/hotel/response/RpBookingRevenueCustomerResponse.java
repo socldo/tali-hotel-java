@@ -43,8 +43,8 @@ public class RpBookingRevenueCustomerResponse {
 		this.totalAmount = e.getTotalAmount();
 		this.totalNewUser = e.getTotalNewUser();
 		this.totalReview = e.getTotalReview();
-		this.totalOrderLastMonth = e.getTotalNewUserLastMonth();
-		this.totalAmountLastMonth = e.getTotalAmountLastMonth();
+		this.totalOrderLastMonth = e.getTotalOrderLastMonth();
+		this.totalAmountLastMonth =  BigDecimal.valueOf(50000);
 		this.totalNewUserLastMonth = e.getTotalNewUserLastMonth();
 		this.totalReviewLastMonth = e.getTotalReviewLastMonth();
 	}
