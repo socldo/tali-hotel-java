@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.config.TwilioService;
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
+import com.vn.tali.hotel.request.ForgotPasswordPhoneRequest;
 import com.vn.tali.hotel.request.LoginRequest;
 import com.vn.tali.hotel.request.UserCreateRequest;
 import com.vn.tali.hotel.response.BaseResponse;
+import com.vn.tali.hotel.response.BranchResponse;
 import com.vn.tali.hotel.response.UserInforResponse;
 import com.vn.tali.hotel.response.UserResponse;
 import com.vn.tali.hotel.securiry.jwt.JwtUtils;
@@ -54,6 +58,9 @@ public class AuthController {
 	PasswordEncoder encoder;
 
 	@Autowired
+	private TwilioService twilioService;
+
+	@Autowired
 	JwtUtils jwtUtils;
 
 	@Operation(summary = "API đăng nhập", description = "API đăng nhập")
@@ -71,7 +78,7 @@ public class AuthController {
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 			User user = userService.findByPhone(userDetails.getUsername());
-			if(user.isLock()) {
+			if (user.isLock()) {
 				response.setStatus(HttpStatus.UNAUTHORIZED);
 				response.setMessageError("Tài khoản đã bị khoá, vui lòng liên hệ tổng đài CSKH!");
 				return response;
@@ -146,4 +153,36 @@ public class AuthController {
 		response.setData("You have been sign out!");
 		return response;
 	}
+
+	
+	@Operation(summary = "API quên mật khẩu", description = "API quên mật khẩu")
+	@PostMapping("/forgot-password")
+	public ResponseEntity<BaseResponse<Object>> forgotPassword(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ForgotPasswordPhoneRequest request) {
+		BaseResponse<Object> response = new BaseResponse<>();
+
+		User user = userService.findByPhone(request.getPhone());
+		if (user == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Số điện thoại không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		// Generate a new password or a reset token
+		String newPassword = generateNewPassword();
+		user.setPassword(newPassword);
+		userService.update(user);
+
+		// Send SMS notification
+		twilioService.sendSms(user.getPhone(), "Mật khẩu mới của bạn là: " + newPassword);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	private String generateNewPassword() {
+		// Implement your password generation logic here
+		// For simplicity, you can use a library like RandomStringUtils
+		return RandomStringUtils.randomAlphanumeric(6);
+	}
+
 }
