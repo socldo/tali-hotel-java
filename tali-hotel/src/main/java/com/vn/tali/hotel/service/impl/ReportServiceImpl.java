@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.ReportDao;
+import com.vn.tali.hotel.entity.RpBookingRevenueCustomer;
 import com.vn.tali.hotel.entity.RpCustomerReview;
 import com.vn.tali.hotel.entity.RpNumberOfHotelByArea;
 import com.vn.tali.hotel.entity.RpNumberOfVisitorsAndRevenue;
@@ -42,6 +43,12 @@ public class ReportServiceImpl implements ReportService {
 	public List<RpTotalBookingByRoom> getRpTotelBookingByRoom(int areaId, int hotelId, String fromDateString,
 			String toDateString, int groupByType) throws Exception {
 		return dao.getRpTotelBookingByRoom(areaId, hotelId, fromDateString, toDateString, groupByType);
+	}
+
+	@Override
+	public List<RpBookingRevenueCustomer> getRpBookingRevenueCustomer(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception {
+		return dao.getRpBookingRevenueCustomer(areaId, hotelId, fromDateString, toDateString, groupByType);
 	}
 
 }

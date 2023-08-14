@@ -2,6 +2,7 @@ package com.vn.tali.hotel.service;
 
 import java.util.List;
 
+import com.vn.tali.hotel.entity.RpBookingRevenueCustomer;
 import com.vn.tali.hotel.entity.RpCustomerReview;
 import com.vn.tali.hotel.entity.RpNumberOfHotelByArea;
 import com.vn.tali.hotel.entity.RpNumberOfVisitorsAndRevenue;
@@ -19,6 +20,9 @@ public interface ReportService {
 			String toDateString, int groupByType) throws Exception;
 
 	List<RpTotalBookingByRoom> getRpTotelBookingByRoom(int areaId, int hotelId, String fromDateString,
+			String toDateString, int groupByType) throws Exception;
+
+	List<RpBookingRevenueCustomer> getRpBookingRevenueCustomer(int areaId, int hotelId, String fromDateString,
 			String toDateString, int groupByType) throws Exception;
 
 }

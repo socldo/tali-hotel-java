@@ -154,7 +154,6 @@ public class AuthController {
 		return response;
 	}
 
-	
 	@Operation(summary = "API quên mật khẩu", description = "API quên mật khẩu")
 	@PostMapping("/forgot-password")
 	public ResponseEntity<BaseResponse<Object>> forgotPassword(
@@ -167,10 +166,10 @@ public class AuthController {
 			response.setMessageError("Số điện thoại không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-
 		// Generate a new password or a reset token
 		String newPassword = generateNewPassword();
-		user.setPassword(newPassword);
+
+		user.setPassword(encoder.encode(newPassword));
 		userService.update(user);
 
 		// Send SMS notification
@@ -180,8 +179,6 @@ public class AuthController {
 	}
 
 	private String generateNewPassword() {
-		// Implement your password generation logic here
-		// For simplicity, you can use a library like RandomStringUtils
 		return RandomStringUtils.randomAlphanumeric(6);
 	}
 
