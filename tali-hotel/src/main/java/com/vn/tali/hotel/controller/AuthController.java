@@ -83,8 +83,10 @@ public class AuthController {
 				response.setMessageError("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			}
-			Authentication authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+			UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+					loginRequest.getUsername(), loginRequest.getPassword());
+
+			Authentication authentication = authenticationManager.authenticate(usernamePassword);
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
