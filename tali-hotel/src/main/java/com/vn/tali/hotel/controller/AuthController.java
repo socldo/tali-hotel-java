@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vn.tali.hotel.config.TwilioService;
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.ForgotPasswordPhoneRequest;
@@ -56,9 +55,9 @@ public class AuthController {
 
 	@Autowired
 	PasswordEncoder encoder;
-
-	@Autowired
-	private TwilioService twilioService;
+//
+//	@Autowired
+//	private TwilioService twilioService;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -161,33 +160,33 @@ public class AuthController {
 		response.setData("You have been sign out!");
 		return response;
 	}
-
-	@Operation(summary = "API quên mật khẩu", description = "API quên mật khẩu")
-	@PostMapping("/forgot-password")
-	public ResponseEntity<BaseResponse<Object>> forgotPassword(
-			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ForgotPasswordPhoneRequest request) {
-		BaseResponse<Object> response = new BaseResponse<>();
-
-		User user = userService.findByPhone(request.getPhone());
-		if (user == null) {
-			response.setStatus(HttpStatus.BAD_REQUEST);
-			response.setMessageError("Số điện thoại không tồn tại!");
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		}
-		// Generate a new password or a reset token
-		String newPassword = generateNewPassword();
-
-		user.setPassword(encoder.encode(newPassword));
-		userService.update(user);
-
-		// Send SMS notification
-		twilioService.sendSms(user.getPhone(), "Mật khẩu mới của bạn là: " + newPassword);
-
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
-
-	private String generateNewPassword() {
-		return RandomStringUtils.randomAlphanumeric(6);
-	}
+//
+//	@Operation(summary = "API quên mật khẩu", description = "API quên mật khẩu")
+//	@PostMapping("/forgot-password")
+//	public ResponseEntity<BaseResponse<Object>> forgotPassword(
+//			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ForgotPasswordPhoneRequest request) {
+//		BaseResponse<Object> response = new BaseResponse<>();
+//
+//		User user = userService.findByPhone(request.getPhone());
+//		if (user == null) {
+//			response.setStatus(HttpStatus.BAD_REQUEST);
+//			response.setMessageError("Số điện thoại không tồn tại!");
+//			return new ResponseEntity<>(response, HttpStatus.OK);
+//		}
+//		// Generate a new password or a reset token
+//		String newPassword = generateNewPassword();
+//
+//		user.setPassword(encoder.encode(newPassword));
+//		userService.update(user);
+//
+//		// Send SMS notification
+//		twilioService.sendSms(user.getPhone(), "Mật khẩu mới của bạn là: " + newPassword);
+//
+//		return new ResponseEntity<>(response, HttpStatus.OK);
+//	}
+//
+//	private String generateNewPassword() {
+//		return RandomStringUtils.randomAlphanumeric(6);
+//	}
 
 }
