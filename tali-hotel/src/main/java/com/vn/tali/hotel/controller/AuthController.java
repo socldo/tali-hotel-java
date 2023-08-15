@@ -66,23 +66,29 @@ public class AuthController {
 	@Operation(summary = "API đăng nhập", description = "API đăng nhập")
 	@CrossOrigin()
 	@PostMapping("/signin")
-	public BaseResponse<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<BaseResponse<Object>> authenticateUser(
+			@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody LoginRequest loginRequest) {
 		BaseResponse<Object> response = new BaseResponse<>();
 		try {
+			User user = userService.findByPhone(loginRequest.getUsername());
 
+			if (user.isLock()) {
+				response.setStatus(HttpStatus.UNAUTHORIZED);
+				response.setMessageError("Tài khoản đã bị khoá, vui lòng liên hệ tổng đài CSKH!");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+
+			if (user.isLock()) {
+				response.setStatus(HttpStatus.UNAUTHORIZED);
+				response.setMessageError("Tài khoản không tồn tại, vui lòng kiểm tra lại!");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-			User user = userService.findByPhone(userDetails.getUsername());
-			if (user.isLock()) {
-				response.setStatus(HttpStatus.UNAUTHORIZED);
-				response.setMessageError("Tài khoản đã bị khoá, vui lòng liên hệ tổng đài CSKH!");
-				return response;
-			}
 
 			user.setJwtToken(jwtUtils.generateTokenFromUsername(loginRequest.getUsername()));
 
@@ -97,11 +103,11 @@ public class AuthController {
 					.body(new UserInforResponse(userDetails.getId(), userDetails.getEmail(), userDetails.getUsername(),
 							user.getName(), roles.get(0), user.getJwtToken(), user.getAvatar(), user.getRoleId()));
 			response.setData(data.getBody());
-			return response;
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (BadCredentialsException e) {
 			response.setStatus(HttpStatus.UNAUTHORIZED);
 			response.setMessageError("Thông tin đăng nhập không hợp lệ");
-			return response;
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
 	}
