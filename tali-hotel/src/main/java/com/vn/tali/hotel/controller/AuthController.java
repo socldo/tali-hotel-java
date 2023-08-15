@@ -7,7 +7,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,11 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
-import com.vn.tali.hotel.request.ForgotPasswordPhoneRequest;
 import com.vn.tali.hotel.request.LoginRequest;
 import com.vn.tali.hotel.request.UserCreateRequest;
 import com.vn.tali.hotel.response.BaseResponse;
-import com.vn.tali.hotel.response.BranchResponse;
 import com.vn.tali.hotel.response.UserInforResponse;
 import com.vn.tali.hotel.response.UserResponse;
 import com.vn.tali.hotel.securiry.jwt.JwtUtils;
@@ -116,7 +113,7 @@ public class AuthController {
 	@Operation(summary = "API đăng ký", description = "API đăng ký")
 	@PostMapping("/signup")
 	public BaseResponse<UserResponse> registerUser(
-			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest signUpRequest) {
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest signUpRequest) throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
 
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {

@@ -17,28 +17,22 @@ public class RoleServiceImpl implements RoleService {
 	private RoleDao dao;
 
 	@Override
-	public Role findOne(int id) {
-		return dao.findById(id).get();
+	public Role findOne(int id) throws Exception {
+		return dao.findOne(id);
 	}
 
 	@Override
-	public Role create(Role entity) {
-		return dao.save(entity);
-	}
-
-	@Override
-	public void remove(Role entity) {
-		dao.delete(entity);
-
+	public void create(Role entity) {
+		dao.create(entity);
 	}
 
 	@Override
 	public void update(Role entity) {
-		dao.save(entity);
+		dao.update(entity);
 	}
 
 	@Override
-	public List<Role> findAll() {
-		return (List<Role>) dao.findAll();
+	public List<Role> findAll() throws Exception {
+		return dao.findAll();
 	}
 }

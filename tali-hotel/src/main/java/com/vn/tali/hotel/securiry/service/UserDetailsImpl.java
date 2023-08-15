@@ -38,7 +38,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(User user, RoleService roleService) {
+	public static UserDetailsImpl build(User user, RoleService roleService) throws Exception {
 
 		Role role = roleService.findOne(user.getRoleId());
 

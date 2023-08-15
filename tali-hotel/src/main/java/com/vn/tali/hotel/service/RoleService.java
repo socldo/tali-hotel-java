@@ -5,13 +5,11 @@ import java.util.List;
 import com.vn.tali.hotel.entity.Role;
 
 public interface RoleService {
-	Role findOne(int id);
+	Role findOne(int id)  throws Exception;
 
-	Role create(Role entity);
-
-	void remove(Role entity);
+	void create(Role entity);
 
 	void update(Role entity);
 
-	List<Role> findAll();
+	List<Role> findAll()  throws Exception;
 }

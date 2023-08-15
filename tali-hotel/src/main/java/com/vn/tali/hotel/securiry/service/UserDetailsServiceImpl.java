@@ -37,7 +37,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 //		return UserDetailsImpl.build(user, roleService);
 
-		return UserDetailsImpl.build(user, roleService);
+		try {
+			return UserDetailsImpl.build(user, roleService);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public User save(User user) {

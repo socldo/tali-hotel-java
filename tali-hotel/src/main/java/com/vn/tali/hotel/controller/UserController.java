@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.RoleEnum;
 import com.vn.tali.hotel.entity.User;
@@ -69,6 +70,13 @@ public class UserController extends BaseController {
 			response.setMessageError("Số điện thoại đã tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
+		Role role = roleService.findOne(request.getRoleId());
+		if (role == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại quyền này!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		
 		User user = new User();
 		user.setRoleId(request.getRoleId());
 		user.setEmail(request.getEmail());
@@ -123,14 +131,14 @@ public class UserController extends BaseController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		
+
 		User user = userService.findOne(id);
 		if (user == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		
+
 		if (userDetails != null) {
 			user.setPassword(encoder.encode(request.getNewPassword()));
 			userService.update(user);
@@ -178,15 +186,23 @@ public class UserController extends BaseController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
+		Role role = roleService.findOne(wrapper.getRoleId());
+		if (role == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại quyền này!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
 		user.setRoleId(wrapper.getRoleId());
 		user.setEmail(wrapper.getEmail());
-		user.setPhone(wrapper.getPhone());
+//		user.setPhone(wrapper.getPhone());
 		user.setName(wrapper.getName());
 
 		user.setAddress(wrapper.getAddress());
 		user.setAvatar(wrapper.getAvatar());
 		user.setGender(wrapper.getGender());
 		user.setAvatar(wrapper.getAvatar());
+		user.setBirthday(Utils.convertStringToDate(wrapper.getBirthday(), "dd/MM/yyyy"));
 		userService.update(user);
 		response.setData(new UserResponse(user));
 
