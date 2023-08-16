@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//import com.vn.tali.hotel.config.SmsService;
 import com.vn.tali.hotel.entity.Role;
 import com.vn.tali.hotel.entity.User;
+import com.vn.tali.hotel.request.ForgotPasswordPhoneRequest;
 import com.vn.tali.hotel.request.LoginRequest;
 import com.vn.tali.hotel.request.UserCreateRequest;
 import com.vn.tali.hotel.response.BaseResponse;
@@ -113,7 +116,8 @@ public class AuthController {
 	@Operation(summary = "API đăng ký", description = "API đăng ký")
 	@PostMapping("/signup")
 	public BaseResponse<UserResponse> registerUser(
-			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest signUpRequest) throws Exception {
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest signUpRequest)
+			throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
 
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
@@ -157,33 +161,34 @@ public class AuthController {
 		response.setData("You have been sign out!");
 		return response;
 	}
-//
-//	@Operation(summary = "API quên mật khẩu", description = "API quên mật khẩu")
-//	@PostMapping("/forgot-password")
-//	public ResponseEntity<BaseResponse<Object>> forgotPassword(
-//			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ForgotPasswordPhoneRequest request) {
-//		BaseResponse<Object> response = new BaseResponse<>();
-//
-//		User user = userService.findByPhone(request.getPhone());
-//		if (user == null) {
-//			response.setStatus(HttpStatus.BAD_REQUEST);
-//			response.setMessageError("Số điện thoại không tồn tại!");
-//			return new ResponseEntity<>(response, HttpStatus.OK);
-//		}
-//		// Generate a new password or a reset token
+
+	@Operation(summary = "API quên mật khẩu", description = "API quên mật khẩu")
+	@PostMapping("/forgot-password")
+	public ResponseEntity<BaseResponse<Object>> forgotPassword(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ForgotPasswordPhoneRequest request) {
+		BaseResponse<Object> response = new BaseResponse<>();
+
+		User user = userService.findByPhone(request.getPhone());
+		if (user == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Số điện thoại không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		
 //		String newPassword = generateNewPassword();
-//
-//		user.setPassword(encoder.encode(newPassword));
-//		userService.update(user);
-//
-//		// Send SMS notification
-//		twilioService.sendSms(user.getPhone(), "Mật khẩu mới của bạn là: " + newPassword);
-//
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
-//
-//	private String generateNewPassword() {
-//		return RandomStringUtils.randomAlphanumeric(6);
-//	}
+		String newPassword = "0000";
+
+		user.setPassword(encoder.encode(newPassword));
+		userService.update(user);
+
+		// Send SMS notification
+//		smsService.sendSms(user.getPhone(), "Mật khẩu mới của bạn là: " + newPassword);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	private String generateNewPassword() {
+		return RandomStringUtils.randomAlphanumeric(6);
+	}
 
 }

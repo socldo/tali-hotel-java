@@ -28,6 +28,10 @@
 			<version>8.35.0</version>
 		</dependency>
  --> 
+ 
+ <!-- https://mvnrepository.com/artifact/com.messagebird/messagebird-api -->
+
+ 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
