@@ -76,7 +76,7 @@ public class UserController extends BaseController {
 			response.setMessageError("Không tồn tại quyền này!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		
+
 		User user = new User();
 		user.setRoleId(request.getRoleId());
 		user.setEmail(request.getEmail());
@@ -114,6 +114,37 @@ public class UserController extends BaseController {
 		List<User> users = userService.findAll();
 
 		response.setData(new UserResponse().mapToList(users));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API Kiểm tra tài khoản mật khẩu", description = "API kiểm tra tài khoản mật khẩu")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+	@GetMapping(value = "/check", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<Object>> check(
+			@RequestParam(name = "phone", required = false, defaultValue = "") String phone,
+			@RequestParam(name = "email", required = false, defaultValue = "") String email
+			) throws Exception {
+		BaseResponse<Object> response = new BaseResponse<>();
+		if (!phone.isEmpty()) {
+			User user = userService.findByPhone(phone);
+			if (user != null) {
+				response.setStatus(HttpStatus.BAD_REQUEST);
+				response.setMessageError("Số điện thoại đã tồn tại!");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		}
+		
+		if (!email.isEmpty()) {
+			User userEmail = userService.findByEmail(email);
+			if (userEmail != null) {
+				response.setStatus(HttpStatus.BAD_REQUEST);
+				response.setMessageError("Email đã tồn tại!");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		}
+
+		response.setData(null);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

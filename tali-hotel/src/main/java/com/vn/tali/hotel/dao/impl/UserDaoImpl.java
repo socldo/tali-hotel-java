@@ -30,6 +30,13 @@ public class UserDaoImpl extends AbstractDao<Integer, Room> implements UserDao {
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
+	public User findByEmail(String email) {
+		return (User) this.getSession().createCriteria(User.class).add(Restrictions.eq("email", email)).list().stream()
+				.findFirst().orElse(null);
+	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	@Override
 	public User findByUserName(String userName) {
 		return (User) this.getSession().createCriteria(User.class).add(Restrictions.eq("phone", userName)).list()
 				.stream().findFirst().orElse(null);

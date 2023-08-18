@@ -115,7 +115,7 @@ public class AuthController {
 
 	@Operation(summary = "API đăng ký", description = "API đăng ký")
 	@PostMapping("/signup")
-	public BaseResponse<UserResponse> registerUser(
+	public ResponseEntity<BaseResponse<UserResponse>> registerUser(
 			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody UserCreateRequest signUpRequest)
 			throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
@@ -123,14 +123,14 @@ public class AuthController {
 		if (userService.findByPhone(signUpRequest.getPhone()) != null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Số điện thoại đã tồn tại, vui lòng thử lại!");
-			return response;
+			return new ResponseEntity<>(response, HttpStatus.OK);	
 		}
 
 		Role role = roleService.findOne(signUpRequest.getRoleId());
 		if (role == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại quyền này!");
-			return response;
+			return new ResponseEntity<>(response, HttpStatus.OK);	
 		}
 
 		// Create new user's account
@@ -140,8 +140,8 @@ public class AuthController {
 		user.setRoleId(role.getId());
 		userService.create(user);
 		response.setData(new UserResponse(user));
-		return response;
-	}
+		return new ResponseEntity<>(response, HttpStatus.OK);	
+}
 
 	/**
 	 * Xoá cookie lưu token
