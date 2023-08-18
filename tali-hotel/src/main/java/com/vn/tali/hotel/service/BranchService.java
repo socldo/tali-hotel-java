@@ -14,8 +14,8 @@ public interface BranchService {
 
 	List<Branch> findAll(String keySearch) throws Exception;
 
-	Branch findByName(String name);
+	Branch findByName(String name) throws Exception;
 
-	List<Branch> findByIds(List<Integer> branchIds);
+	List<Branch> findByIds(List<Integer> branchIds)  throws Exception;
 
 }

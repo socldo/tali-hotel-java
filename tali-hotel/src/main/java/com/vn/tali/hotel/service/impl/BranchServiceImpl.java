@@ -41,12 +41,12 @@ public class BranchServiceImpl implements BranchService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Branch findByName(String name) {
+	public Branch findByName(String name) throws Exception {
 		return branchDao.findByName(name);
 	}
 
 	@Override
-	public List<Branch> findByIds(List<Integer> branchIds) {
+	public List<Branch> findByIds(List<Integer> branchIds)   throws Exception{
 		return branchDao.findByIds(branchIds);
 	}
 

@@ -15,5 +15,5 @@ public interface ReviewDao {
 	
 	List<ReviewModel> filter(int hotelId) throws Exception;
 
-	List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted);
+	List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) throws Exception ;
 }

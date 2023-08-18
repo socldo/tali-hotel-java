@@ -12,7 +12,7 @@ public interface ReviewService {
 
 	Review findOne(int id) throws Exception;
 
-	List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted);
+	List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) throws Exception;
 
 	List<ReviewModel> filter(int hotelId) throws Exception;
 

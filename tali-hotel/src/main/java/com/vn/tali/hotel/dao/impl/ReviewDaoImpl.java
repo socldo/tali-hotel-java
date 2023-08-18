@@ -1,6 +1,7 @@
 package com.vn.tali.hotel.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.ParameterMode;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.ReviewDao;
+import com.vn.tali.hotel.entity.News;
 import com.vn.tali.hotel.entity.Review;
 import com.vn.tali.hotel.entity.ReviewModel;
 
@@ -23,7 +25,7 @@ public class ReviewDaoImpl extends AbstractDao<Integer, Review> implements Revie
 
 	@Override
 	public Review findOne(int id) throws Exception {
-		return this.getSession().get(Review.class, id);
+		return executeInSession(session -> session.get(Review.class, id));
 	}
 
 	@Override
@@ -37,49 +39,60 @@ public class ReviewDaoImpl extends AbstractDao<Integer, Review> implements Revie
 	}
 
 	@Override
-	public List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) {
-		CriteriaQuery<Review> criteria = this.getBuilder().createQuery(Review.class);
-		Root<Review> root = criteria.from(Review.class);
+	public List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) throws Exception {
 
-		List<Predicate> predicates = new ArrayList<>();
-		if (parentReviewId > -1) {
-			predicates.add(this.getBuilder().equal(root.get("parentReviewId"), parentReviewId));
-		}
+		return executeInSession(session -> {
+			CriteriaQuery<Review> criteria = this.getBuilder().createQuery(Review.class);
+			Root<Review> root = criteria.from(Review.class);
 
-		if (userId > -1) {
-			predicates.add(this.getBuilder().equal(root.get("userId"), userId));
-		}
-		if (hotelId > -1) {
-			predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
-		}
-		if (isDeleted > -1) {
-			predicates.add(this.getBuilder().equal(root.get("isDeleted"), isDeleted));
-		}
-		criteria.select(root).where(predicates.toArray(new Predicate[] {}))
-				.orderBy(this.getBuilder().asc(root.get("id")));
-		return this.getSession().createQuery(criteria).getResultList();
+			List<Predicate> predicates = new ArrayList<>();
+			if (parentReviewId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("parentReviewId"), parentReviewId));
+			}
+
+			if (userId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("userId"), userId));
+			}
+			if (hotelId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
+			}
+			if (isDeleted > -1) {
+				predicates.add(this.getBuilder().equal(root.get("isDeleted"), isDeleted));
+			}
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}))
+					.orderBy(this.getBuilder().asc(root.get("id")));
+			return this.getSession().createQuery(criteria).getResultList();
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ReviewModel> filter(int hotelId) throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("fillter_reviews", ReviewModel.class)
-				.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
+		try {
+			return executeInSession(session -> {
+				StoredProcedureQuery query = this.getSession()
+						.createStoredProcedureQuery("fillter_reviews", ReviewModel.class)
+						.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
 
-				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
-				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
-		query.setParameter("hotelId", hotelId);
+						.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
+						.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+				query.setParameter("hotelId", hotelId);
 
-		int statusCode = (int) query.getOutputParameterValue("status_code");
-		String messageError = query.getOutputParameterValue("message_error").toString();
-		System.out.println(query.getFirstResult());
-		switch (statusCode) {
-		case 0:
-			return query.getResultList();
-		case 1:
-			throw new Exception("Bad request");
-		default:
-			throw new Exception(messageError);
+				int statusCode = (int) query.getOutputParameterValue("status_code");
+				String messageError = query.getOutputParameterValue("message_error").toString();
+				System.out.println(query.getFirstResult());
+				switch (statusCode) {
+				case 0:
+					return query.getResultList();
+				case 1:
+					throw new RuntimeException("Bad request");
+				default:
+					throw new RuntimeException(messageError);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Collections.emptyList();
 		}
-
 	}
 }

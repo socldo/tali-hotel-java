@@ -42,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) {
+	public List<Review> findAll(int parentReviewId, int userId, int hotelId, int isDeleted) throws Exception {
 		return dao.findAll(parentReviewId, userId, hotelId, isDeleted);
 	}
 
