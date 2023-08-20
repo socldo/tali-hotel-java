@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.ReviewDao;
-import com.vn.tali.hotel.entity.News;
 import com.vn.tali.hotel.entity.Review;
 import com.vn.tali.hotel.entity.ReviewModel;
 

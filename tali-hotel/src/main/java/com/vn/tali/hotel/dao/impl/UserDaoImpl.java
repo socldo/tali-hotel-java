@@ -68,7 +68,7 @@ public class UserDaoImpl extends AbstractDao<Integer, Room> implements UserDao {
 				CriteriaBuilder builder = getBuilder();
 				CriteriaQuery<User> criteria = builder.createQuery(User.class);
 				Root<User> root = criteria.from(User.class);
-				Predicate userNamePredicate = builder.equal(root.get("userName"), userName);
+				Predicate userNamePredicate = builder.equal(root.get("phone"), userName);
 
 				criteria.select(root).where(userNamePredicate);
 				List<User> resultList = session.createQuery(criteria).getResultList();

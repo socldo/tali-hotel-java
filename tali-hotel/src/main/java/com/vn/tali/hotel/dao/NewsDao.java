@@ -10,7 +10,7 @@ public interface NewsDao {
 
 	void update(News entity) throws Exception;
 
-	News create(News entity) throws Exception;
+	void create(News entity) throws Exception;
 
 	News findOne(int id) throws Exception;
 

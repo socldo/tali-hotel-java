@@ -43,7 +43,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return (T) getSession().get(persistentClass, key);
 	}
 
-	public void update(T entity) throws Exception {
+	public void update(T entity) {
 		executeInTransaction(session -> {
 			session.update(entity);
 			session.flush();
@@ -95,7 +95,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		}
 	}
 
-	@SuppressWarnings({ "unused", "hiding" })
+	@SuppressWarnings({ "hiding" })
 	protected <T> T executeInSession(Function<Session, T> action) throws Exception {
 	    Session session = getSession();
 	    try {

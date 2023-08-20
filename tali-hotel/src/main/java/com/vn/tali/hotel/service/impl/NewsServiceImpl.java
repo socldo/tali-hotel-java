@@ -28,8 +28,8 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public News create(News entity) throws Exception {
-		return dao.create(entity);
+	public void create(News entity) throws Exception {
+		 dao.create(entity);
 	}
 
 	@Override

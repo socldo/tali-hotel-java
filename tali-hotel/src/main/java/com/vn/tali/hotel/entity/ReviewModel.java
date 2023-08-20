@@ -1,8 +1,15 @@
 package com.vn.tali.hotel.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.vn.tali.hotel.common.Utils;
 
@@ -27,13 +34,39 @@ public class ReviewModel {
 	private int isDeleted;
 
 	@Column(name = "score_rate")
-	private float score_rate;
+	private float scoreRate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "created_at")
+	@CreationTimestamp
+	private Date createdAt = new Date();
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updated_at")
+	@UpdateTimestamp
+	private Date updatedAt = new Date();
 
 	@Column(name = "users")
 	private String users;
 
 	public UserDataJson getUsers() throws Exception {
 		return (UserDataJson) Utils.convertJsonStringToListObject(this.users, UserDataJson[].class).get(0);
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public void setUsers(String users) {
@@ -80,11 +113,12 @@ public class ReviewModel {
 		this.isDeleted = isDeleted;
 	}
 
-	public float getScore_rate() {
-		return score_rate;
+	public float getScoreRate() {
+		return scoreRate;
 	}
 
-	public void setScore_rate(float score_rate) {
-		this.score_rate = score_rate;
+	public void setScoreRate(float scoreRate) {
+		this.scoreRate = scoreRate;
 	}
+
 }

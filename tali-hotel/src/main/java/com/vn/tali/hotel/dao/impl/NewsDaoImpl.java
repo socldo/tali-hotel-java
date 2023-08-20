@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.NewsDao;
-import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.News;
 
 @Repository("newsDao")
@@ -25,13 +24,12 @@ public class NewsDaoImpl extends AbstractDao<Integer, News> implements NewsDao {
 	}
 
 	@Override
-	public News create(News entity) throws Exception {
-		this.getSession().save(entity);
-		return entity;
+	public void create(News entity) {
+		this.executeInTransaction(session -> session.save(entity));
 	}
 
 	@Override
-	public void update(News entity) throws Exception {
+	public void update(News entity)  {
 		this.executeInTransaction(session -> session.update(entity));
 	}
 
