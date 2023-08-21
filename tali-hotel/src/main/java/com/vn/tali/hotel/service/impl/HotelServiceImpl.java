@@ -39,7 +39,7 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public Hotel findByName(int branchId, String name) {
+	public Hotel findByName(int branchId, String name) throws Exception{
 		return dao.findByName(branchId, name);
 	}
 
@@ -57,7 +57,7 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public List<Hotel> findByIds(List<Integer> hotelIds) {
+	public List<Hotel> findByIds(List<Integer> hotelIds) throws Exception {
 		return dao.findByIds(hotelIds);
 	}
 

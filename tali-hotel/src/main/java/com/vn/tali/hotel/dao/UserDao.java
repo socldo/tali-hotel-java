@@ -20,4 +20,6 @@ public interface UserDao {
 
 	List<User> findByIds(List<Integer> ids);
 
+	User findByEmail(String email);
+
 }

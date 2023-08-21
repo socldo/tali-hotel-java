@@ -1,6 +1,7 @@
 package com.vn.tali.hotel.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.ParameterMode;
@@ -22,7 +23,7 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 
 	@Override
 	public Booking findOne(int id) throws Exception {
-		return this.getSession().get(Booking.class, id);
+		return executeInSession(session -> session.get(Booking.class, id));
 	}
 
 	@Override
@@ -36,72 +37,84 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 	}
 
 	@Override
-	public List<Booking> findAll(int userId, int hotelId, int status) {
-		CriteriaQuery<Booking> criteria = this.getBuilder().createQuery(Booking.class);
-		Root<Booking> root = criteria.from(Booking.class);
+	public List<Booking> findAll(int userId, int hotelId, int status) throws Exception {
+		return executeInSession(session -> {
+			CriteriaQuery<Booking> criteria = this.getBuilder().createQuery(Booking.class);
+			Root<Booking> root = criteria.from(Booking.class);
 
-		List<Predicate> predicates = new ArrayList<>();
+			List<Predicate> predicates = new ArrayList<>();
 
-		if (userId > -1) {
-			predicates.add(this.getBuilder().equal(root.get("userId"), userId));
-		}
-		if (status > -1) {
-			predicates.add(this.getBuilder().equal(root.get("status"), status));
-		}
+			if (userId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("userId"), userId));
+			}
+			if (status > -1) {
+				predicates.add(this.getBuilder().equal(root.get("status"), status));
+			}
 
-		if (hotelId > -1) {
-			predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
-		}
-		criteria.select(root).where(predicates.toArray(new Predicate[] {}))
-				.orderBy(this.getBuilder().asc(root.get("id")));
-		return this.getSession().createQuery(criteria).getResultList();
+			if (hotelId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
+			}
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}))
+					.orderBy(this.getBuilder().asc(root.get("id")));
+			return this.getSession().createQuery(criteria).getResultList();
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Booking createBooking(int userId, int hotelId, String checkIn, String checkOut, int status, int amount,
 			int totalAmount, int depositAmount, String roomsData, String firstName, String lastName, String phone,
 			String email) throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("create_booking", Booking.class)
-				.registerStoredProcedureParameter("userId", Integer.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("checkIn", String.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("checkOut", String.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("status", Integer.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("amount", Integer.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("totalAmount", Integer.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("depositAmount", Integer.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("roomsData", String.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("firstName", String.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("lastName", String.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("phone", String.class, ParameterMode.IN)
-				.registerStoredProcedureParameter("email", String.class, ParameterMode.IN)
 
-				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
-				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
-		query.setParameter("userId", userId);
-		query.setParameter("hotelId", hotelId);
-		query.setParameter("checkIn", checkIn);
-		query.setParameter("checkOut", checkOut);
-		query.setParameter("status", status);
-		query.setParameter("amount", amount);
-		query.setParameter("totalAmount", totalAmount);
-		query.setParameter("depositAmount", depositAmount);
-		query.setParameter("roomsData", roomsData);
-		query.setParameter("firstName", firstName);
-		query.setParameter("lastName", lastName);
-		query.setParameter("phone", phone);
-		query.setParameter("email", email);
+		try {
+			return executeInSession(session -> {
+				StoredProcedureQuery query = this.getSession()
+						.createStoredProcedureQuery("create_booking", Booking.class)
+						.registerStoredProcedureParameter("userId", Integer.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("hotelId", Integer.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("checkIn", String.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("checkOut", String.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("status", Integer.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("amount", Integer.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("totalAmount", Integer.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("depositAmount", Integer.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("roomsData", String.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("firstName", String.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("lastName", String.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("phone", String.class, ParameterMode.IN)
+						.registerStoredProcedureParameter("email", String.class, ParameterMode.IN)
 
-		int statusCode = (int) query.getOutputParameterValue("status_code");
-		String messageError = query.getOutputParameterValue("message_error").toString();
-		System.out.println(query.getFirstResult());
-		switch (statusCode) {
-		case 0:
-			return (Booking) query.getResultList().stream().findFirst().orElse(null);
-		case 1:
-			throw new Exception("Bad request");
-		default:
-			throw new Exception(messageError);
+						.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
+						.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+				query.setParameter("userId", userId);
+				query.setParameter("hotelId", hotelId);
+				query.setParameter("checkIn", checkIn);
+				query.setParameter("checkOut", checkOut);
+				query.setParameter("status", status);
+				query.setParameter("amount", amount);
+				query.setParameter("totalAmount", totalAmount);
+				query.setParameter("depositAmount", depositAmount);
+				query.setParameter("roomsData", roomsData);
+				query.setParameter("firstName", firstName);
+				query.setParameter("lastName", lastName);
+				query.setParameter("phone", phone);
+				query.setParameter("email", email);
+
+				int statusCode = (int) query.getOutputParameterValue("status_code");
+				String messageError = query.getOutputParameterValue("message_error").toString();
+				System.out.println(query.getFirstResult());
+				switch (statusCode) {
+				case 0:
+					return (Booking) query.getResultList().stream().findFirst().orElse(null);
+				case 1:
+					throw new RuntimeException("Bad request");
+				default:
+					throw new RuntimeException(messageError);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return (Booking) Collections.emptyList();
 		}
 	}
 
@@ -125,7 +138,6 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 		default:
 			throw new Exception(messageError);
 		}
-
 	}
 
 }

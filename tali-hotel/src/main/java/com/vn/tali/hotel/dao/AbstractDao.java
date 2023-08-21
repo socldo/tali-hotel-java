@@ -3,16 +3,17 @@ package com.vn.tali.hotel.dao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.persistence.criteria.CriteriaBuilder;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.vn.tali.hotel.entity.BaseEntity;
-import org.hibernate.Transaction;
 
 @Repository
 public abstract class AbstractDao<PK extends Serializable, T> {
@@ -42,7 +43,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return (T) getSession().get(persistentClass, key);
 	}
 
-	public void update(T entity) throws Exception {
+	public void update(T entity) {
 		executeInTransaction(session -> {
 			session.update(entity);
 			session.flush();
@@ -94,4 +95,17 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		}
 	}
 
+	@SuppressWarnings({ "hiding" })
+	protected <T> T executeInSession(Function<Session, T> action) throws Exception {
+	    Session session = getSession();
+	    try {
+	        return action.apply(session);
+	    } catch (Exception e) {
+	        throw e;
+	    } finally {
+	        session.close(); // Đóng session sau khi hoàn thành tác vụ
+	    }
+	}
+
+	
 }

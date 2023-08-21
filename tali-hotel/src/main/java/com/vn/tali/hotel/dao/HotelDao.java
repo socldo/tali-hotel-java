@@ -20,8 +20,8 @@ public interface HotelDao {
 
 	HotelDetail getDetailRoom(int id) throws Exception;
 
-	Hotel findByName(int branchId, String name);
+	Hotel findByName(int branchId, String name) throws Exception ;
 
-	List<Hotel> findByIds(List<Integer> hotelIds);
+	List<Hotel> findByIds(List<Integer> hotelIds) throws Exception ;
 
 }

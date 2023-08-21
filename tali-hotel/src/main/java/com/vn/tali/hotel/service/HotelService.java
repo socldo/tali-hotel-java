@@ -15,9 +15,9 @@ public interface HotelService {
 
 	List<Hotel> findAll() throws Exception;
 
-	Hotel findByName(int branchId, String name);
+	Hotel findByName(int branchId, String name) throws Exception;
 
-	List<Hotel> findByIds(List<Integer> hotelIds);
+	List<Hotel> findByIds(List<Integer> hotelIds) throws Exception;
 
 	List<HotelDetail> filter(int branchId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
 			int avarageRate, String checkIn, String checkOut, String keySearch, int page, int limit) throws Exception;

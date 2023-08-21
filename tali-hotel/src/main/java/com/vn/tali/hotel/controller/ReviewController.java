@@ -48,7 +48,6 @@ public class ReviewController extends BaseController {
 	@Autowired
 	HotelService hotelService;
 
-	
 	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
 	@Parameter(in = ParameterIn.QUERY, name = "hotel_id", description = "Id của nhà hàng")
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -118,7 +117,7 @@ public class ReviewController extends BaseController {
 
 			x.setUserRoleId(RoleEnum.valueOf(user.getRoleId()).getValue());
 			x.setUserRoleName(RoleEnum.valueOf(user.getRoleId()).getName());
-			
+
 			return x;
 
 		}).collect(Collectors.toList());
@@ -127,7 +126,6 @@ public class ReviewController extends BaseController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 
 	@Operation(summary = "API xóa review", description = "API xóa review")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
@@ -175,7 +173,7 @@ public class ReviewController extends BaseController {
 			response.setMessageError("Đánh giá từ 1->5 sao");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		review.setUserId(user.getId());
+		review.setUserId(user == null ? 0 : user.getId());
 		review.setParentReviewId(request.getParentReviewId());
 		review.setContent(request.getContent());
 		review.setHotelId(request.getHotelId());

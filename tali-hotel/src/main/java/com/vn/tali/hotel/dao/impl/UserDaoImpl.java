@@ -3,12 +3,12 @@ package com.vn.tali.hotel.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,23 +21,71 @@ import com.vn.tali.hotel.entity.User;
 @Transactional
 public class UserDaoImpl extends AbstractDao<Integer, Room> implements UserDao {
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public User findByPhone(String phone) {
-		return (User) this.getSession().createCriteria(User.class).add(Restrictions.eq("phone", phone)).list().stream()
-				.findFirst().orElse(null);
+		try {
+			return executeInSession(session -> {
+				CriteriaBuilder builder = getBuilder();
+				CriteriaQuery<User> criteria = builder.createQuery(User.class);
+				Root<User> root = criteria.from(User.class);
+				Predicate phonePredicate = builder.equal(root.get("phone"), phone);
+
+				criteria.select(root).where(phonePredicate);
+				List<User> resultList = session.createQuery(criteria).getResultList();
+
+				return resultList.stream().findFirst().orElse(null);
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@Override
+	public User findByEmail(String email) {
+		try {
+			return executeInSession(session -> {
+				CriteriaBuilder builder = getBuilder();
+				CriteriaQuery<User> criteria = builder.createQuery(User.class);
+				Root<User> root = criteria.from(User.class);
+				Predicate emailPredicate = builder.equal(root.get("email"), email);
+
+				criteria.select(root).where(emailPredicate);
+				List<User> resultList = session.createQuery(criteria).getResultList();
+
+				return resultList.stream().findFirst().orElse(null);
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	@Override
 	public User findByUserName(String userName) {
-		return (User) this.getSession().createCriteria(User.class).add(Restrictions.eq("phone", userName)).list()
-				.stream().findFirst().orElse(null);
+		try {
+			return executeInSession(session -> {
+				CriteriaBuilder builder = getBuilder();
+				CriteriaQuery<User> criteria = builder.createQuery(User.class);
+				Root<User> root = criteria.from(User.class);
+				Predicate userNamePredicate = builder.equal(root.get("phone"), userName);
+
+				criteria.select(root).where(userNamePredicate);
+				List<User> resultList = session.createQuery(criteria).getResultList();
+
+				return resultList.stream().findFirst().orElse(null);
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
 	public User findOne(int id) throws Exception {
-		return this.getSession().get(User.class, id);
+
+		return executeInSession(session -> session.get(User.class, id));
+
 	}
 
 	@Override
@@ -53,10 +101,13 @@ public class UserDaoImpl extends AbstractDao<Integer, Room> implements UserDao {
 
 	@Override
 	public List<User> findAll() throws Exception {
-		CriteriaQuery<User> criteria = this.getBuilder().createQuery(User.class);
-		Root<User> root = criteria.from(User.class);
-		criteria.select(root).orderBy(this.getBuilder().asc(root.get("id")));
-		return this.getSession().createQuery(criteria).getResultList();
+
+		return executeInSession(session -> {
+			CriteriaQuery<User> criteria = this.getBuilder().createQuery(User.class);
+			Root<User> root = criteria.from(User.class);
+			criteria.select(root).orderBy(this.getBuilder().asc(root.get("id")));
+			return this.getSession().createQuery(criteria).getResultList();
+		});
 	}
 
 	@Override

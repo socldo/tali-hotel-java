@@ -2,8 +2,6 @@ package com.vn.tali.hotel.dao;
 
 import java.util.List;
 
-import com.vn.tali.hotel.entity.Hotel;
-import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.entity.Room;
 
 public interface RoomDao {
@@ -19,6 +17,6 @@ public interface RoomDao {
 	List<Room> filter(int hotelId, int status, int peopleNumber, int bedNumber, int minPrice, int maxPrice,
 			String checkIn, String checkOut, String keySearch, int page, int limit, int bookingId) throws Exception;
 
-	Room findByName(int hotelId, String name);
+	Room findByName(int hotelId, String name) throws Exception;
 
 }

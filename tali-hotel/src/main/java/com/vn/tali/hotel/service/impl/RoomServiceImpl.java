@@ -46,7 +46,7 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public Room findByName(int hotelId, String name) {
+	public Room findByName(int hotelId, String name) throws Exception {
 		return dao.findByName(hotelId, name);
 	}
 
