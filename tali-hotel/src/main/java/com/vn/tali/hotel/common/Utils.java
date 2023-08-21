@@ -746,6 +746,20 @@ public class Utils {
 			return new SimpleDateFormat("yyyy-MM-dd").format(dateFormat);
 		}
 	}
+	
+	public static Date formatDatabaseStringToDate(String dateString) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
+		Calendar cal1 = Calendar.getInstance();
+		cal1.add(Calendar.YEAR, 1);
+
+		if (dateString == null || Strings.isEmpty(dateString)) {
+			return cal1.getTime();
+		} else {
+			return sdf.parse(dateString);
+
+		}
+	}
+
 
 	public static String formatDateToStringDatabase(String dateString) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

@@ -36,7 +36,7 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 	}
 
 	@Override
-	public List<Booking> findAll( int userId, int hotelId, int status) {
+	public List<Booking> findAll(int userId, int hotelId, int status) {
 		CriteriaQuery<Booking> criteria = this.getBuilder().createQuery(Booking.class);
 		Root<Booking> root = criteria.from(Booking.class);
 
@@ -48,7 +48,7 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 		if (status > -1) {
 			predicates.add(this.getBuilder().equal(root.get("status"), status));
 		}
-		
+
 		if (hotelId > -1) {
 			predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
 		}
@@ -98,6 +98,28 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 		switch (statusCode) {
 		case 0:
 			return (Booking) query.getResultList().stream().findFirst().orElse(null);
+		case 1:
+			throw new Exception("Bad request");
+		default:
+			throw new Exception(messageError);
+		}
+	}
+
+	@Override
+	public int isCancleBooking(int id) throws Exception {
+		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("is_cancel_booking")
+				.registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
+
+				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
+				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+		query.setParameter("id", id);
+
+		int statusCode = (int) query.getOutputParameterValue("status_code");
+		String messageError = query.getOutputParameterValue("message_error").toString();
+		query.getFirstResult();
+		switch (statusCode) {
+		case 0:
+			return query.getFirstResult();
 		case 1:
 			throw new Exception("Bad request");
 		default:

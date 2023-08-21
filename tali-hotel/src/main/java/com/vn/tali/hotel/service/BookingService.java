@@ -12,10 +12,12 @@ public interface BookingService {
 
 	void update(Booking entity);
 
-	List<Booking> findAll( int userId, int hotelId, int status);
+	List<Booking> findAll(int userId, int hotelId, int status);
 
 	Booking createBooking(int userId, int hotelId, String checkIn, String checkOut, int status, int amount,
 			int totalAmount, int depositAmount, String roomsData, String firstName, String lastName, String phone,
 			String email) throws Exception;
+
+	public int isCancleBooking(int id) throws Exception;
 
 }

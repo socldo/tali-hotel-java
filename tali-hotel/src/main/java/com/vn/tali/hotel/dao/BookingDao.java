@@ -17,4 +17,6 @@ public interface BookingDao {
 	Booking createBooking(int userId, int hotelId, String checkIn, String checkOut, int status, int amount,
 			int totalAmount, int depositAmount, String roomsData, String firstName, String lastName, String phone,
 			String email) throws Exception;
+	
+	int isCancleBooking(int id) throws Exception;
 }

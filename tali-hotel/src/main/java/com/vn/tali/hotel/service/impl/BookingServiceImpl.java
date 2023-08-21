@@ -34,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public List<Booking> findAll(int userId, int hotelId, int status) {
-		return dao.findAll( userId, hotelId, status);
+		return dao.findAll(userId, hotelId, status);
 	}
 
 	@Override
@@ -43,6 +43,11 @@ public class BookingServiceImpl implements BookingService {
 			String email) throws Exception {
 		return dao.createBooking(userId, hotelId, checkIn, checkOut, status, amount, totalAmount, depositAmount,
 				roomsData, firstName, lastName, phone, email);
+	}
+
+	@Override
+	public int isCancleBooking(int id) throws Exception {
+		return dao.isCancleBooking(id);
 	}
 
 }

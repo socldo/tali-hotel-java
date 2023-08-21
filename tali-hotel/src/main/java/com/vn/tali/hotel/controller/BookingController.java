@@ -1,5 +1,8 @@
 package com.vn.tali.hotel.controller;
 
+import java.time.Duration;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,9 +69,24 @@ public class BookingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PostMapping(value = "/{id}/cancel", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<BookingResponse>> cancel(@PathVariable("id") int id) throws Exception {
+		BaseResponse<BookingResponse> response = new BaseResponse<>();
+		Booking booking = bookingService.findOne(id);
+		if (bookingService.isCancleBooking(id) == 0) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Chỉ được huỷ đơn đặt phòng trước 2 ngày kể từ ngày check in!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+       	}
+		booking.setStatus(3);
+		bookingService.update(booking);
+		response.setData(new BookingResponse(booking));
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@Operation(summary = "API thanh toán booking", description = "API thanh toán booking")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
-
 	@PostMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BookingResponse>> changePaymentStatus(@PathVariable("id") int id)
 			throws Exception {
