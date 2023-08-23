@@ -236,4 +236,33 @@ public class BookingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+
+	@Operation(summary = "API update trạng thái", description = "API update trạng thái")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
+	@PostMapping(value = "/{id}/change-payment-status", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<BookingDataResponse>> changePaymentStatus(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @Valid @RequestBody ChangeStatusBookingRequest request,
+			@PathVariable("id") int id) throws Exception {
+		BaseResponse<BookingDataResponse> response = new BaseResponse<>();
+
+		Booking booking = bookingService.findOne(id);
+		if (booking == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		if ( booking.getPaymentStatus() == 3) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Không thể chuyển trạng thái!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		booking.setPaymentStatus(request.getStatus());
+
+		bookingService.update(booking);
+
+		response.setData(new BookingDataResponse(booking));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 }

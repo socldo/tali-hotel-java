@@ -30,13 +30,13 @@ public class CRUDRoomRequest {
 
 	@Schema(description = "Số giường")
 	@Min(value = 1, message = "Số giường lớn hơn hoặc bằng 1")
-	@Max(value = 5, message = "Số giường bé hơn hoặc bằng 5")
+	@Max(value = 10, message = "Số giường bé hơn hoặc bằng 10")
 	@JsonProperty("bed_number")
 	private int bedNumber;
 
 	@Schema(description = "Số người")
 	@Min(value = 1, message = "Số người lớn hơn hoặc bằng 1")
-	@Max(value = 5, message = "Số người bé hơn hoặc bằng 5")
+	@Max(value = 10, message = "Số người bé hơn hoặc bằng 10")
 	@JsonProperty("people_number")
 	private int peopleNumber;
 

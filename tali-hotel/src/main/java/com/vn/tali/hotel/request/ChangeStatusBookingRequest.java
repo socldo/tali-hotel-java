@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class ChangeStatusBookingRequest {
 
-	@Schema(description = "Trạng thái booking")
+	@Schema(description = "Trạng thái")
 	@Min(value = 0, message = "Trạng thái phải lớn hơn hoặc bằng 0")
 	@Max(value = 3, message = "Trạng thái phải bé hơn hoặc bằng 0")
 	@JsonProperty("status")
