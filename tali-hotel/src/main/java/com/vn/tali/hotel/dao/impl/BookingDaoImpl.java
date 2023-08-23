@@ -120,23 +120,30 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 
 	@Override
 	public int isCancleBooking(int id) throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("is_cancel_booking")
-				.registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
+		try {
+			return executeInSession(session -> {
+				StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("is_cancel_booking")
+						.registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
 
-				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
-				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
-		query.setParameter("id", id);
+						.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
+						.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+				query.setParameter("id", id);
 
-		int statusCode = (int) query.getOutputParameterValue("status_code");
-		String messageError = query.getOutputParameterValue("message_error").toString();
-		query.getFirstResult();
-		switch (statusCode) {
-		case 0:
-			return query.getFirstResult();
-		case 1:
-			throw new Exception("Bad request");
-		default:
-			throw new Exception(messageError);
+				int statusCode = (int) query.getOutputParameterValue("status_code");
+				String messageError = query.getOutputParameterValue("message_error").toString();
+				query.getFirstResult();
+				switch (statusCode) {
+				case 0:
+					return query.getFirstResult();
+				case 1:
+					throw new RuntimeException("Bad request");
+				default:
+					throw new RuntimeException(messageError);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 1;
 		}
 	}
 
