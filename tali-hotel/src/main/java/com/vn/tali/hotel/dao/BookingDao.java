@@ -3,6 +3,7 @@ package com.vn.tali.hotel.dao;
 import java.util.List;
 
 import com.vn.tali.hotel.entity.Booking;
+import com.vn.tali.hotel.entity.IsCancelEntity;
 
 public interface BookingDao {
 
@@ -18,5 +19,5 @@ public interface BookingDao {
 			int totalAmount, int depositAmount, String roomsData, String firstName, String lastName, String phone,
 			String email) throws Exception;
 	
-	int isCancleBooking(int id) throws Exception;
+	IsCancelEntity isCancleBooking(int id) throws Exception;
 }

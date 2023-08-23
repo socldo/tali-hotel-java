@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.BookingDao;
 import com.vn.tali.hotel.entity.Booking;
+import com.vn.tali.hotel.entity.IsCancelEntity;
 
 @Repository
 @Transactional
@@ -119,8 +120,9 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 	}
 
 	@Override
-	public int isCancleBooking(int id) throws Exception {
-		StoredProcedureQuery query = this.getSession().createStoredProcedureQuery("is_cancel_booking")
+	public IsCancelEntity isCancleBooking(int id) throws Exception {
+		StoredProcedureQuery query = this.getSession()
+				.createStoredProcedureQuery("is_cancel_booking", IsCancelEntity.class)
 				.registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
 
 				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
@@ -129,10 +131,10 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 
 		int statusCode = (int) query.getOutputParameterValue("status_code");
 		String messageError = query.getOutputParameterValue("message_error").toString();
-		query.getFirstResult();
+
 		switch (statusCode) {
 		case 0:
-			return query.getFirstResult();
+			return (IsCancelEntity) query.getResultList().stream().findFirst().orElse(null);
 		case 1:
 			throw new Exception("Bad request");
 		default:

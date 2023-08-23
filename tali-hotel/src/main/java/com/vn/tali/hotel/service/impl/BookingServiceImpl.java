@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.BookingDao;
 import com.vn.tali.hotel.entity.Booking;
+import com.vn.tali.hotel.entity.IsCancelEntity;
 import com.vn.tali.hotel.service.BookingService;
 
 @Transactional(rollbackFor = Exception.class)
@@ -46,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public int isCancleBooking(int id) throws Exception {
+	public IsCancelEntity isCancleBooking(int id) throws Exception {
 		return dao.isCancleBooking(id);
 	}
 

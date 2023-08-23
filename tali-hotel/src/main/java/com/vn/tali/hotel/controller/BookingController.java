@@ -68,12 +68,20 @@ public class BookingController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
+	
+	@Operation(summary = "API huỷ đơn đặt phòng booking", description = "API huỷ đơn đặt phòng booking")
+	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@PostMapping(value = "/{id}/cancel", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BookingResponse>> cancel(@PathVariable("id") int id) throws Exception {
 		BaseResponse<BookingResponse> response = new BaseResponse<>();
 		Booking booking = bookingService.findOne(id);
-		if (bookingService.isCancleBooking(id) == 0) {
+		System.out.println(bookingService.isCancleBooking(id));
+		if (booking.getStatus() == 3) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Đơn hàng này đã huỷ!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+       	}
+		if (bookingService.isCancleBooking(id).getIsCancel() == 0) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Chỉ được huỷ đơn đặt phòng trước 2 ngày kể từ ngày check in!");
 			return new ResponseEntity<>(response, HttpStatus.OK);

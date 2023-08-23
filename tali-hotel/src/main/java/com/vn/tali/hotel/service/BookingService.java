@@ -3,6 +3,7 @@ package com.vn.tali.hotel.service;
 import java.util.List;
 
 import com.vn.tali.hotel.entity.Booking;
+import com.vn.tali.hotel.entity.IsCancelEntity;
 
 public interface BookingService {
 
@@ -18,6 +19,6 @@ public interface BookingService {
 			int totalAmount, int depositAmount, String roomsData, String firstName, String lastName, String phone,
 			String email) throws Exception;
 
-	public int isCancleBooking(int id) throws Exception;
+	public IsCancelEntity isCancleBooking(int id) throws Exception;
 
 }
