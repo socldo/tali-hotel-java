@@ -119,26 +119,35 @@ public class BookingDaoImpl extends AbstractDao<Integer, Booking> implements Boo
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IsCancelEntity isCancleBooking(int id) throws Exception {
-		StoredProcedureQuery query = this.getSession()
-				.createStoredProcedureQuery("is_cancel_booking", IsCancelEntity.class)
-				.registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
 
-				.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
-				.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
-		query.setParameter("id", id);
+		try {
+			return executeInSession(session -> {
+				StoredProcedureQuery query = this.getSession()
+						.createStoredProcedureQuery("is_cancel_booking", IsCancelEntity.class)
+						.registerStoredProcedureParameter("id", Integer.class, ParameterMode.IN)
 
-		int statusCode = (int) query.getOutputParameterValue("status_code");
-		String messageError = query.getOutputParameterValue("message_error").toString();
+						.registerStoredProcedureParameter("status_code", Integer.class, ParameterMode.OUT)
+						.registerStoredProcedureParameter("message_error", String.class, ParameterMode.OUT);
+				query.setParameter("id", id);
 
-		switch (statusCode) {
-		case 0:
-			return (IsCancelEntity) query.getResultList().stream().findFirst().orElse(null);
-		case 1:
-			throw new Exception("Bad request");
-		default:
-			throw new Exception(messageError);
+				int statusCode = (int) query.getOutputParameterValue("status_code");
+				String messageError = query.getOutputParameterValue("message_error").toString();
+
+				switch (statusCode) {
+				case 0:
+					return (IsCancelEntity) query.getResultList().stream().findFirst().orElse(null);
+				case 1:
+					throw new RuntimeException("Bad request");
+				default:
+					throw new RuntimeException(messageError);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
