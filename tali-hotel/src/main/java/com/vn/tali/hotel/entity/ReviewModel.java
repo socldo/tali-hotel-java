@@ -25,6 +25,9 @@ public class ReviewModel {
 	@Column(name = "user_id")
 	private int userId;
 
+	@Column(name = "parent_review_id")
+	private int parentReviewId;
+
 	@Column(name = "hotel_id")
 	private int hotelId;
 
@@ -51,6 +54,14 @@ public class ReviewModel {
 
 	public UserDataJson getUsers() throws Exception {
 		return (UserDataJson) Utils.convertJsonStringToListObject(this.users, UserDataJson[].class).get(0);
+	}
+
+	public int getParentReviewId() {
+		return parentReviewId;
+	}
+
+	public void setParentReviewId(int parentReviewId) {
+		this.parentReviewId = parentReviewId;
 	}
 
 	public Date getCreatedAt() {
