@@ -61,7 +61,6 @@ public class HotelController extends BaseController {
 	@Parameter(in = ParameterIn.QUERY, name = "key_search", description = "Từ khóa tìm kiếm")
 	@Parameter(in = ParameterIn.QUERY, name = "page", description = "Số trang")
 	@Parameter(in = ParameterIn.QUERY, name = "limit", description = "GIới hạn tìm kiếm")
-
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<HotelDetailResponse>>> getList(
 			@RequestParam(name = "branch_id", required = false, defaultValue = "-1") int branchId,
