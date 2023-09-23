@@ -2,6 +2,7 @@ package com.vn.tali.hotel.dao;
 
 import java.util.List;
 
+import com.vn.tali.hotel.entity.FavoriteHotelMap;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 
@@ -23,5 +24,13 @@ public interface HotelDao {
 	Hotel findByName(int branchId, String name) throws Exception ;
 
 	List<Hotel> findByIds(List<Integer> hotelIds) throws Exception ;
+
+	List<FavoriteHotelMap> findAllFavoriteHotelMap(int userId) throws Exception;
+
+	FavoriteHotelMap findOneFavoriteHotelMap(int userId, int hotelId) throws Exception;
+
+	void updateMap(FavoriteHotelMap entity);
+
+	void createMap(FavoriteHotelMap entity);
 
 }

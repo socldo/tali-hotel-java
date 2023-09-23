@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
+import com.vn.tali.hotel.entity.FavoriteHotelMap;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.entity.Review;
+import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.CRUDHotelRequest;
+import com.vn.tali.hotel.request.ChangeFavoriteRequest;
 import com.vn.tali.hotel.request.CreateUpdateImageRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.CountStarHotelResponse;
@@ -31,6 +34,7 @@ import com.vn.tali.hotel.response.HotelResponse;
 import com.vn.tali.hotel.service.BranchService;
 import com.vn.tali.hotel.service.HotelService;
 import com.vn.tali.hotel.service.ReviewService;
+import com.vn.tali.hotel.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,6 +45,9 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 public class HotelController extends BaseController {
 	@Autowired
 	HotelService hotelService;
+
+	@Autowired
+	UserService userService;
 
 	@Autowired
 	BranchService branchService;
@@ -293,4 +300,68 @@ public class HotelController extends BaseController {
 		response.setData(new HotelResponse(hotel));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	@Operation(summary = "API lấy danh sách yêu thích", description = "API lấy danh sách yêu thích")
+	@Parameter(in = ParameterIn.QUERY, name = "user_id", description = "ID user")
+	@GetMapping(value = "/favorite", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<List<HotelResponse>>> favorite(
+			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId) throws Exception {
+		BaseResponse<List<HotelResponse>> response = new BaseResponse<>();
+
+		List<FavoriteHotelMap> favoriteHotelMap = hotelService.findAllFavoriteHotelMap(userId);
+
+		List<Hotel> hotels = hotelService
+				.findByIds(favoriteHotelMap.stream().filter(y -> y.isStatus()).map(x -> x.getHotelId()).collect(Collectors.toList()));
+
+		List<Branch> branches = branchService
+				.findByIds(hotels.stream().map(x -> x.getBranchId()).collect(Collectors.toList()));
+
+		List<HotelResponse> hotelResponses = new HotelResponse().mapToList(hotels);
+
+		hotelResponses = hotelResponses.stream().map(x -> {
+			x.setBranchName(branches.stream().filter(y -> y.getId() == x.getBranchId()).map(y -> y.getName())
+					.findFirst().orElse(""));
+			return x;
+		}).collect(Collectors.toList());
+		response.setData(hotelResponses);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API change favorite", description = "API change favorite")
+	@PostMapping(value = "/change-favorite", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<HotelResponse>> changeFavorite(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody @Valid ChangeFavoriteRequest wrapper)
+			throws Exception {
+		User userFavorite = this.getUser();
+		BaseResponse<HotelResponse> response = new BaseResponse<>();
+
+		if (userFavorite == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("User không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		Hotel hotel = hotelService.findOne(wrapper.getHotelId());
+		if (hotel == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Khách sạn không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		FavoriteHotelMap favoriteHotelMap = hotelService.findOneFavoriteHotelMap(userFavorite.getId(),
+				wrapper.getHotelId());
+		if (favoriteHotelMap == null) {
+			FavoriteHotelMap favoriteHotelMapCreate = new FavoriteHotelMap();
+			favoriteHotelMapCreate.setHotelId(wrapper.getHotelId());
+			favoriteHotelMapCreate.setStatus(true);
+			favoriteHotelMapCreate.setUserId(userFavorite.getId());
+			hotelService.createMap(favoriteHotelMapCreate);
+		} else {
+			favoriteHotelMap.setStatus(!favoriteHotelMap.isStatus());
+			hotelService.updateMap(favoriteHotelMap);
+		}
+		response.setData(new HotelResponse(hotel));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 }
