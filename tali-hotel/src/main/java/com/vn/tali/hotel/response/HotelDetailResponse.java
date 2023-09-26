@@ -79,6 +79,9 @@ public class HotelDetailResponse {
 	@JsonProperty("lng")
 	private String lng;
 
+	@JsonProperty("is_favorite")
+	private int isFavorite = 0;
+
 	public HotelDetailResponse() {
 		super();
 	}
@@ -120,6 +123,46 @@ public class HotelDetailResponse {
 			}
 			return null;
 		}).collect(Collectors.toList());
+	}
+
+	public String getEmaill() {
+		return emaill;
+	}
+
+	public void setEmaill(String emaill) {
+		this.emaill = emaill;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLng() {
+		return lng;
+	}
+
+	public void setLng(String lng) {
+		this.lng = lng;
+	}
+
+	public int getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(int isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 
 	public List<String> getImages() {

@@ -56,6 +56,7 @@ public class HotelController extends BaseController {
 	ReviewService reviewService;
 
 	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	@Parameter(in = ParameterIn.QUERY, name = "user_id", description = "ID User")
 	@Parameter(in = ParameterIn.QUERY, name = "branch_id", description = "ID khu vực")
 	@Parameter(in = ParameterIn.QUERY, name = "status", description = "Trạng thái")
 	@Parameter(in = ParameterIn.QUERY, name = "people_number", description = "Số người")
@@ -70,6 +71,7 @@ public class HotelController extends BaseController {
 	@Parameter(in = ParameterIn.QUERY, name = "limit", description = "GIới hạn tìm kiếm")
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<HotelDetailResponse>>> getList(
+			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId,
 			@RequestParam(name = "branch_id", required = false, defaultValue = "-1") int branchId,
 			@RequestParam(name = "status", required = false, defaultValue = "-1") int status,
 			@RequestParam(name = "people_number", required = false, defaultValue = "-1") int peopleNumber,
@@ -83,10 +85,32 @@ public class HotelController extends BaseController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "limit", required = false, defaultValue = "2000") int limit) throws Exception {
 		BaseResponse<List<HotelDetailResponse>> response = new BaseResponse<>();
+//		User userFavorite = this.getUser();
 
 		List<HotelDetail> hotels = hotelService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice,
 				avarageRate, checkIn, checkOut, keySearch, page, limit);
-		response.setData(new HotelDetailResponse().mapToList(hotels));
+
+		List<HotelDetailResponse> list = new HotelDetailResponse().mapToList(hotels);
+		User userFavorite = userService.findOne(userId);
+		if (userFavorite != null) {
+
+			List<FavoriteHotelMap> favoriteHotelMaps = hotelService.findAllFavoriteHotelMap(userFavorite.getId());
+
+			list = list.stream().map(x -> {
+
+				FavoriteHotelMap favoriteHotelMap = favoriteHotelMaps.stream().filter(y -> y.getHotelId() == x.getId())
+						.findFirst().orElse(null);
+				if (favoriteHotelMap != null && favoriteHotelMap.isStatus()) {
+					x.setIsFavorite(1);
+				} else {
+					x.setIsFavorite(0);
+				}
+				return x;
+			}).collect(Collectors.toList());
+
+		}
+
+		response.setData(list);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -96,13 +120,29 @@ public class HotelController extends BaseController {
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelDetailResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelDetailResponse> response = new BaseResponse<>();
+		User userFavorite = this.getUser();
+
 		Hotel hotel = hotelService.findOne(id);
 		if (hotel == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		response.setData(new HotelDetailResponse(hotelService.getDetailRoom(id)));
+		HotelDetail hotelDetail = hotelService.getDetailRoom(id);
+		HotelDetailResponse hotelDetailResponse = new HotelDetailResponse(hotelDetail);
+		if (userFavorite != null) {
+
+			FavoriteHotelMap favoriteHotelMap = hotelService.findOneFavoriteHotelMap(userFavorite.getId(), id);
+
+			if (favoriteHotelMap != null && favoriteHotelMap.isStatus()) {
+				hotelDetailResponse.setIsFavorite(1);
+			} else {
+				hotelDetailResponse.setIsFavorite(0);
+
+			}
+		}
+
+		response.setData(hotelDetailResponse);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -310,8 +350,8 @@ public class HotelController extends BaseController {
 
 		List<FavoriteHotelMap> favoriteHotelMap = hotelService.findAllFavoriteHotelMap(userId);
 
-		List<Hotel> hotels = hotelService
-				.findByIds(favoriteHotelMap.stream().filter(y -> y.isStatus()).map(x -> x.getHotelId()).collect(Collectors.toList()));
+		List<Hotel> hotels = hotelService.findByIds(favoriteHotelMap.stream().filter(y -> y.isStatus())
+				.map(x -> x.getHotelId()).collect(Collectors.toList()));
 
 		List<Branch> branches = branchService
 				.findByIds(hotels.stream().map(x -> x.getBranchId()).collect(Collectors.toList()));
