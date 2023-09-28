@@ -104,7 +104,6 @@ public class BookingController {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		Booking booking = bookingService.findOne(id);
-		System.out.println(id);
 		Hotel hotel = hotelService.findOne(booking.getHotelId());
 
 //		Gửi mail sau khi thanh toán xong

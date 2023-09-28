@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.HotelDao;
+import com.vn.tali.hotel.entity.FavoriteHotelMap;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.service.HotelService;
@@ -39,7 +40,7 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public Hotel findByName(int branchId, String name) throws Exception{
+	public Hotel findByName(int branchId, String name) throws Exception {
 		return dao.findByName(branchId, name);
 	}
 
@@ -59,6 +60,26 @@ public class HotelServiceImpl implements HotelService {
 	@Override
 	public List<Hotel> findByIds(List<Integer> hotelIds) throws Exception {
 		return dao.findByIds(hotelIds);
+	}
+
+	@Override
+	public List<FavoriteHotelMap> findAllFavoriteHotelMap(int userId) throws Exception {
+		return dao.findAllFavoriteHotelMap(userId);
+	}
+
+	@Override
+	public FavoriteHotelMap findOneFavoriteHotelMap(int userId, int hotelId) throws Exception {
+		return dao.findOneFavoriteHotelMap(userId, hotelId);
+	}
+
+	@Override
+	public void updateMap(FavoriteHotelMap entity) {
+		dao.updateMap(entity);
+	}
+
+	@Override
+	public void createMap(FavoriteHotelMap entity) {
+		dao.createMap(entity);
 	}
 
 }

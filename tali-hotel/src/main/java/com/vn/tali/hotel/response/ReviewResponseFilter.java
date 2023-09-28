@@ -16,6 +16,9 @@ public class ReviewResponseFilter {
 	@JsonProperty("user_id")
 	private int userId;
 
+	@JsonProperty("parent_review_id")
+	private int parentReviewId;
+	
 	@JsonProperty("hotel_id")
 	private int hotelId;
 
@@ -43,6 +46,7 @@ public class ReviewResponseFilter {
 	public ReviewResponseFilter(ReviewModel e) throws Exception {
 		this.id = e.getId();
 		this.userId = e.getUserId();
+		this.parentReviewId = e.getParentReviewId();
 		this.content = e.getContent();
 		this.isDeleted = e.getIsDeleted();
 		this.scoreRate = e.getScoreRate();
@@ -61,6 +65,14 @@ public class ReviewResponseFilter {
 			}
 			return null;
 		}).collect(Collectors.toList());
+	}
+
+	public int getParentReviewId() {
+		return parentReviewId;
+	}
+
+	public void setParentReviewId(int parentReviewId) {
+		this.parentReviewId = parentReviewId;
 	}
 
 	public String getCreatedAt() {

@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Branch;
+import com.vn.tali.hotel.entity.FavoriteHotelMap;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 import com.vn.tali.hotel.entity.Review;
+import com.vn.tali.hotel.entity.User;
 import com.vn.tali.hotel.request.CRUDHotelRequest;
+import com.vn.tali.hotel.request.ChangeFavoriteRequest;
 import com.vn.tali.hotel.request.CreateUpdateImageRequest;
 import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.CountStarHotelResponse;
@@ -31,6 +34,7 @@ import com.vn.tali.hotel.response.HotelResponse;
 import com.vn.tali.hotel.service.BranchService;
 import com.vn.tali.hotel.service.HotelService;
 import com.vn.tali.hotel.service.ReviewService;
+import com.vn.tali.hotel.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,12 +47,16 @@ public class HotelController extends BaseController {
 	HotelService hotelService;
 
 	@Autowired
+	UserService userService;
+
+	@Autowired
 	BranchService branchService;
 
 	@Autowired
 	ReviewService reviewService;
 
 	@Operation(summary = "API lấy danh sách", description = "API lấy danh sách ")
+	@Parameter(in = ParameterIn.QUERY, name = "user_id", description = "ID User")
 	@Parameter(in = ParameterIn.QUERY, name = "branch_id", description = "ID khu vực")
 	@Parameter(in = ParameterIn.QUERY, name = "status", description = "Trạng thái")
 	@Parameter(in = ParameterIn.QUERY, name = "people_number", description = "Số người")
@@ -63,6 +71,7 @@ public class HotelController extends BaseController {
 	@Parameter(in = ParameterIn.QUERY, name = "limit", description = "GIới hạn tìm kiếm")
 	@GetMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<List<HotelDetailResponse>>> getList(
+			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId,
 			@RequestParam(name = "branch_id", required = false, defaultValue = "-1") int branchId,
 			@RequestParam(name = "status", required = false, defaultValue = "-1") int status,
 			@RequestParam(name = "people_number", required = false, defaultValue = "-1") int peopleNumber,
@@ -76,10 +85,32 @@ public class HotelController extends BaseController {
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
 			@RequestParam(name = "limit", required = false, defaultValue = "2000") int limit) throws Exception {
 		BaseResponse<List<HotelDetailResponse>> response = new BaseResponse<>();
+//		User userFavorite = this.getUser();
 
 		List<HotelDetail> hotels = hotelService.filter(branchId, status, peopleNumber, bedNumber, minPrice, maxPrice,
 				avarageRate, checkIn, checkOut, keySearch, page, limit);
-		response.setData(new HotelDetailResponse().mapToList(hotels));
+
+		List<HotelDetailResponse> list = new HotelDetailResponse().mapToList(hotels);
+		User userFavorite = userService.findOne(userId);
+		if (userFavorite != null) {
+
+			List<FavoriteHotelMap> favoriteHotelMaps = hotelService.findAllFavoriteHotelMap(userFavorite.getId());
+
+			list = list.stream().map(x -> {
+
+				FavoriteHotelMap favoriteHotelMap = favoriteHotelMaps.stream().filter(y -> y.getHotelId() == x.getId())
+						.findFirst().orElse(null);
+				if (favoriteHotelMap != null && favoriteHotelMap.isStatus()) {
+					x.setIsFavorite(1);
+				} else {
+					x.setIsFavorite(0);
+				}
+				return x;
+			}).collect(Collectors.toList());
+
+		}
+
+		response.setData(list);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -89,13 +120,29 @@ public class HotelController extends BaseController {
 	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<HotelDetailResponse>> getDetail(@PathVariable("id") int id) throws Exception {
 		BaseResponse<HotelDetailResponse> response = new BaseResponse<>();
+		User userFavorite = this.getUser();
+
 		Hotel hotel = hotelService.findOne(id);
 		if (hotel == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		response.setData(new HotelDetailResponse(hotelService.getDetailRoom(id)));
+		HotelDetail hotelDetail = hotelService.getDetailRoom(id);
+		HotelDetailResponse hotelDetailResponse = new HotelDetailResponse(hotelDetail);
+		if (userFavorite != null) {
+
+			FavoriteHotelMap favoriteHotelMap = hotelService.findOneFavoriteHotelMap(userFavorite.getId(), id);
+
+			if (favoriteHotelMap != null && favoriteHotelMap.isStatus()) {
+				hotelDetailResponse.setIsFavorite(1);
+			} else {
+				hotelDetailResponse.setIsFavorite(0);
+
+			}
+		}
+
+		response.setData(hotelDetailResponse);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -293,4 +340,68 @@ public class HotelController extends BaseController {
 		response.setData(new HotelResponse(hotel));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	@Operation(summary = "API lấy danh sách yêu thích", description = "API lấy danh sách yêu thích")
+	@Parameter(in = ParameterIn.QUERY, name = "user_id", description = "ID user")
+	@GetMapping(value = "/favorite", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<List<HotelResponse>>> favorite(
+			@RequestParam(name = "user_id", required = false, defaultValue = "-1") int userId) throws Exception {
+		BaseResponse<List<HotelResponse>> response = new BaseResponse<>();
+
+		List<FavoriteHotelMap> favoriteHotelMap = hotelService.findAllFavoriteHotelMap(userId);
+
+		List<Hotel> hotels = hotelService.findByIds(favoriteHotelMap.stream().filter(y -> y.isStatus())
+				.map(x -> x.getHotelId()).collect(Collectors.toList()));
+
+		List<Branch> branches = branchService
+				.findByIds(hotels.stream().map(x -> x.getBranchId()).collect(Collectors.toList()));
+
+		List<HotelResponse> hotelResponses = new HotelResponse().mapToList(hotels);
+
+		hotelResponses = hotelResponses.stream().map(x -> {
+			x.setBranchName(branches.stream().filter(y -> y.getId() == x.getBranchId()).map(y -> y.getName())
+					.findFirst().orElse(""));
+			return x;
+		}).collect(Collectors.toList());
+		response.setData(hotelResponses);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Operation(summary = "API change favorite", description = "API change favorite")
+	@PostMapping(value = "/change-favorite", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<BaseResponse<HotelResponse>> changeFavorite(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody @Valid ChangeFavoriteRequest wrapper)
+			throws Exception {
+		User userFavorite = this.getUser();
+		BaseResponse<HotelResponse> response = new BaseResponse<>();
+
+		if (userFavorite == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("User không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		Hotel hotel = hotelService.findOne(wrapper.getHotelId());
+		if (hotel == null) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Khách sạn không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+
+		FavoriteHotelMap favoriteHotelMap = hotelService.findOneFavoriteHotelMap(userFavorite.getId(),
+				wrapper.getHotelId());
+		if (favoriteHotelMap == null) {
+			FavoriteHotelMap favoriteHotelMapCreate = new FavoriteHotelMap();
+			favoriteHotelMapCreate.setHotelId(wrapper.getHotelId());
+			favoriteHotelMapCreate.setStatus(true);
+			favoriteHotelMapCreate.setUserId(userFavorite.getId());
+			hotelService.createMap(favoriteHotelMapCreate);
+		} else {
+			favoriteHotelMap.setStatus(!favoriteHotelMap.isStatus());
+			hotelService.updateMap(favoriteHotelMap);
+		}
+		response.setData(new HotelResponse(hotel));
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 }

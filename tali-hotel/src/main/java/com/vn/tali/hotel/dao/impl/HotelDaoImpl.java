@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vn.tali.hotel.dao.AbstractDao;
 import com.vn.tali.hotel.dao.HotelDao;
+import com.vn.tali.hotel.entity.FavoriteHotelMap;
 import com.vn.tali.hotel.entity.Hotel;
 import com.vn.tali.hotel.entity.HotelDetail;
 
@@ -167,4 +168,54 @@ public class HotelDaoImpl extends AbstractDao<Integer, Hotel> implements HotelDa
 			return (HotelDetail) Collections.emptyList();
 		}
 	}
+
+	@Override
+	public List<FavoriteHotelMap> findAllFavoriteHotelMap(int userId) throws Exception {
+
+		return executeInSession(session -> {
+			CriteriaQuery<FavoriteHotelMap> criteria = this.getBuilder().createQuery(FavoriteHotelMap.class);
+			Root<FavoriteHotelMap> root = criteria.from(FavoriteHotelMap.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			if (userId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("userId"), userId));
+			}
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}))
+					.orderBy(this.getBuilder().asc(root.get("id")));
+			return this.getSession().createQuery(criteria).getResultList();
+		});
+	}
+
+	@Override
+	public FavoriteHotelMap findOneFavoriteHotelMap(int userId, int hotelId) throws Exception {
+
+		return executeInSession(session -> {
+			CriteriaQuery<FavoriteHotelMap> criteria = this.getBuilder().createQuery(FavoriteHotelMap.class);
+			Root<FavoriteHotelMap> root = criteria.from(FavoriteHotelMap.class);
+
+			List<Predicate> predicates = new ArrayList<>();
+
+			if (userId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("userId"), userId));
+			}
+			if (hotelId > -1) {
+				predicates.add(this.getBuilder().equal(root.get("hotelId"), hotelId));
+			}
+			criteria.select(root).where(predicates.toArray(new Predicate[] {}))
+					.orderBy(this.getBuilder().asc(root.get("id")));
+			return this.getSession().createQuery(criteria).stream().findFirst().orElse(null);
+		});
+	}
+	
+	@Override
+	public void updateMap(FavoriteHotelMap entity) {
+		this.executeInTransaction(session -> session.update(entity));
+	}
+
+	@Override
+	public void createMap(FavoriteHotelMap entity) {
+		this.executeInTransaction(session -> session.save(entity));
+	}
+
 }

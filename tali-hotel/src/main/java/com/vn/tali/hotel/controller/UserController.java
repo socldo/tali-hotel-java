@@ -122,8 +122,7 @@ public class UserController extends BaseController {
 	@GetMapping(value = "/check", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<Object>> check(
 			@RequestParam(name = "phone", required = false, defaultValue = "") String phone,
-			@RequestParam(name = "email", required = false, defaultValue = "") String email
-			) throws Exception {
+			@RequestParam(name = "email", required = false, defaultValue = "") String email) throws Exception {
 		BaseResponse<Object> response = new BaseResponse<>();
 		if (!phone.isEmpty()) {
 			User user = userService.findByPhone(phone);
@@ -133,7 +132,7 @@ public class UserController extends BaseController {
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			}
 		}
-		
+
 		if (!email.isEmpty()) {
 			User userEmail = userService.findByEmail(email);
 			if (userEmail != null) {
@@ -189,10 +188,17 @@ public class UserController extends BaseController {
 	@PostMapping(value = "{id}/lock", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<UserResponse>> lock(@PathVariable("id") int id) throws Exception {
 		BaseResponse<UserResponse> response = new BaseResponse<>();
+		User userDo = this.getUser();
+		
 		User user = userService.findOne(id);
 		if (user == null) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không tồn tại!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		if (userDo.getRoleId() < user.getRoleId()) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Bạn không có quyền này!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 		user.setLock(!user.isLock());
@@ -264,6 +270,14 @@ public class UserController extends BaseController {
 
 		if ((userDo.getRoleId() == RoleEnum.ROLE_MANAGER.getValue() && wrapper.getRoleId() >= 3)
 				|| (userDo.getRoleId() == RoleEnum.ROLE_EMPLOYEE.getValue() && wrapper.getRoleId() >= 2)) {
+			response.setStatus(HttpStatus.BAD_REQUEST);
+			response.setMessageError("Bộ phận không hợp lệ!");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+
+		}
+
+		if (userDo.getRoleId() == RoleEnum.ROLE_EMPLOYEE.getValue()
+				&& wrapper.getRoleId() >= RoleEnum.ROLE_EMPLOYEE.getValue()) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Bộ phận không hợp lệ!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
