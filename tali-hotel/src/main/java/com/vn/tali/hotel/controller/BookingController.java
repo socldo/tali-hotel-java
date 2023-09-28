@@ -1,8 +1,5 @@
 package com.vn.tali.hotel.controller;
 
-import java.time.Duration;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.context.Context;
 
 import com.vn.tali.hotel.common.Utils;
 import com.vn.tali.hotel.entity.Booking;
@@ -33,6 +31,7 @@ import com.vn.tali.hotel.response.BaseResponse;
 import com.vn.tali.hotel.response.BookingDataResponse;
 import com.vn.tali.hotel.response.BookingResponse;
 import com.vn.tali.hotel.service.BookingService;
+import com.vn.tali.hotel.service.EmailService;
 import com.vn.tali.hotel.service.HotelService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,6 +51,9 @@ public class BookingController {
 	@Autowired
 	private JavaMailSender mailSender;
 
+	@Autowired
+	private EmailService emailService;
+
 	@Operation(summary = "API tạo booking", description = "API tạo booking")
 	@PostMapping(value = "/create", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<BaseResponse<BookingResponse>> create(
@@ -68,7 +70,7 @@ public class BookingController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 	@Operation(summary = "API huỷ đơn đặt phòng booking", description = "API huỷ đơn đặt phòng booking")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@PostMapping(value = "/{id}/cancel", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -80,12 +82,12 @@ public class BookingController {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Đơn hàng này đã huỷ!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
-       	}
+		}
 		if (bookingService.isCancleBooking(id).getIsCancel() == 0) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Chỉ được huỷ đơn đặt phòng trước 2 ngày kể từ ngày check in!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
-       	}
+		}
 		booking.setStatus(3);
 		bookingService.update(booking);
 		response.setData(new BookingResponse(booking));
@@ -106,22 +108,30 @@ public class BookingController {
 		Hotel hotel = hotelService.findOne(booking.getHotelId());
 
 //		Gửi mail sau khi thanh toán xong
-		helper.setTo(booking.getEmail());
-		helper.setSubject(
-				String.format("Xác nhận cho mã số đặt phòng %s Nhận phòng %s", booking.getId(), booking.getId()));
-		helper.setText(String.format("Đơn đặt phòng của quý khách hiện đã được xác nhận!\n" + "Thân gửi %s %s \n"
-				+ "Để tham khảo, mã đặt phòng của quý khách là %s. Để xem, hủy, hoặc sửa đổi đơn đặt phòng của quý khách, hãy sử dụng các lựa chọn tự phục vụ dễ dàng của chúng tôi. \n"
-				+ "%s \n" + "Nhận phòng %s. (Sau 13:00)\n" + "Trả phòng %s. (Trước 12:00)\n"
-				+ "Quý khách cũng có thể dễ dàng tìm hiểu về các quy định và tiện nghi của chỗ nghỉ tại Đơn đặt chỗ của tôi \n"
-				+ "Mọi câu hỏi liên quan đến chỗ nghỉ, vui lòng liên hệ trực tiếp với chỗ nghỉ. \n" + "\n"
-				+ "Đặt phòng của bạn đã thanh toán và xác nhận\n" + "Tổng tiền: %s\n" + "Đã bao gồm thuế và phí" + "\n"
-				+ "Cần thêm thông tin hoặc hỗ trợ?\n"
-				+ "Hãy để sẵn số tham chiếu đặt phòng 926541268 của quý khách trong tầm tay. Quý khách sẽ cần nó nếu muốn liên hệ với bộ phận hỗ trợ khách hàng của chúng tôi.\n"
-				+ "Nhanh chóng tìm hiểu xem làm thế nào mình có thể quản lý đặt phòng trực tuyến trong thư viện câu hỏi thường gặp có nội dung phong phú của chúng tôi.",
-				booking.getFirstName(), booking.getLastName(), booking.getId(), hotel.getName(), booking.getCheckIn(),
-				booking.getCheckOut(), booking.getAmount()));
-
-		mailSender.send(message);
+//		helper.setTo(booking.getEmail());
+//		helper.setSubject(
+//				String.format("Xác nhận cho mã số đặt phòng %s Nhận phòng %s", booking.getId(), booking.getId()));
+//		helper.setText(String.format("Đơn đặt phòng của quý khách hiện đã được xác nhận!\n" + "Thân gửi %s %s \n"
+//				+ "Để tham khảo, mã đặt phòng của quý khách là %s. Để xem, hủy, hoặc sửa đổi đơn đặt phòng của quý khách, hãy sử dụng các lựa chọn tự phục vụ dễ dàng của chúng tôi. \n"
+//				+ "%s \n" + "Nhận phòng %s. (Sau 13:00)\n" + "Trả phòng %s. (Trước 12:00)\n"
+//				+ "Quý khách cũng có thể dễ dàng tìm hiểu về các quy định và tiện nghi của chỗ nghỉ tại Đơn đặt chỗ của tôi \n"
+//				+ "Mọi câu hỏi liên quan đến chỗ nghỉ, vui lòng liên hệ trực tiếp với chỗ nghỉ. \n" + "\n"
+//				+ "Đặt phòng của bạn đã thanh toán và xác nhận\n" + "Tổng tiền: %s\n" + "Đã bao gồm thuế và phí" + "\n"
+//				+ "Cần thêm thông tin hoặc hỗ trợ?\n"
+//				+ "Hãy để sẵn số tham chiếu đặt phòng 926541268 của quý khách trong tầm tay. Quý khách sẽ cần nó nếu muốn liên hệ với bộ phận hỗ trợ khách hàng của chúng tôi.\n"
+//				+ "Nhanh chóng tìm hiểu xem làm thế nào mình có thể quản lý đặt phòng trực tuyến trong thư viện câu hỏi thường gặp có nội dung phong phú của chúng tôi.",
+//				booking.getFirstName(), booking.getLastName(), booking.getId(), hotel.getName(), booking.getCheckIn(),
+//				booking.getCheckOut(), booking.getAmount()));sdasdcascsccscsca
+//
+//		mailSender.send(message);
+		Context context = new Context();
+		context.setVariable("first_name", booking.getFirstName());
+		context.setVariable("order_title", hotel.getName());
+		context.setVariable("order_id", id);
+		context.setVariable("check_in", booking.getCheckIn());
+		context.setVariable("check_out", booking.getCheckOut());
+		context.setVariable("company_address", "bnmtai.java@gmail.com");
+		emailService.sendEmailWithHtmlTemplate(booking.getEmail(), "Email", "email-template", context);
 
 		booking.setPaymentStatus(2);
 		bookingService.update(booking);
@@ -236,7 +246,6 @@ public class BookingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-
 	@Operation(summary = "API update trạng thái", description = "API update trạng thái")
 	@Parameter(in = ParameterIn.PATH, name = "id", description = "ID")
 	@PostMapping(value = "/{id}/change-payment-status", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -251,7 +260,7 @@ public class BookingController {
 			response.setMessageError("Không tồn tại!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		if ( booking.getPaymentStatus() == 3) {
+		if (booking.getPaymentStatus() == 3) {
 			response.setStatus(HttpStatus.BAD_REQUEST);
 			response.setMessageError("Không thể chuyển trạng thái!");
 			return new ResponseEntity<>(response, HttpStatus.OK);
@@ -264,5 +273,5 @@ public class BookingController {
 		response.setData(new BookingDataResponse(booking));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 }
