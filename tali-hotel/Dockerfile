@@ -1,5 +1,5 @@
 FROM openjdk:11
-VOLUME /tmp
+EXPOSE 1802
 ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY target/tali-hotel-2.7.12 tali-hotel-2.7.12.jar
+ENTRYPOINT ["java","-jar","/tali-hotel-2.7.12.jar"]
